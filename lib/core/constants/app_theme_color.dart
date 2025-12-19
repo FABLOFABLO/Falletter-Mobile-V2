@@ -16,12 +16,14 @@ class ThemeColors {
   final Gradient hintInitial;
   final Gradient rewardText;
 
-  final String logoSvg;
+  final String onBoardingSvg;
   final String letterSvg;
   final String brickSvg;
-  final String checkLetterSvg;
+  final String receivedLetterSvg;
   final String signupLottie;
   final String sendLetterLottie;
+  final String noticeSvg;
+  final String rouletteCheckSvg;
 
   ThemeColors({
     required this.primaryGradient,
@@ -35,12 +37,14 @@ class ThemeColors {
     required this.timer,
     required this.hintInitial,
     required this.rewardText,
-    required this.logoSvg,
+    required this.onBoardingSvg,
     required this.letterSvg,
     required this.brickSvg,
-    required this.checkLetterSvg,
+    required this.receivedLetterSvg,
     required this.signupLottie,
     required this.sendLetterLottie,
+    required this.noticeSvg,
+    required this.rouletteCheckSvg,
   });
 }
 
@@ -57,10 +61,12 @@ Map<AppTheme, ThemeColors> appThemeColors = {
     timer: FalletterGradient.vertical(FalletterColor.blueGradient),
     hintInitial: FalletterGradient.vertical(FalletterColor.blueGradient),
     rewardText: FalletterGradient.vertical(FalletterColor.blueGradient),
-    logoSvg: 'assets/icon/onBoarding.svg',
-    letterSvg: 'assets/icon/letter.svg',
-    brickSvg: 'assets/icon/brick.svg',
-    checkLetterSvg: 'assets/icon/check_letter.svg',
+    onBoardingSvg: 'assets/svg/on_boarding/onBoarding_blue.svg',
+    letterSvg: 'assets/svg/letter/letter_blue.svg',
+    brickSvg: 'assets/svg/brick/brick_blue.svg',
+    receivedLetterSvg: 'assets/svg/received_letter/received/letter_blue.svg',
+    noticeSvg: 'assets/svg/notice/notice_blue.svg',
+    rouletteCheckSvg: 'assets/svg/roulette_check/roulette_blue.svg',
     signupLottie: 'assets/lottie/congratulation.json',
     sendLetterLottie: 'assets/lottie/paperPlane.json',
   ),
@@ -77,10 +83,12 @@ Map<AppTheme, ThemeColors> appThemeColors = {
     timer: FalletterGradient.vertical(FalletterColor.pinkGradient),
     hintInitial: FalletterGradient.vertical(FalletterColor.pinkGradient),
     rewardText: FalletterGradient.vertical(FalletterColor.pinkGradient),
-    logoSvg: 'assets/icon/onBoarding_pink.svg',
-    letterSvg: 'assets/icon/letter_pink.svg',
-    brickSvg: 'assets/icon/brick_pink.svg',
-    checkLetterSvg: 'assets/icon/check_letter_pink.svg',
+    onBoardingSvg: 'assets/svg/on_boarding/onBoarding_pink.svg',
+    letterSvg: 'assets/svg/letter/letter_pink.svg',
+    brickSvg: 'assets/svg/brick/brick_pink.svg',
+    receivedLetterSvg: 'assets/svg/received_letter/received/letter_pink.svg',
+    noticeSvg: 'assets/svg/notice/notice_pink.svg',
+    rouletteCheckSvg: 'assets/svg/roulette_check/roulette_pink.svg',
     signupLottie: 'assets/lottie/congratulation_pink.json',
     sendLetterLottie: 'assets/lottie/paperPlane_pink.json',
   ),
@@ -97,10 +105,12 @@ Map<AppTheme, ThemeColors> appThemeColors = {
     timer: FalletterGradient.vertical(FalletterColor.purpleGradient),
     hintInitial: FalletterGradient.vertical(FalletterColor.purpleGradient),
     rewardText: FalletterGradient.vertical(FalletterColor.purpleGradient),
-    logoSvg: 'assets/icon/onBoarding_silver.svg',
-    letterSvg: 'assets/icon/letter_silver.svg',
-    brickSvg: 'assets/icon/brick_silver.svg',
-    checkLetterSvg: 'assets/icon/check_letter_silver.svg',
+    onBoardingSvg: 'assets/svg/on_boarding/onBoarding_purple.svg',
+    letterSvg: 'assets/svg/letter/letter_purple.svg',
+    brickSvg: 'assets/svg/brick/brick_purple.svg',
+    receivedLetterSvg: 'assets/svg/received_letter/received/letter_purple.svg',
+    noticeSvg: 'assets/svg/notice/notice_purple.svg',
+    rouletteCheckSvg: 'assets/svg/roulette_check/roulette_purple.svg',
     signupLottie: 'assets/lottie/congratulation_purple.json',
     sendLetterLottie: 'assets/lottie/paperPlane_purple.json',
   )
