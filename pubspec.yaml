@@ -49,5 +49,12 @@ flutter:
           weight: 400
 
   assets:
+    - assets/
     - assets/svg/
+    - assets/svg/brick/
+    - assets/svg/letter/
+    - assets/svg/notice/
+    - assets/svg/on_boarding/
+    - assets/svg/received_letter/
+    - assets/svg/roulette_check/
     - assets/lottie/
