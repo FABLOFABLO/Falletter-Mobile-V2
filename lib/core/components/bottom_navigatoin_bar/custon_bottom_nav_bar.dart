@@ -32,7 +32,7 @@ class CustomBottomNavigationBar extends ConsumerWidget {
     final themeColors = appThemeColors[selectedTheme]!;
 
     return Padding(
-      padding: const EdgeInsets.only(top: 10, bottom: 26),
+      padding: const EdgeInsets.symmetric(vertical: 10),
       child: Container(
         decoration: const BoxDecoration(
           color: FalletterColor.black,
