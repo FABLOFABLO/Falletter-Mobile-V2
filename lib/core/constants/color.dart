@@ -8,6 +8,7 @@ abstract final class FalletterColor {
 
   static const Color gray50 = Color(0xFFF4F4F4);
   static const Color gray100 = Color(0xFFE4E4E4);
+  static const Color lightTheme = Color(0xFFDDDDDD);
   static const Color gray200 = Color(0xFFD0D0D0);
   static const Color gray300 = Color(0xFFBCBCBC);
   static const Color gray400 = Color(0xFFA7A7A7);
@@ -16,6 +17,7 @@ abstract final class FalletterColor {
   static const Color gray700 = Color(0xFF6A6A6A);
   static const Color gray800 = Color(0xFF565656);
   static const Color gray900 = Color(0xFF414141);
+  static const Color darkTheme = Color(0xFF3D3D3D);
 
   static const List<Color> blueGradient = [
     Color(0xFF0CDFE6),

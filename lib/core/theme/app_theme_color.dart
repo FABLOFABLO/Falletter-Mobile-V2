@@ -7,6 +7,7 @@ class ThemeColors {
   final Gradient primaryGradient;
   final Gradient text;
   final Gradient button;
+  final Gradient floatingButton;
   final Gradient letterModalBorder;
   final Gradient bottomNavIcon;
   final Gradient profile;
@@ -15,9 +16,10 @@ class ThemeColors {
   final Gradient timer;
   final Gradient hintInitial;
   final Gradient rewardText;
+  final Gradient toggleCircleColor;
 
-  final double? width;
-  final double? height;
+  // final double? width;
+  // final double? height;
 
   final String onBoardingSvg;
   final String letterSvg;
@@ -32,6 +34,7 @@ class ThemeColors {
     required this.primaryGradient,
     required this.text,
     required this.button,
+    required this.floatingButton,
     required this.letterModalBorder,
     required this.bottomNavIcon,
     required this.profile,
@@ -40,8 +43,8 @@ class ThemeColors {
     required this.timer,
     required this.hintInitial,
     required this.rewardText,
-    this.width = 24,
-    this.height = 24,
+    // this.width = 100,
+    // this.height = 100,
     required this.onBoardingSvg,
     required this.letterSvg,
     required this.brickSvg,
@@ -50,6 +53,7 @@ class ThemeColors {
     required this.sendLetterLottie,
     required this.noticeSvg,
     required this.rouletteCheckSvg,
+    required this.toggleCircleColor,
   });
 }
 
@@ -58,6 +62,7 @@ Map<AppTheme, ThemeColors> appThemeColors = {
     primaryGradient: FalletterGradient.horizontal(FalletterColor.blueGradient),
     text: FalletterGradient.vertical(FalletterColor.blueGradient),
     button: FalletterGradient.horizontal(FalletterColor.blueGradient),
+    floatingButton: FalletterGradient.vertical(FalletterColor.blueGradient),
     letterModalBorder: FalletterGradient.horizontal(FalletterColor.blueGradient),
     bottomNavIcon: FalletterGradient.horizontal(FalletterColor.blueGradient),
     profile: FalletterGradient.vertical(FalletterColor.blueGradient),
@@ -66,6 +71,7 @@ Map<AppTheme, ThemeColors> appThemeColors = {
     timer: FalletterGradient.vertical(FalletterColor.blueGradient),
     hintInitial: FalletterGradient.vertical(FalletterColor.blueGradient),
     rewardText: FalletterGradient.vertical(FalletterColor.blueGradient),
+    toggleCircleColor: FalletterGradient.vertical(FalletterColor.blueGradient),
     onBoardingSvg: 'assets/svg/on_boarding/on_boarding_blue.svg',
     letterSvg: 'assets/svg/letter/letter_blue.svg',
     brickSvg: 'assets/svg/brick/brick_blue.svg',
@@ -80,6 +86,7 @@ Map<AppTheme, ThemeColors> appThemeColors = {
     primaryGradient: FalletterGradient.horizontal(FalletterColor.pinkGradient),
     text: FalletterGradient.vertical(FalletterColor.pinkGradient),
     button: FalletterGradient.horizontal(FalletterColor.pinkGradient),
+    floatingButton: FalletterGradient.vertical(FalletterColor.pinkGradient),
     letterModalBorder: FalletterGradient.horizontal(FalletterColor.pinkGradient),
     bottomNavIcon: FalletterGradient.horizontal(FalletterColor.pinkGradient),
     profile: FalletterGradient.vertical(FalletterColor.pinkGradient),
@@ -88,6 +95,7 @@ Map<AppTheme, ThemeColors> appThemeColors = {
     timer: FalletterGradient.vertical(FalletterColor.pinkGradient),
     hintInitial: FalletterGradient.vertical(FalletterColor.pinkGradient),
     rewardText: FalletterGradient.vertical(FalletterColor.pinkGradient),
+    toggleCircleColor: FalletterGradient.vertical(FalletterColor.pinkGradient),
     onBoardingSvg: 'assets/svg/on_boarding/on_boarding_pink.svg',
     letterSvg: 'assets/svg/letter/letter_pink.svg',
     brickSvg: 'assets/svg/brick/brick_pink.svg',
@@ -102,6 +110,7 @@ Map<AppTheme, ThemeColors> appThemeColors = {
     primaryGradient: FalletterGradient.horizontal(FalletterColor.purpleGradient),
     text: FalletterGradient.vertical(FalletterColor.purpleGradient),
     button: FalletterGradient.horizontal(FalletterColor.purpleGradient),
+    floatingButton: FalletterGradient.vertical(FalletterColor.purpleGradient),
     letterModalBorder: FalletterGradient.horizontal(FalletterColor.purpleGradient),
     bottomNavIcon: FalletterGradient.horizontal(FalletterColor.purpleGradient),
     profile: FalletterGradient.vertical(FalletterColor.purpleGradient),
@@ -110,6 +119,7 @@ Map<AppTheme, ThemeColors> appThemeColors = {
     timer: FalletterGradient.vertical(FalletterColor.purpleGradient),
     hintInitial: FalletterGradient.vertical(FalletterColor.purpleGradient),
     rewardText: FalletterGradient.vertical(FalletterColor.purpleGradient),
+    toggleCircleColor: FalletterGradient.vertical(FalletterColor.purpleGradient),
     onBoardingSvg: 'assets/svg/on_boarding/on_boarding_purple.svg',
     letterSvg: 'assets/svg/letter/letter_purple.svg',
     brickSvg: 'assets/svg/brick/brick_purple.svg',

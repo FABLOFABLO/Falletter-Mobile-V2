@@ -57,4 +57,5 @@ flutter:
     - assets/svg/on_boarding/
     - assets/svg/received_letter/
     - assets/svg/roulette_check/
+    - assets/svg/theme_mode/
     - assets/lottie/
