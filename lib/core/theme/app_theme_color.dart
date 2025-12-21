@@ -18,9 +18,6 @@ class ThemeColors {
   final Gradient rewardText;
   final Gradient toggleCircleColor;
 
-  // final double? width;
-  // final double? height;
-
   final String onBoardingSvg;
   final String letterSvg;
   final String brickSvg;
@@ -43,8 +40,6 @@ class ThemeColors {
     required this.timer,
     required this.hintInitial,
     required this.rewardText,
-    // this.width = 100,
-    // this.height = 100,
     required this.onBoardingSvg,
     required this.letterSvg,
     required this.brickSvg,
