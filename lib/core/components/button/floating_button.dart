@@ -14,11 +14,10 @@ class CustomFloatingButton extends ConsumerWidget {
     final themeColors = appThemeColors[selectedTheme]!;
 
     final screenWidth = MediaQuery.of(context).size.width;
-    final fabSize = screenWidth * 0.2;
+    final fabSize = screenWidth * 0.15;
 
-    return FloatingActionButton(
-      backgroundColor: Colors.transparent,
-      elevation: 0,
+    return GestureDetector(
+      onTap: () {},
       child: Container(
         width: fabSize,
         height: fabSize,
@@ -33,7 +32,6 @@ class CustomFloatingButton extends ConsumerWidget {
             color: FalletterColor.black,
         ),
       ),
-      onPressed: () {},
     );
   }
 }
