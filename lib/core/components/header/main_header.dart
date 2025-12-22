@@ -22,7 +22,7 @@ class MainHeader extends ConsumerWidget {
     return SafeArea(
       bottom: false,
       child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 20.0),
+        padding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [

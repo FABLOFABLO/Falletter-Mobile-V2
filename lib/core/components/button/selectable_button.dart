@@ -37,7 +37,7 @@ class SelectableButton extends StatelessWidget {
         child: Column(
           children: [
             Padding(
-              padding: EdgeInsets.all(32.0),
+              padding: EdgeInsets.all(32),
               child: SizedBox(
                   width: 100,
                   height: 100,
@@ -45,7 +45,7 @@ class SelectableButton extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(bottom: 32.0),
+              padding: const EdgeInsets.only(bottom: 32),
               child: Text(
                 label,
                 style: FalletterTextStyle.title2,
