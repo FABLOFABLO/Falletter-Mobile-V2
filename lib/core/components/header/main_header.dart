@@ -5,8 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 
 class MainHeader extends ConsumerWidget {
-  final double? width;
-  final double? height;
+  final double width;
+  final double height;
 
   const MainHeader({
     super.key,
