@@ -1,5 +1,5 @@
 import 'package:falletter_mobile_v2/core/theme/app_theme_color.dart';
-import 'package:riverpod/riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final themeProvider = NotifierProvider<ThemeNotifier, AppTheme>(ThemeNotifier.new);
 

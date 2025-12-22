@@ -1,4 +1,3 @@
-import 'package:falletter_mobile_v2/core/components/bottom_navigatoin_bar/custon_bottom_nav_bar.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/router/app_router.dart';
 import 'package:falletter_mobile_v2/core/theme/falletter_theme.dart';
