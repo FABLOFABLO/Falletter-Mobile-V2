@@ -9,6 +9,7 @@ import 'package:falletter_mobile_v2/presentation/splash/provider/auth_status_pro
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 
 class SplashView extends ConsumerStatefulWidget {
   const SplashView({super.key});
@@ -50,12 +51,7 @@ class _SplashViewState extends ConsumerState<SplashView> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => const SetGenderView(),
-                              ),
-                            );
+                            context.push('/signup/gender');
                           },
                           child: Text('회원가입', style: FalletterTextStyle.body3),
                         ),
@@ -63,6 +59,8 @@ class _SplashViewState extends ConsumerState<SplashView> {
                     ),
                   ),
                   CustomElevatedButton(
+                    onPressed: () {context.push('/signin');},
+                    gradient: LinearGradient(colors: [FalletterColor.middleBlack, FalletterColor.middleBlack]),
                     child: GradientText(
                       text: '로그인하기',
                       gradient: themeColors.text,
