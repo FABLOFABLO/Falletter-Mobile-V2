@@ -32,7 +32,6 @@ class FcmService {
       if (kDebugMode) {
         debugPrint('Foreground Message received: ${message.notification?.title}');
       }
-      // 여기서 Local Notifications 등을 이용해 팝업을 띄울 수 있슴
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
@@ -68,13 +67,11 @@ class FcmService {
       }
       await Future.delayed(const Duration(milliseconds: 500));
     }
-
     if (kDebugMode) debugPrint('APNs token not ready yet (continuing)');
   }
 
   Future<String?> _retryGetFcmToken() async {
     bool printedApnsNotSet = false;
-
     for (int i = 0; i < 40; i++) {
       try {
         final token = await _messaging.getToken();
@@ -92,7 +89,6 @@ class FcmService {
           if (kDebugMode) debugPrint('getToken retry error: $e');
         }
       }
-
       await Future.delayed(const Duration(milliseconds: 500));
     }
     return null;
