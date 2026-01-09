@@ -27,6 +27,7 @@ class CustomGenderButton extends StatelessWidget {
           color: FalletterColor.middleBlack,
           border: Border.all(color:  isPressed ? FalletterColor.blueGradient.first:FalletterColor.middleBlack,width: 3),
         ),
+        width: 160,
         child: Column(
           children: [
             SvgPicture.asset(genderPicture),
