@@ -33,7 +33,7 @@ class ContentCardButton extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Padding(
-                  padding: EdgeInsets.only(top: 25, left: 25),
+                  padding: EdgeInsets.all(25),
                   child: child
                 ),
               ),
