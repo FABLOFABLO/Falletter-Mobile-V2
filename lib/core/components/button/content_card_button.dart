@@ -2,13 +2,13 @@ import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:flutter/material.dart';
 
-class ContentListButton extends StatelessWidget {
+class ContentCardButton extends StatelessWidget {
   final Widget child;
   final void Function() onTap;
   final double? width;
   final double? height;
 
-  const ContentListButton({
+  const ContentCardButton({
     super.key,
     required this.child,
     required this.onTap,
