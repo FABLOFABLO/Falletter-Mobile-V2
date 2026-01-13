@@ -3,27 +3,25 @@ import 'package:falletter_mobile_v2/core/components/button/elevated_button.dart'
 import 'package:falletter_mobile_v2/core/components/button/selectable_button.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
+import 'package:falletter_mobile_v2/presentation/signup/provider/signup_provider.dart';
 import 'package:flutter/material.dart' hide Action;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 
-enum Gender { man, woman }
-
-class SetGenderView extends ConsumerStatefulWidget {
+class SetGenderView extends ConsumerWidget {
   const SetGenderView({super.key});
 
-  @override
-  ConsumerState<SetGenderView> createState() => _SetGenderViewState();
-}
-
-class _SetGenderViewState extends ConsumerState<SetGenderView> {
-  Gender? gender;
-  final Color blue = FalletterColor.blueGradient.first;
-  final Color pink = FalletterColor.pinkGradient.first;
+  void _selectGender(WidgetRef ref, String value) {
+    ref.watch(signUpProvider.notifier).setGender(value);
+  }
 
   @override
-  Widget build(BuildContext context) {
-    final bool isEnabled = gender != null;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final selectGender = ref.watch(signUpProvider).gender;
+    final Color blue = FalletterColor.blueGradient.first;
+    final Color pink = FalletterColor.pinkGradient.first;
+    final bool enabled = selectGender != null;
+
     return Scaffold(
       appBar: CustomAppBar(icon: true, action: Action.orderStep, count: 1),
       body: SafeArea(
@@ -42,9 +40,9 @@ class _SetGenderViewState extends ConsumerState<SetGenderView> {
                       label: '남성',
                       icon: Symbols.man,
                       iconColor: blue,
-                      isSelected: gender == Gender.man,
+                      isSelected: selectGender == 'MALE',
                       onTap: () {
-                        setState(() => gender = Gender.man);
+                        _selectGender(ref, 'MALE');
                       },
                     ),
                   ),
@@ -54,9 +52,9 @@ class _SetGenderViewState extends ConsumerState<SetGenderView> {
                       label: '여성',
                       icon: Symbols.woman,
                       iconColor: pink,
-                      isSelected: gender == Gender.woman,
+                      isSelected: selectGender == 'FEMALE',
                       onTap: () {
-                        setState(() => gender = Gender.woman);
+                        _selectGender(ref, 'FEMALE');
                       },
                     ),
                   ),
@@ -64,11 +62,10 @@ class _SetGenderViewState extends ConsumerState<SetGenderView> {
               ),
 
               const Spacer(),
-
               CustomElevatedButton(
-                onPressed: isEnabled
+                onPressed: enabled
                     ? () {
-                        // TODO: 다음 페이지 이동
+                        /// TODO: 다음 페이지 이동
                       }
                     : null,
                 child: const Text('다음'),
