@@ -6,8 +6,10 @@ class SignupState {
   final String? email;
   final String? password;
   final String? name;
-  final String? theme;
-  final String? profileImage;
+  final String? passwordCheck;
+  final String? verified;
+  final String? timer;
+  final String? hasError;
 
   SignupState({
     this.gender,
@@ -15,8 +17,10 @@ class SignupState {
     this.email,
     this.password,
     this.name,
-    this.theme,
-    this.profileImage,
+    this.passwordCheck,
+    this.verified,
+    this.timer,
+    this.hasError,
   });
 
   SignupState copyWith({
@@ -25,8 +29,10 @@ class SignupState {
     String? email,
     String? password,
     String? name,
-    String? theme,
-    String? profileImage
+    String? passwordCheck,
+    String? verified,
+    String? timer,
+    String? hasError,
   }) {
     return SignupState(
       gender: gender ?? this.gender,
@@ -34,8 +40,10 @@ class SignupState {
       email: email ?? this.email,
       password: password ?? this.password,
       name: name ?? this.name,
-      theme: theme ?? this.theme,
-      profileImage: profileImage ?? this.profileImage,
+      passwordCheck: passwordCheck ?? this.passwordCheck,
+      verified: verified ?? this.verified,
+      timer: timer ?? this.timer,
+      hasError: hasError ?? this.hasError,
     );
   }
 }
@@ -58,13 +66,19 @@ class SignUpNotifier extends StateNotifier<SignupState> {
   void setName(String name) =>
       state = state.copyWith(name: name);
 
-  void setTheme(String theme) =>
-      state = state.copyWith(theme: theme);
+  void setPasswordCheck(String check) =>
+      state = state.copyWith(passwordCheck: check);
 
-  void setImageProfile(String profileImage) =>
-      state = state.copyWith(profileImage: profileImage);
+  void setVerified(String verified) =>
+      state = state.copyWith(verified: verified);
+
+  void setTimer(String timer) =>
+      state = state.copyWith(timer: timer);
+
+  void setHasError(String error) =>
+      state = state.copyWith(hasError: error);
 }
 
-final signUpProvider = StateNotifierProvider<SignUpNotifier, SignupState>((ref) {
+final signUpProvider = StateNotifierProvider<SignUpNotifier, SignupState>((ref,) {
   return SignUpNotifier();
 });

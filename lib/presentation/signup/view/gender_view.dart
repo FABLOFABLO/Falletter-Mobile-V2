@@ -12,14 +12,15 @@ class SetGenderView extends ConsumerWidget {
   const SetGenderView({super.key});
 
   void _selectGender(WidgetRef ref, String value) {
-    ref.watch(signUpProvider.notifier).setGender(value);
+    ref.read(signUpProvider.notifier).setGender(value);
   }
+
+  static final Color blue = FalletterColor.blueGradient.first;
+  static final Color pink = FalletterColor.pinkGradient.first;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selectGender = ref.watch(signUpProvider).gender;
-    final Color blue = FalletterColor.blueGradient.first;
-    final Color pink = FalletterColor.pinkGradient.first;
+    final selectGender = ref.watch(signUpProvider.select((gender)=>gender.gender));
     final bool enabled = selectGender != null;
 
     return Scaffold(
