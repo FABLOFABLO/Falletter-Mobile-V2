@@ -84,7 +84,6 @@ class _FalletterMainViewState extends State<FalletterMainView> {
                     ],
                   ),
                 );
-                // return ContentCardButton(child: Column(), onTap: () {});
               },
             ),
           ),
