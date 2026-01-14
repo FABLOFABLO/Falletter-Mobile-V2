@@ -1,10 +1,111 @@
+import 'package:falletter_mobile_v2/core/components/bottom_navigatoin_bar/custon_bottom_nav_bar.dart';
+import 'package:falletter_mobile_v2/core/components/button/delete_button.dart';
+import 'package:falletter_mobile_v2/core/components/button/floating_button.dart';
+import 'package:falletter_mobile_v2/core/components/header/main_header.dart';
+import 'package:falletter_mobile_v2/core/components/text_form_field/text_form_field.dart';
+import 'package:falletter_mobile_v2/core/constants/color.dart';
+import 'package:falletter_mobile_v2/core/constants/text_style.dart';
+import 'package:falletter_mobile_v2/core/components/button/content_card_button.dart';
 import 'package:flutter/material.dart';
 
-class FalletterMainView extends StatelessWidget {
+class FalletterMainView extends StatefulWidget {
   const FalletterMainView({super.key});
 
   @override
+  State<FalletterMainView> createState() => _FalletterMainViewState();
+}
+
+class _FalletterMainViewState extends State<FalletterMainView> {
+  int _currentIndex = 0;
+
+  void _onTap(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  }
+
+  String timeCheck(DateTime date) {
+    final diff = DateTime.now().difference(date);
+    print(DateTime.now());
+
+    if (diff.inMinutes < 1) return '방금 전';
+    if (diff.inMinutes < 60) return '${diff.inMinutes}분 전';
+    if (diff.inHours < 24) return '${diff.inHours}시간 전';
+    if (diff.inDays < 7) return '${diff.inDays}일 전';
+    if (diff.inDays < 30) return '${(diff.inDays / 7).floor()}주 전';
+    return '${(diff.inDays / 30).floor()}개월 전';
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return const Placeholder(child: Text('메인 페이지'),);
+    return Scaffold(
+      body: Column(
+        children: [
+          const MainHeader(),
+          Expanded(
+            child: ListView.builder(
+              padding: EdgeInsets.zero,
+              itemCount: 11,
+              itemBuilder: (BuildContext context, int index) {
+                return ContentCardButton(
+                  onTap: () {},
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '내일 1학년 1반 시간표 바뀌었다는데 아시는분 계신가요?',
+                        style: FalletterTextStyle.subTitle2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 3),
+                        child: Text(
+                          '시간표 바뀐거 아시는 분 댓글 달아주세요ㅜㅜ!시간표 바뀐거 아시는 분 댓글 달아주세요ㅜㅜ!',
+                          style: FalletterTextStyle.body4.copyWith(
+                            color: FalletterColor.gray400,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            '네모의꿈',
+                            style: FalletterTextStyle.body4.copyWith(
+                              color: FalletterColor.gray500,
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 10),
+                            child: Text(
+                              timeCheck(DateTime(2025, 3, 24)),
+                              style: FalletterTextStyle.body4.copyWith(
+                                color: FalletterColor.gray500,
+                              ),
+                            ),
+                          ),
+                          Text(
+                            '댓글 10개',
+                            style: FalletterTextStyle.body4.copyWith(
+                              color: FalletterColor.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                );
+                // return ContentCardButton(child: Column(), onTap: () {});
+              },
+            ),
+          ),
+        ],
+      ),
+      floatingActionButton: CustomFloatingButton(),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        currentIndex: _currentIndex,
+        onTap: _onTap,
+      ),
+    );
   }
 }
