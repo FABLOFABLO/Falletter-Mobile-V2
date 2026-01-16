@@ -17,13 +17,6 @@ class FalletterMainView extends StatefulWidget {
 }
 
 class _FalletterMainViewState extends State<FalletterMainView> {
-  int _currentIndex = 0;
-
-  void _onTap(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,10 +83,6 @@ class _FalletterMainViewState extends State<FalletterMainView> {
         ],
       ),
       floatingActionButton: CustomFloatingButton(),
-      bottomNavigationBar: CustomBottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: _onTap,
-      ),
     );
   }
 }
