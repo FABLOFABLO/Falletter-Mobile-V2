@@ -68,6 +68,7 @@ class SetGenderView extends ConsumerWidget {
                         /// TODO: 다음 페이지 이동
                       }
                     : null,
+                width: double.infinity,
                 child: const Text('다음'),
               ),
             ],
