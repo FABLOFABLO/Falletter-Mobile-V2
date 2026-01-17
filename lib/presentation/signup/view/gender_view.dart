@@ -21,7 +21,7 @@ class SetGenderView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectGender = ref.watch(signUpProvider.select((gender)=>gender.gender));
-    final bool enabled = selectGender != null;
+    final isNextStep = ref.watch(signUpProvider.select((enabled)=>enabled.isEnabled ?? false));
 
     return Scaffold(
       appBar: CustomAppBar(icon: true, action: Action.orderStep, count: 1),
@@ -61,10 +61,9 @@ class SetGenderView extends ConsumerWidget {
                   ),
                 ],
               ),
-
               const Spacer(),
               CustomElevatedButton(
-                onPressed: enabled
+                onPressed: isNextStep
                     ? () {
                         /// TODO: 다음 페이지 이동
                       }
