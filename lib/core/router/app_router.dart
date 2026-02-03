@@ -41,7 +41,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             bottomNavigationBar: CustomBottomNavigationBar(
               currentIndex: navigationShell.currentIndex,
               onTap: (index) {
-                navigationShell.goBranch(index);
+                navigationShell.goBranch(
+                  index,
+                  initialLocation: index == navigationShell.currentIndex,
+                );
               },
             ),
           );
