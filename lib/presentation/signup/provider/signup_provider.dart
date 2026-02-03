@@ -10,7 +10,6 @@ class SignupState {
   final bool? verified;
   final Duration? timer;
   final String? hasError;
-  final bool? isEnabled;
 
   SignupState({
     this.gender,
@@ -22,7 +21,6 @@ class SignupState {
     this.verified,
     this.timer,
     this.hasError,
-    this.isEnabled,
   });
 
   SignupState copyWith({
@@ -35,7 +33,6 @@ class SignupState {
     bool? verified,
     Duration? timer,
     String? hasError,
-    bool? isEnabled,
   }) {
     return SignupState(
       gender: gender ?? this.gender,
@@ -47,7 +44,6 @@ class SignupState {
       verified: verified ?? this.verified,
       timer: timer ?? this.timer,
       hasError: hasError ?? this.hasError,
-      isEnabled: isEnabled ?? this.isEnabled,
     );
   }
 }
@@ -56,31 +52,31 @@ class SignUpNotifier extends StateNotifier<SignupState> {
   SignUpNotifier() : super(SignupState());
 
   void setGender(String gender) =>
-      state = state.copyWith(gender: gender,isEnabled: true);
+      state = state.copyWith(gender: gender);
 
   void setSchoolNumber(String number) =>
-      state = state.copyWith(schoolNumber: number,isEnabled: true);
+      state = state.copyWith(schoolNumber: number);
 
   void setEmail(String email) =>
-      state = state.copyWith(email: email,isEnabled: true);
+      state = state.copyWith(email: email);
 
   void setPassword(String pw) =>
-      state = state.copyWith(password: pw,isEnabled: true);
+      state = state.copyWith(password: pw);
 
   void setName(String name) =>
-      state = state.copyWith(name: name,isEnabled: true);
+      state = state.copyWith(name: name);
 
   void setPasswordCheck(String check) =>
-      state = state.copyWith(passwordCheck: check,isEnabled: true);
+      state = state.copyWith(passwordCheck: check);
 
   void setVerified(bool verified) =>
-      state = state.copyWith(verified: verified,isEnabled: true);
+      state = state.copyWith(verified: verified);
 
   void setTimer(Duration timer) =>
-      state = state.copyWith(timer: timer,isEnabled: true);
+      state = state.copyWith(timer: timer);
 
   void setHasError(String error) =>
-      state = state.copyWith(hasError: error,isEnabled: true);
+      state = state.copyWith(hasError: error);
 }
 final signUpProvider = StateNotifierProvider<SignUpNotifier, SignupState>((ref) {
   return SignUpNotifier();

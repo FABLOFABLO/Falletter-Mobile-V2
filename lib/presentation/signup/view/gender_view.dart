@@ -21,7 +21,7 @@ class SetGenderView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectGender = ref.watch(signUpProvider.select((gender)=>gender.gender));
-    final isNextStep = ref.watch(signUpProvider.select((enabled)=>enabled.isEnabled ?? false));
+    final isNextStep = ref.watch(signUpProvider.select((enabled)=>enabled.gender?.isNotEmpty ?? false));
 
     return Scaffold(
       appBar: CustomAppBar(icon: true, action: Action.orderStep, count: 1),
