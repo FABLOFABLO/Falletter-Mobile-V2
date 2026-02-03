@@ -33,6 +33,7 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
     return AppBar(
       toolbarHeight: 40,
       centerTitle: true,
+      scrolledUnderElevation: 0,
       backgroundColor: FalletterColor.black,
       leading: Padding(
         padding: const EdgeInsets.symmetric(horizontal: paddingWidth),
