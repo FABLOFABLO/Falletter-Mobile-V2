@@ -1,8 +1,11 @@
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
+import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
+import 'package:falletter_mobile_v2/core/theme/app_theme_color.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SelectableButton extends StatelessWidget {
+class SelectableButton extends ConsumerWidget {
   final String label;
   final IconData? icon;
   final Widget? iconWidget;
@@ -23,42 +26,50 @@ class SelectableButton extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final selectedTheme = ref.watch(themeProvider);
+    final themeColors = appThemeColors[selectedTheme]!;
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        decoration: BoxDecoration(
-          color: FalletterColor.middleBlack,
+        decoration: isSelected
+            ? BoxDecoration(
+          gradient: themeColors.answerButton,
           borderRadius: BorderRadius.circular(8),
-          border: isSelected
-              ? Border.all(color: FalletterColor.white, width: 2.0)
-              : null,
-        ),
-        child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.all(32),
-              child: SizedBox(
+        )
+            : null,
+        padding: isSelected ? const EdgeInsets.all(2) : EdgeInsets.zero,
+        child: Container(
+          decoration: BoxDecoration(
+            color: FalletterColor.middleBlack,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(32),
+                child: SizedBox(
                   width: 100,
                   height: 100,
                   child: _buildIcon(),
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 32),
-              child: Text(
-                label,
-                style: FalletterTextStyle.title2,
-                textAlign: TextAlign.center,
-                overflow: TextOverflow.ellipsis,
+              Padding(
+                padding: const EdgeInsets.only(bottom: 32),
+                child: Text(
+                  label,
+                  style: FalletterTextStyle.title2,
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
-
 
   Widget _buildIcon() {
     if (iconWidget != null) {
