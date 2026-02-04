@@ -33,7 +33,7 @@ class _EmailViewState extends ConsumerState<EmailView> {
       signUpProvider.select((enWrite) => enWrite.emailValid()),
     );
     return Scaffold(
-      appBar: CustomAppBar(icon: true, action: Action.orderStep, count: 3),
+      appBar: CustomAppBar(icon: true, appBarAction: AppBarAction.orderStep, count: 3),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
