@@ -18,27 +18,18 @@ class ContentCardButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: GestureDetector(
-        onTap: onTap,
-        child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 10),
-              child: Container(
-                width: width ?? 350,
-                height: height ?? 108,
-                decoration: BoxDecoration(
-                  color: FalletterColor.middleBlack,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Padding(
-                  padding: EdgeInsets.all(25),
-                  child: child
-                ),
-              ),
-            ),
-          ],
+    return GestureDetector(
+      onTap: onTap,
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+        child: Container(
+          width: width ?? double.infinity,
+          height: height ?? null,
+          decoration: BoxDecoration(
+            color: FalletterColor.middleBlack,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: child
         ),
       ),
     );
