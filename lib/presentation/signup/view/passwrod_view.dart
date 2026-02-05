@@ -28,8 +28,8 @@ class _PasswordViewState extends ConsumerState<PasswordView> {
         _passwordCheckController.text.isEmpty) {
       return null;
     }
-    if (_passwordController.text.isNotEmpty !=
-        _passwordCheckController.text.isNotEmpty) {
+    if (_passwordController.text !=
+        _passwordCheckController.text) {
       return '비밀번호가 일치하지 않습니다.';
     }
     return null;
