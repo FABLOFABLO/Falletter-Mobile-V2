@@ -21,7 +21,7 @@ class ContentCardButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         child: Container(
           width: width ?? double.infinity,
           height: height ?? null,
