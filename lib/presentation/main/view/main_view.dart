@@ -97,7 +97,7 @@ class _FalletterMainViewState extends ConsumerState<FalletterMainView> {
       ),
       floatingActionButton: CustomFloatingButton(
         onTap: () {
-          context.go('/posts/create'); // 수정...하기
+          context.push('/posts/create');
         },
       ),
     );
