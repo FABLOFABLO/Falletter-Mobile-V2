@@ -36,10 +36,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: '/signin',
         builder: (_, __) => const SigninView(),
       ),
-      GoRoute(
-        path: '/posts/create',
-        builder: (_, __) => const PostCreateView(),
-      ),
+
       GoRoute(
         path: '/posts/detail',
         builder: (context, state) {
@@ -64,6 +61,12 @@ final goRouterProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: RoutePaths.main,
                 builder: (_, __) => const FalletterMainView(),
+                routes: [
+                  GoRoute(
+                    path: 'posts/create',
+                    builder: (_, __) => const PostCreateView(),
+                  ),
+                ]
               ),
             ],
           ),
