@@ -106,19 +106,22 @@ class _PasswordViewState extends ConsumerState<PasswordView> {
                 maxLines: 1,
               ),
               const Spacer(),
-              CustomElevatedButton(
-                onPressed: isNextStep
-                    ? () {
-                        setState(() {
-                          isPressed = true;
-                        });
-                        if (errorValid() != null) return;
+              Padding(
+                padding: EdgeInsets.only(bottom: 16),
+                child: CustomElevatedButton(
+                  onPressed: isNextStep
+                      ? () {
+                          setState(() {
+                            isPressed = true;
+                          });
+                          if (errorValid() != null) return;
 
-                        /// todo 이용약관 페이지
-                      }
-                    : null,
-                width: double.infinity,
-                child: Text('회원가입'),
+                          /// todo 이용약관 페이지
+                        }
+                      : null,
+                  width: double.infinity,
+                  child: Text('회원가입'),
+                ),
               ),
             ],
           ),
