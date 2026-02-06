@@ -56,74 +56,76 @@ class _PasswordViewState extends ConsumerState<PasswordView> {
       signUpProvider.select((enabled) {
         return enabled.password != null &&
             enabled.passwordCheck != null &&
-            _passwordController.text.isNotEmpty;
+            enabled.password!.isNotEmpty;
       }),
     );
     return Scaffold(
       appBar: CustomAppBar(icon: true, action: Action.orderStep, count: 5),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 28),
-              Text('비밀번호를 입력해주세요.', style: FalletterTextStyle.title2),
-              const SizedBox(height: 36),
-              CustomTextFormField(
-                onTapOutside: (event) => FocusScope.of(context).unfocus(),
-                onChanged: (value) {
-                  _password(ref, value);
-                },
-                controller: _passwordController,
-                decoration: InputDecoration(
-                  hintText: '새 비밀번호 입력',
-                  suffixIcon: _suffixIcon(
-                    onTap: () => setState(() => pwObsText = !pwObsText),
-                    pwObsText: pwObsText,
+        child: GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: ()=>FocusScope.of(context).unfocus(),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 28),
+                Text('비밀번호를 입력해주세요.', style: FalletterTextStyle.title2),
+                const SizedBox(height: 36),
+                CustomTextFormField(
+                  onChanged: (value) {
+                    _password(ref, value);
+                  },
+                  controller: _passwordController,
+                  decoration: InputDecoration(
+                    hintText: '새 비밀번호 입력',
+                    suffixIcon: _suffixIcon(
+                      onTap: () => setState(() => pwObsText = !pwObsText),
+                      pwObsText: pwObsText,
+                    ),
                   ),
+                  obscureText: pwObsText,
+                  maxLines: 1,
                 ),
-                obscureText: pwObsText,
-                maxLines: 1,
-              ),
-              const SizedBox(height: 16),
-              CustomTextFormField(
-                onTapOutside: (event) => FocusScope.of(context).unfocus(),
-                onChanged: (value) {
-                  _passwordCheck(ref, value);
-                },
-                controller: _passwordCheckController,
-                decoration: InputDecoration(
-                  hintText: '비밀번호 재확인',
-                  suffixIcon: _suffixIcon(
-                    pwObsText: pwObsTextCheck,
-                    onTap: () =>
-                        setState(() => pwObsTextCheck = !pwObsTextCheck),
+                const SizedBox(height: 16),
+                CustomTextFormField(
+                  onChanged: (value) {
+                    _passwordCheck(ref, value);
+                  },
+                  controller: _passwordCheckController,
+                  decoration: InputDecoration(
+                    hintText: '비밀번호 재확인',
+                    suffixIcon: _suffixIcon(
+                      pwObsText: pwObsTextCheck,
+                      onTap: () =>
+                          setState(() => pwObsTextCheck = !pwObsTextCheck),
+                    ),
+                    errorText: errorValid(),
                   ),
-                  errorText: errorValid(),
+                  obscureText: pwObsTextCheck,
+                  maxLines: 1,
                 ),
-                obscureText: pwObsTextCheck,
-                maxLines: 1,
-              ),
-              const Spacer(),
-              Padding(
-                padding: EdgeInsets.only(bottom: 16),
-                child: CustomElevatedButton(
-                  onPressed: isNextStep
-                      ? () {
-                          setState(() {
-                            isPressed = true;
-                          });
-                          if (errorValid() != null) return;
+                const Spacer(),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 16),
+                  child: CustomElevatedButton(
+                    onPressed: isNextStep
+                        ? () {
+                            setState(() {
+                              isPressed = true;
+                            });
+                            if (errorValid() != null) return;
 
-                          /// todo 이용약관 페이지
-                        }
-                      : null,
-                  width: double.infinity,
-                  child: Text('회원가입'),
+                            /// todo 이용약관 페이지
+                          }
+                        : null,
+                    width: double.infinity,
+                    child: Text('회원가입'),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
