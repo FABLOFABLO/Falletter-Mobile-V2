@@ -38,12 +38,8 @@ class _PostCreateViewState extends State<PostCreateView> {
   void onChangedButton() {
     setState(() {
       isEnabled =
-          _titleController.text
-              .trim()
-              .isNotEmpty &&
-              _contentController.text
-                  .trim()
-                  .isNotEmpty;
+          _titleController.text.trim().isNotEmpty
+              && _contentController.text.trim().isNotEmpty;
     });
   }
 
