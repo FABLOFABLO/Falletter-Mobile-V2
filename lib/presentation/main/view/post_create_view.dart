@@ -79,20 +79,16 @@ class _PostCreateViewState extends State<PostCreateView> {
                             '내용을 입력해주세요',
                             style: FalletterTextStyle.subTitle1,
                           ),
-                          Row(
-                            children: [
-                              Text(
-                                '${_contentController.text.length}',
-                                style: FalletterTextStyle.body2,
-                              ),
-                              Text(
-                                '/$maxLength',
-                                style: FalletterTextStyle.body2.copyWith(
-                                  color: FalletterColor.gray500,
-                                ),
-                              ),
-                            ],
-                          ),
+                          RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(text: '${_contentController.text.length}', style: FalletterTextStyle.body2),
+                                  TextSpan(text: '/$maxLength', style: FalletterTextStyle.body2.copyWith(
+                                    color: FalletterColor.gray500
+                                  ))
+                                ]
+                              )
+                          )
                         ],
                       ),
                       SizedBox(height: 10),
