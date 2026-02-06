@@ -100,7 +100,7 @@ class _PostCreateViewState extends State<PostCreateView> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.fromLTRB(20, 10, 20, 30),
+              padding: EdgeInsets.symmetric(horizontal: 20).copyWith(bottom: 30),
               child: CustomElevatedButton(
                 child: Text('글 등록하기'),
                 width: double.infinity,
