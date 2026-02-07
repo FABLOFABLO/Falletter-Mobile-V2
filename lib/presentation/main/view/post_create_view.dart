@@ -19,13 +19,12 @@ class _PostCreateViewState extends State<PostCreateView> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _contentController = TextEditingController();
   final int maxLength = 200;
-  bool isEnabled = false;
 
   @override
   void initState() {
-    _titleController.addListener(onChangedButton);
-    _contentController.addListener(onChangedButton);
     super.initState();
+    _titleController.addListener(_onChanged);
+    _contentController.addListener(_onChanged);
   }
 
   @override
@@ -35,12 +34,12 @@ class _PostCreateViewState extends State<PostCreateView> {
     super.dispose();
   }
 
-  void onChangedButton() {
-    setState(() {
-      isEnabled =
-          _titleController.text.trim().isNotEmpty
-              && _contentController.text.trim().isNotEmpty;
-    });
+  bool get isEnabled =>
+      _titleController.text.trim().isNotEmpty
+          && _contentController.text.trim().isNotEmpty;
+
+  void _onChanged() {
+    setState(() {});
   }
 
   @override
