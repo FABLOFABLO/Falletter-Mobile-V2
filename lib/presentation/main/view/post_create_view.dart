@@ -45,7 +45,7 @@ class _PostCreateViewState extends State<PostCreateView> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: FocusManager.instance.primaryFocus?.unfocus,
+      onTap: FocusScope.of(context).unfocus,
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         body: Column(
