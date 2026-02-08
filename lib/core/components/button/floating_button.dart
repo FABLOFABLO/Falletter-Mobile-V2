@@ -6,7 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
 class CustomFloatingButton extends ConsumerWidget {
-  const CustomFloatingButton({super.key});
+  final VoidCallback? onTap;
+  const CustomFloatingButton({super.key, this.onTap});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -17,7 +18,7 @@ class CustomFloatingButton extends ConsumerWidget {
     final fabSize = screenWidth * 0.15;
 
     return GestureDetector(
-      onTap: () {},
+      onTap: onTap,
       child: Container(
         width: fabSize,
         height: fabSize,

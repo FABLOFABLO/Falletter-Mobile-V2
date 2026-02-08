@@ -23,6 +23,12 @@ class SignupState {
     this.hasError,
   });
 
+  bool emailValid() {
+    final input = email ?? '';
+    final isValid = RegExp(r'^[a-zA-Z0-9._]+$').hasMatch(input);
+    return isValid && input.length >= 6;
+  }
+
   SignupState copyWith({
     String? gender,
     String? schoolNumber,
