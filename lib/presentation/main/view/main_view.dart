@@ -8,6 +8,7 @@ import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/components/button/content_card_button.dart';
 import 'package:falletter_mobile_v2/core/providers/comments_provider.dart';
 import 'package:falletter_mobile_v2/core/providers/posts_provider.dart';
+import 'package:falletter_mobile_v2/core/router/route_paths.dart';
 import 'package:falletter_mobile_v2/core/utils/time_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -97,7 +98,7 @@ class _FalletterMainViewState extends ConsumerState<FalletterMainView> {
       ),
       floatingActionButton: CustomFloatingButton(
         onTap: () {
-          context.push('/posts/create');
+          context.push('${RoutePaths.main}/posts/create');
         },
       ),
     );

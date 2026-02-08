@@ -4,6 +4,8 @@ import 'package:falletter_mobile_v2/core/router/route_paths.dart';
 import 'package:falletter_mobile_v2/presentation/answer/view/answer_view.dart';
 import 'package:falletter_mobile_v2/presentation/letter/view/letter_view.dart';
 import 'package:falletter_mobile_v2/presentation/main/view/main_view.dart';
+import 'package:falletter_mobile_v2/presentation/main/view/post_detail_view.dart';
+import 'package:falletter_mobile_v2/presentation/main/view/post_create_view.dart';
 import 'package:falletter_mobile_v2/presentation/mypage/view/mypage_view.dart';
 import 'package:falletter_mobile_v2/presentation/notice/view/notice_view.dart';
 import 'package:falletter_mobile_v2/presentation/signin/view/signin_view.dart';
@@ -34,6 +36,13 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: '/signin',
         builder: (_, __) => const SigninView(),
       ),
+
+      GoRoute(
+        path: '/posts/detail',
+        builder: (context, state) {
+          return PostDetailView(postId: state.extra as int);
+        },
+      ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
           return Scaffold(
@@ -52,6 +61,12 @@ final goRouterProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: RoutePaths.main,
                 builder: (_, __) => const FalletterMainView(),
+                routes: [
+                  GoRoute(
+                    path: 'posts/create',
+                    builder: (_, __) => const PostCreateView(),
+                  ),
+                ]
               ),
             ],
           ),
