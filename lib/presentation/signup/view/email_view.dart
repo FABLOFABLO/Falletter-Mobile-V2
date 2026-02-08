@@ -23,7 +23,7 @@ class _EmailViewState extends ConsumerState<EmailView> {
     super.dispose();
   }
 
-  void _writeEmail(WidgetRef ref, String value) {
+  void _writeEmail(String value) {
     ref.read(signUpProvider.notifier).setEmail(value);
   }
 
@@ -53,7 +53,7 @@ class _EmailViewState extends ConsumerState<EmailView> {
                   suffixIcon: FieldIcon.emailText(),
                 ),
                 onChanged: (value) {
-                  _writeEmail(ref, value);
+                  _writeEmail(value);
                 },
                 onTapOutside: (event) => FocusScope.of(context).unfocus(),
               ),
