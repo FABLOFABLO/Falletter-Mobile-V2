@@ -16,10 +16,6 @@ class EmailView extends ConsumerStatefulWidget {
 
 class _EmailViewState extends ConsumerState<EmailView> {
   final TextEditingController _emailController = TextEditingController();
-  final String title = '이메일을 입력해주세요';
-  bool isEnabled = false;
-  String buttonText = '인증번호 전송';
-
 
   @override
   void dispose() {
@@ -45,7 +41,7 @@ class _EmailViewState extends ConsumerState<EmailView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 28),
-              Text(title, style: FalletterTextStyle.title2),
+              Text('이메일을 입력해주세요.', style: FalletterTextStyle.title2),
               const SizedBox(height: 36),
               CustomTextFormField(
                 controller: _emailController,
@@ -71,7 +67,7 @@ class _EmailViewState extends ConsumerState<EmailView> {
                       }
                     : null,
                 width: double.infinity,
-                child: Text('다음'),
+                child: Text('인증번호 전송'),
               ),
             ],
           ),
