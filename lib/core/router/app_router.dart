@@ -24,7 +24,7 @@ final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final goRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     navigatorKey: _rootNavigatorKey,
-    initialLocation: RoutePaths.main,
+    initialLocation: '/splash',
     routes: [
       GoRoute(
         path: '/splash',
