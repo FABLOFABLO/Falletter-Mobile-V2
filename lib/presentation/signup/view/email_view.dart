@@ -1,5 +1,6 @@
 import 'package:falletter_mobile_v2/core/components/app_bar/custom_app_bar.dart';
 import 'package:falletter_mobile_v2/core/components/button/elevated_button.dart';
+import 'package:falletter_mobile_v2/core/components/icon/field_icon.dart';
 import 'package:falletter_mobile_v2/core/components/text_form_field/text_form_field.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
@@ -37,12 +38,7 @@ class _EmailViewState extends ConsumerState<EmailView> {
   @override
   Widget build(BuildContext context) {
     final isNextStep = ref.watch(
-      signUpProvider.select((enWrite) {
-        final input = enWrite.email ?? '';
-        final isValid =
-            RegExp(r'^[a-zA-Z0-9._]+$').hasMatch(input);
-            return isValid && input.length >= 6;
-      }),
+      signUpProvider.select((enWrite) => enWrite.emailValid()),
     );
     return Scaffold(
       appBar: CustomAppBar(icon: true, action: Action.orderStep, count: 3),
@@ -62,13 +58,7 @@ class _EmailViewState extends ConsumerState<EmailView> {
                 decoration: InputDecoration(
                   counterText: '',
                   hintText: '이메일을 입력해주세요',
-                  suffixIcon: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 15.5,
-                    ),
-                    child: suffixText,
-                  ),
+                  suffixIcon: FieldIcon.emailText(),
                 ),
                 onChanged: (value) {
                   _writeEmail(ref, value);
@@ -79,8 +69,9 @@ class _EmailViewState extends ConsumerState<EmailView> {
               CustomElevatedButton(
                 onPressed: isNextStep
                     ? () {
-                  ref.read(signUpProvider.notifier).setTimer(Duration(seconds: 300));
-                       /// 인증 페이지 연결
+                        ref.read(signUpProvider.notifier).setTimer(Duration(seconds: 300));
+
+                        /// 인증 페이지 연결
                       }
                     : null,
                 width: double.infinity,
