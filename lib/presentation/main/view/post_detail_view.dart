@@ -238,6 +238,7 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
                   Expanded(
                     child: CustomTextFormField(
                       controller: _commentController,
+                      maxLines: 1,
                       decoration: InputDecoration(hintText: 'Placeholder'),
                     ),
                   ),
