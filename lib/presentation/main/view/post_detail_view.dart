@@ -79,7 +79,7 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
                         ),
                         IconButton(
                           icon: Icon(
-                            Icons.more_horiz,
+                            Symbols.more_horiz,
                             color: FalletterColor.white,
                           ),
                           onPressed: () {
