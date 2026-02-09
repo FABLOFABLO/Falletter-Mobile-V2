@@ -229,7 +229,7 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
                     child: CustomTextFormField(
                       controller: _commentController,
                       maxLines: 1,
-                      decoration: InputDecoration(hintText: 'Placeholder'),
+                      decoration: InputDecoration(hintText: '댓글을 작성하세요'),
                     ),
                   ),
                   SizedBox(width: 12),
