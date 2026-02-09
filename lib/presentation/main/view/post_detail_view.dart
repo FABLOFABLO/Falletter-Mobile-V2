@@ -24,6 +24,8 @@ class PostDetailView extends ConsumerStatefulWidget {
 
 class _PostDetailViewState extends ConsumerState<PostDetailView> {
   final TextEditingController _commentController = TextEditingController();
+  final baseInfoStyle = FalletterTextStyle.body3.copyWith(color: FalletterColor.gray200);
+  final commentInfoStyle = FalletterTextStyle.body4.copyWith(color: FalletterColor.gray200);
 
   @override
   void initState() {
@@ -66,16 +68,12 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
                           children: [
                             Text(
                               post.author.name,
-                              style: FalletterTextStyle.body3.copyWith(
-                                color: FalletterColor.gray200,
-                              ),
+                              style: baseInfoStyle,
                             ),
                             SizedBox(width: 8),
                             Text(
                               timeCheck(post.updatedAt),
-                              style: FalletterTextStyle.body3.copyWith(
-                                color: FalletterColor.gray200,
-                              ),
+                              style: baseInfoStyle
                             ),
                           ],
                         ),
@@ -161,9 +159,7 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
                       padding: EdgeInsets.symmetric(vertical: 15),
                       child: Text(
                         post.content,
-                        style: FalletterTextStyle.body3.copyWith(
-                          color: FalletterColor.gray400,
-                        ),
+                        style: baseInfoStyle.copyWith(color: FalletterColor.gray400)
                       ),
                     ),
                   ],
@@ -192,25 +188,19 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
                                   children: [
                                     Text(
                                       comment.user.name,
-                                      style: FalletterTextStyle.body4.copyWith(
-                                        color: FalletterColor.gray200,
-                                      ),
+                                      style: commentInfoStyle,
                                     ),
                                     SizedBox(width: 8),
                                     Text(
                                       timeCheck(comment.updatedAt),
-                                      style: FalletterTextStyle.body4.copyWith(
-                                        color: FalletterColor.gray200,
-                                      ),
+                                      style: commentInfoStyle,
                                     ),
                                   ],
                                 ),
                                 SizedBox(height: 10),
                                 Text(
                                   comment.comment,
-                                  style: FalletterTextStyle.body3.copyWith(
-                                    color: FalletterColor.gray50,
-                                  ),
+                                  style: baseInfoStyle.copyWith(color: FalletterColor.gray50)
                                 ),
                               ],
                             ),
