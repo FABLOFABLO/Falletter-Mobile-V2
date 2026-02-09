@@ -8,7 +8,7 @@ class UserComplete extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(icon: true),
+      appBar: CustomAppBar(icon: false),
       body: Stack(
         children: [
           /// 배경에 홈 페이지 넣기
