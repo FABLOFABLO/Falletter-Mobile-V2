@@ -222,7 +222,7 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
             ),
             Divider(thickness: 0.5),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
               child: Row(
                 children: [
                   Expanded(
@@ -232,12 +232,13 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
                       decoration: InputDecoration(hintText: '댓글을 작성하세요'),
                     ),
                   ),
-                  SizedBox(width: 12),
-                  SendButton(isEnabled: isEnabled, onPressed: () {}),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 12),
+                    child: SendButton(isEnabled: isEnabled, onPressed: () {}),
+                  ),
                 ],
               ),
             ),
-            SizedBox(height: 10),
           ],
         ),
       ),
