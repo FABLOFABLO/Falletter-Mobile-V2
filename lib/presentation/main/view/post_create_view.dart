@@ -64,7 +64,7 @@ class _PostCreateViewState extends State<PostCreateView> {
                       SizedBox(height: 10),
                       CustomTextFormField(
                         controller: _titleController,
-                        decoration: InputDecoration(hintText: 'Placeholder'),
+                        decoration: InputDecoration(hintText: '제목을 입력하세요'),
                       ),
                       SizedBox(height: 32),
                       Row(
