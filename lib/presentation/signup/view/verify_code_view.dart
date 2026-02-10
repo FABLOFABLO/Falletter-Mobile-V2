@@ -86,7 +86,6 @@ class _VerifyCodeViewState extends ConsumerState<VerifyCodeView> {
     });
     if (verifyController.text == number) {
       ref.read(signUpProvider.notifier).setVerified(true);
-      verifyController.clear();
     }
     if (verifyController.text != number) {
       ref.read(signUpProvider.notifier).setVerified(false);
