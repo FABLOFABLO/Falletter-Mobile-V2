@@ -12,14 +12,14 @@ final dummyDetailPosts = PostDetailModel(
       comment: [
         Comment(
             commentId: 1,
-            user: Author(userId: 2, name: getNickname(2)),
+            user: Author(userId: 2, name: getNickname(1)),
             comment: '1교시가 국어로 변경되었습니다. 1교시가 국어로 변경되었습니다.',
             createdAt: DateTime(2025, 7, 9),
             updatedAt: DateTime(2025, 7, 10)
         ),
         Comment(
             commentId: 2,
-            user: Author(userId: 3, name: getNickname(3)),
+            user: Author(userId: 3, name: getNickname(2)),
             comment: '2교시는 수학으로 변경됩니다.',
             createdAt: DateTime(2020, 2, 23),
             updatedAt: DateTime(2026, 1, 6)
