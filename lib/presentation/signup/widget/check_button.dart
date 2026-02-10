@@ -1,9 +1,9 @@
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
-import 'package:falletter_mobile_v2/presentation/signup/view/detail_agree/agree_service.dart';
-import 'package:falletter_mobile_v2/presentation/signup/view/detail_agree/community_service.dart';
-import 'package:falletter_mobile_v2/presentation/signup/view/detail_agree/privacy_policy.dart';
-import 'package:falletter_mobile_v2/presentation/signup/view/detail_agree/push_notification.dart';
+import 'package:falletter_mobile_v2/presentation/signup/view/detail_agree_view/agree_service_view.dart';
+import 'package:falletter_mobile_v2/presentation/signup/view/detail_agree_view/community_service_view.dart';
+import 'package:falletter_mobile_v2/presentation/signup/view/detail_agree_view/privacy_policy_view.dart';
+import 'package:falletter_mobile_v2/presentation/signup/view/detail_agree_view/push_notification_view.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 
@@ -20,10 +20,10 @@ class CheckButton extends StatefulWidget {
 class _CheckButtonState extends State<CheckButton> {
   final navigator = [
     null,
-    (_) => AgreeService(),
-    (_) => PrivacyPolicy(),
-    (_) => CommunityService(),
-    (_) => PushNotification(),
+    (_) => AgreeServiceView(),
+    (_) => PrivacyPolicyView(),
+    (_) => CommunityServiceView(),
+    (_) => PushNotificationView(),
   ];
 
   @override
