@@ -2,6 +2,7 @@ import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
 import 'package:falletter_mobile_v2/core/theme/app_theme_color.dart';
+import 'package:falletter_mobile_v2/presentation/main/view/main_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_symbols_icons/symbols.dart';
@@ -38,47 +39,53 @@ class LetterModal extends ConsumerWidget {
               borderRadius: BorderRadius.circular(8),
               gradient: themeColors.letterModalBorder,
             ),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                color: FalletterColor.white,
-              ),
-              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Center(
-                    child: Text(
-                      dear,
-                      style: FalletterTextStyle.body3.copyWith(
-                        color: FalletterColor.gray800,
+            child: Padding(
+              padding: const EdgeInsets.all(2),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  color: FalletterColor.white,
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Center(
+                      child: Text(
+                        dear,
+                        style: FalletterTextStyle.body3.copyWith(
+                          color: FalletterColor.gray800,
+                        ),
                       ),
                     ),
-                  ),
-                  height,
-                  divider,
-                  height,
-                  Center(
-                    child: Text(
-                      content,
-                      style: FalletterTextStyle.body3.copyWith(
-                        color: FalletterColor.middleBlack,
+                    height,
+                    divider,
+                    height,
+                    Container(
+                      height: 200,
+                      child: Center(
+                        child: Text(
+                          content,
+                          style: FalletterTextStyle.body3.copyWith(
+                            color: FalletterColor.middleBlack,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                  height,
-                  divider,
-                  height,
-                  Center(
-                    child: Text(
-                      bottom,
-                      style: FalletterTextStyle.body3.copyWith(
-                        color: FalletterColor.gray800,
+                    height,
+                    divider,
+                    height,
+                    Center(
+                      child: Text(
+                        bottom,
+                        style: FalletterTextStyle.body3.copyWith(
+                          color: FalletterColor.gray800,
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
