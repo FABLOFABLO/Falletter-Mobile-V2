@@ -19,6 +19,10 @@ abstract final class FalletterColor {
   static const Color gray900 = Color(0xFF414141);
   static const Color darkTheme = Color(0xFF3D3D3D);
 
+  static const blue = Color(0xff95D2FF);
+  static const pink = Color(0xffFF638E);
+  static const purple = Color(0xffDB7DFF);
+
   static const List<Color> blueGradient = [
     Color(0xFF0CDFE6),
     Color(0xFF93AAFF),
