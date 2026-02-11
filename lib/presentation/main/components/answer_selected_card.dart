@@ -18,6 +18,8 @@ class AnswerSelectedCard extends ConsumerStatefulWidget {
 }
 
 class _AnswerSelectedCardState extends ConsumerState<AnswerSelectedCard> {
+  final titleStyle = FalletterTextStyle.subTitle2.copyWith(fontSize: 15);
+
   @override
   Widget build(BuildContext context) {
     final selectedTheme = ref.watch(themeProvider);
@@ -32,7 +34,7 @@ class _AnswerSelectedCardState extends ConsumerState<AnswerSelectedCard> {
                 children: [
                   SvgPicture.asset(themeColors.brickSvg, width: 20, height: 20),
                   SizedBox(width: 6),
-                  Expanded(child: Text('누군가 나를 선택했어요. 지금 확인해보세요!', style: FalletterTextStyle.subTitle2))
+                  Expanded(child: Text('누군가 나를 선택했어요. 지금 확인해보세요!', style: titleStyle))
                 ],
               ),
               SizedBox(height: 15),
