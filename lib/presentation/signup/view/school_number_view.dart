@@ -37,8 +37,8 @@ class _SchoolNumberViewState extends ConsumerState<SchoolNumberView> {
   Widget build(BuildContext context) {
     final isNextStep = ref.watch(
       signUpProvider.select((enabled) {
-        final schoolNumber = (enabled.schoolNumber?.length ?? 0) >= 4;
-        final name = (enabled.name?.length ?? 0) >= 3;
+        final schoolNumber = (enabled.schoolNumber?.length ?? 0) == 4;
+        final name = (enabled.name?.trim().length ?? 0) >= 2;
         return schoolNumber && name;
       }),
     );
@@ -69,14 +69,18 @@ class _SchoolNumberViewState extends ConsumerState<SchoolNumberView> {
                 ),
                 const SizedBox(height: 16),
                 CustomTextFormField(
+                  maxLength: 4,
                   inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp('[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]')),
+                    FilteringTextInputFormatter.allow(RegExp('[ㄱ-ㅎㅏ-ㅣ가-힣]')),
                   ],
                   onChanged: (value) {
                     _writeName(value);
                   },
                   controller: nameController,
-                  decoration: InputDecoration(hintText: '이름을 입력해주세요'),
+                  decoration: InputDecoration(
+                    hintText: '이름을 입력해주세요',
+                    counterText: '',
+                  ),
                 ),
                 const Spacer(),
                 Padding(
