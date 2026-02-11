@@ -40,7 +40,7 @@ class _CheckButtonState extends State<CheckButton> {
       Text('약관 전체 동의', style: FalletterTextStyle.body1),
       Text.rich(
         TextSpan(
-          text: '빨레터 이용약관 동의 ',
+          text: '팔레터 이용약관 동의 ',
           style: style,
           children: [TextSpan(text: '(필수)', style: blueStyle)],
         ),

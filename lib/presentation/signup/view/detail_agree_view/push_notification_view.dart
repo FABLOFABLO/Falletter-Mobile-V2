@@ -12,26 +12,25 @@ class PushNotificationView extends StatefulWidget {
 
 class _PushNotificationViewState extends State<PushNotificationView> {
   String text = '';
+
   @override
   void initState() {
     super.initState();
-    rootBundle.loadString('assets/text/push.txt').then((value){
+    rootBundle.loadString('assets/text/push.txt').then((value) {
       setState(() {
         text = value;
       });
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(icon: true,title: '푸시 알림 동의',),
+      appBar: CustomAppBar(icon: true, title: '푸시 알림 동의'),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 26),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 26),
         child: SingleChildScrollView(
-          child: Text(
-            text,
-            style: FalletterTextStyle.body3,
-          ),
+          child: Text(text, style: FalletterTextStyle.body3),
         ),
       ),
     );

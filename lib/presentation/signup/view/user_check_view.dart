@@ -6,14 +6,14 @@ import 'package:falletter_mobile_v2/presentation/signup/view/sign_up_complete_vi
 import 'package:falletter_mobile_v2/presentation/signup/widget/check_button.dart';
 import 'package:flutter/material.dart';
 
-class UserCheck extends StatefulWidget {
-  const UserCheck({super.key});
+class UserCheckView extends StatefulWidget {
+  const UserCheckView({super.key});
 
   @override
-  State<UserCheck> createState() => _UserCheckState();
+  State<UserCheckView> createState() => _UserCheckViewState();
 }
 
-class _UserCheckState extends State<UserCheck> {
+class _UserCheckViewState extends State<UserCheckView> {
   List<bool> _isChecked = List.generate(5, (_) => false);
 
   bool get _isCheckedToggle => _isChecked[1] && _isChecked[2] && _isChecked[3];
@@ -50,16 +50,20 @@ class _UserCheckState extends State<UserCheck> {
                 ),
               ),
               const SizedBox(height: 34),
-              CheckButton(toggle: _checkBoxList, isChecked: _isChecked,),
+              CheckButton(toggle: _checkBoxList, isChecked: _isChecked),
               const Spacer(),
               CustomElevatedButton(
                 width: double.infinity,
-                onPressed: _isCheckedToggle ? () {
-                  Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (_) => const UserComplete()),
-                        (route) => false,
-                  );
-                } : null,
+                onPressed: _isCheckedToggle
+                    ? () {
+                        Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                            builder: (_) => const SignUpCompleteView(),
+                          ),
+                          (route) => false,
+                        );
+                      }
+                    : null,
                 child: Text('가입하기'),
               ),
             ],
