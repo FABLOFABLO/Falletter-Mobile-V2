@@ -1,11 +1,13 @@
 // app_router.dart 수정본
 import 'package:falletter_mobile_v2/core/components/bottom_navigatoin_bar/custon_bottom_nav_bar.dart';
 import 'package:falletter_mobile_v2/core/router/route_paths.dart';
+import 'package:falletter_mobile_v2/models/post_detail_model.dart';
 import 'package:falletter_mobile_v2/presentation/answer/view/answer_view.dart';
 import 'package:falletter_mobile_v2/presentation/letter/view/letter_view.dart';
 import 'package:falletter_mobile_v2/presentation/main/view/main_view.dart';
 import 'package:falletter_mobile_v2/presentation/main/view/post_detail_view.dart';
 import 'package:falletter_mobile_v2/presentation/main/view/post_create_view.dart';
+import 'package:falletter_mobile_v2/presentation/main/view/post_edit_view.dart';
 import 'package:falletter_mobile_v2/presentation/mypage/view/mypage_view.dart';
 import 'package:falletter_mobile_v2/presentation/notice/view/notice_view.dart';
 import 'package:falletter_mobile_v2/presentation/signin/view/signin_view.dart';
@@ -66,6 +68,14 @@ final goRouterProvider = Provider<GoRouter>((ref) {
                     path: 'posts/create',
                     builder: (_, __) => const PostCreateView(),
                   ),
+                  GoRoute(
+                    path: 'posts/edit',
+                    parentNavigatorKey: _rootNavigatorKey,
+                    builder: (context, state) {
+                      final post = state.extra as PostDetailModel;
+                      return PostEditView(title: post.title, content: post.content);
+                    }
+                  )
                 ]
               ),
             ],
