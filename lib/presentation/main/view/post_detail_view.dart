@@ -222,7 +222,7 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
             ),
             Divider(thickness: 0.5),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              padding: const EdgeInsets.all(20),
               child: Row(
                 children: [
                   Expanded(
