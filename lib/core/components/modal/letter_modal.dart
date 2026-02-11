@@ -63,7 +63,6 @@ class LetterModal extends ConsumerWidget {
                     divider,
                     height,
                     Container(
-                      height: 200,
                       child: Center(
                         child: Text(
                           content,
