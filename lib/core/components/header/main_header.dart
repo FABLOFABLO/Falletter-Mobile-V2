@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 class MainHeader extends ConsumerWidget {
   final double width;
@@ -31,11 +32,11 @@ class MainHeader extends ConsumerWidget {
         child: Row(
           children: [
             if (leadingIcon)
-              IconButton(
-                onPressed: () {
+              GestureDetector(
+                onTap: () {
                   context.go('${RoutePaths.main}');
                 },
-                icon: Icon(Icons.close, color: FalletterColor.white, size: 18),
+                  child: Icon(Symbols.close, color: FalletterColor.white, size: 18)
               ),
             Spacer(),
             GestureDetector(
