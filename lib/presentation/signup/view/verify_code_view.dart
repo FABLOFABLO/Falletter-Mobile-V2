@@ -16,6 +16,7 @@ class VerifyCodeView extends ConsumerStatefulWidget {
 }
 
 class _VerifyCodeViewState extends ConsumerState<VerifyCodeView> {
+  final baseStyle = FalletterTextStyle.body3;
   bool isPressed = false;
   TextEditingController verifyController = TextEditingController();
   bool? verifyResult;
@@ -28,7 +29,6 @@ class _VerifyCodeViewState extends ConsumerState<VerifyCodeView> {
     });
   }
 
-  final baseStyle = FalletterTextStyle.body3;
 
   @override
   void dispose() {
@@ -109,7 +109,7 @@ class _VerifyCodeViewState extends ConsumerState<VerifyCodeView> {
                 children: [
                   Expanded(
                     child: CustomTextFormField(
-                      keyboardType: TextInputType.numberWithOptions(),
+                      keyboardType: TextInputType.number,
                       onChanged: (value) {
                         _writeVerifyCode(false);
                       },
