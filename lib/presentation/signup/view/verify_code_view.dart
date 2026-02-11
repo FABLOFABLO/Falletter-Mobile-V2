@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:falletter_mobile_v2/core/components/app_bar/custom_app_bar.dart';
 import 'package:falletter_mobile_v2/core/components/button/elevated_button.dart';
 import 'package:falletter_mobile_v2/core/components/text_form_field/text_form_field.dart';
@@ -17,8 +16,6 @@ class VerifyCodeView extends ConsumerStatefulWidget {
 }
 
 class _VerifyCodeViewState extends ConsumerState<VerifyCodeView> {
-  Timer? timer;
-  int limitTime = 300;
   bool isPressed = false;
   TextEditingController verifyController = TextEditingController();
   bool? verifyResult;
@@ -27,55 +24,27 @@ class _VerifyCodeViewState extends ConsumerState<VerifyCodeView> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _startTime();
+      ref.read(signUpProvider.notifier).startTime();
     });
   }
 
-  void _startTime() {
-    if (mounted) {
-      timer?.cancel();
-    }
-    ref.read(signUpProvider.notifier).setTimer(Duration(seconds: limitTime));
-    timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      if (limitTime > 0) {
-        setState(() {
-          limitTime--;
-        });
-      } else {
-        timer.cancel();
-      }
-    });
-  }
-
-  String get time {
-    Duration duration = Duration(seconds: limitTime);
-    return '${duration.inMinutes.toString().padLeft(2, '0')}:${(duration.inSeconds % 60).toString().padLeft(2, '0')}';
-  }
+  final baseStyle = FalletterTextStyle.body3;
 
   @override
   void dispose() {
-    timer?.cancel();
     verifyController.dispose();
     super.dispose();
   }
 
-  final reSend = Container(
-    padding: EdgeInsets.symmetric(horizontal: 14, vertical: 3),
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(4),
-      color: FalletterColor.blueGradient.first,
-    ),
-    child: Text(
-      '재전송',
-      style: FalletterTextStyle.placeholder.copyWith(
-        color: FalletterColor.black,
-      ),
-    ),
-  );
+  String durationTime(Duration? duration) {
+    final durations = duration;
+    return '${durations?.inMinutes.toString().padLeft(2, '0')}:${(durations!.inSeconds % 60).toString().padLeft(2, '0')}';
+  }
 
-  void _writeVerifyCode(WidgetRef ref, bool value) {
+  void _writeVerifyCode(bool value) {
     ref.read(signUpProvider.notifier).setVerified(value);
   }
+
   // 임시코드
   String number = '123456';
 
@@ -118,6 +87,8 @@ class _VerifyCodeViewState extends ConsumerState<VerifyCodeView> {
         return enWrite.verified ?? false;
       }),
     );
+    final timer = ref.watch(signUpProvider).timer ?? Duration.zero;
+    bool limitTime = timer.inSeconds > 0;
     return Scaffold(
       appBar: CustomAppBar(icon: true, action: Action.orderStep, count: 4),
       body: SafeArea(
@@ -131,23 +102,22 @@ class _VerifyCodeViewState extends ConsumerState<VerifyCodeView> {
               const SizedBox(height: 8),
               Text(
                 '입력한 이메일로 전송했어요!',
-                style: FalletterTextStyle.body3.copyWith(
-                  color: FalletterColor.gray400,
-                ),
+                style: baseStyle.copyWith(color: FalletterColor.gray400),
               ),
               const SizedBox(height: 36),
               Row(
                 children: [
                   Expanded(
                     child: CustomTextFormField(
+                      keyboardType: TextInputType.numberWithOptions(),
                       onChanged: (value) {
-                        _writeVerifyCode(ref, false);
+                        _writeVerifyCode(false);
                       },
                       onTapOutside: (event) => FocusScope.of(context).unfocus(),
                       controller: verifyController,
                       maxLines: 1,
                       decoration: InputDecoration(
-                        enabled: limitTime > 0,
+                        enabled: limitTime,
                         hintText: '인증번호를 입력해주세요',
                         suffixIconConstraints: BoxConstraints(
                           minHeight: 0,
@@ -156,8 +126,8 @@ class _VerifyCodeViewState extends ConsumerState<VerifyCodeView> {
                         suffixIcon: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 17),
                           child: Text(
-                            time,
-                            style: FalletterTextStyle.body3.copyWith(
+                            durationTime(timer),
+                            style: baseStyle.copyWith(
                               color: FalletterColor.error,
                             ),
                             textAlign: TextAlign.center,
@@ -171,10 +141,7 @@ class _VerifyCodeViewState extends ConsumerState<VerifyCodeView> {
                   GestureDetector(
                     onTap: _check,
                     child: Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 12,
-                      ),
+                      padding: EdgeInsets.all(12),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(4),
                         color: FalletterColor.blueGradient.first,
@@ -192,9 +159,7 @@ class _VerifyCodeViewState extends ConsumerState<VerifyCodeView> {
               const SizedBox(height: 8),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  _errorValid() ?? SizedBox.shrink(),
-                ],
+                children: [_errorValid() ?? SizedBox.shrink()],
               ),
               const Spacer(),
               Row(
@@ -205,14 +170,14 @@ class _VerifyCodeViewState extends ConsumerState<VerifyCodeView> {
                   GestureDetector(
                     onTap: () {
                       setState(() {
-                        _check();
-                        limitTime = 300;
                         verifyController.clear();
+                        verifyResult = null;
                       });
+                      ref.read(signUpProvider.notifier).startTime();
                     },
                     child: Text(
                       '재전송',
-                      style: FalletterTextStyle.body3.copyWith(
+                      style: baseStyle.copyWith(
                         decoration: TextDecoration.underline,
                         decorationColor: FalletterColor.white,
                       ),
