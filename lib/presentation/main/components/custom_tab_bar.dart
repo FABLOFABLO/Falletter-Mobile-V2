@@ -7,7 +7,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class CustomTabBar extends ConsumerWidget {
   final List<Tab> tabs;
   final TabController controller;
-  const CustomTabBar({super.key, required this.tabs, required this.controller});
+
+  const CustomTabBar({
+    super.key,
+    required this.tabs,
+    required this.controller
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
