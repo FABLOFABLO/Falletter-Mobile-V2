@@ -30,7 +30,7 @@ class _BlockCardState extends State<BlockCard> {
           children: [
             Row(
               children: [
-                SvgPicture.asset('assets/svg/suspend/block.svg'),
+                Text('⛔️', style: TextStyle(fontSize: 20)),
                 SizedBox(width: 8),
                 Text(
                   '계정 이용 일시 정지 안내',
