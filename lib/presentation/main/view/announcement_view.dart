@@ -17,12 +17,14 @@ class AnnouncementView extends ConsumerStatefulWidget {
 class _AnnouncementViewState extends ConsumerState<AnnouncementView> {
   @override
   Widget build(BuildContext context) {
+    final metaTextStyle = FalletterTextStyle.body4.copyWith(
+        color: FalletterColor.gray500);
+    final notices = ref.watch(AnnouncementProvider);
     return Scaffold(
       body: ListView.builder(
         padding: EdgeInsets.zero,
-        itemCount: 2,
+        itemCount: notices.length,
         itemBuilder: (BuildContext context, int index) {
-          final notices = ref.watch(AnnouncementProvider);
           final notice = notices[index];
           return ContentCardButton(
             child: Padding(
@@ -36,14 +38,12 @@ class _AnnouncementViewState extends ConsumerState<AnnouncementView> {
                     children: [
                       Text(
                         notice.authorName,
-                        style: FalletterTextStyle.body4.copyWith(
-                            color: FalletterColor.gray500),
+                        style: metaTextStyle,
                       ),
                       SizedBox(width: 8),
                       Text(
                         timeCheck(notice.createdAt),
-                        style: FalletterTextStyle.body4.copyWith(
-                            color: FalletterColor.gray500),
+                        style: metaTextStyle,
                       )
                     ],
                   )
