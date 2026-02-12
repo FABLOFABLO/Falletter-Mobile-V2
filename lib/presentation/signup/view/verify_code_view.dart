@@ -17,6 +17,7 @@ class VerifyCodeView extends ConsumerStatefulWidget {
 
 class _VerifyCodeViewState extends ConsumerState<VerifyCodeView> {
   final baseStyle = FalletterTextStyle.body3;
+  final errorStyle = FalletterTextStyle.body2;
   bool isPressed = false;
   TextEditingController verifyController = TextEditingController();
   bool? verifyResult;
@@ -66,14 +67,14 @@ class _VerifyCodeViewState extends ConsumerState<VerifyCodeView> {
     if (verifyResult == false) {
       return Text(
         '인증번호가 일치하지 않습니다',
-        style: FalletterTextStyle.body2.copyWith(color: FalletterColor.error),
+        style: errorStyle.copyWith(color: FalletterColor.error),
         textAlign: TextAlign.center,
       );
     }
     if (verifyResult == true) {
       return Text(
         '인증이 완료되었습니다',
-        style: FalletterTextStyle.body2.copyWith(color: Colors.blue),
+        style: errorStyle.copyWith(color: Colors.blue),
         textAlign: TextAlign.center,
       );
     }
@@ -165,7 +166,7 @@ class _VerifyCodeViewState extends ConsumerState<VerifyCodeView> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('만약 인증번호가 오지 않으셨나요?', style: FalletterTextStyle.body3),
+                  Text('만약 인증번호가 오지 않으셨나요?', style: baseStyle),
                   const SizedBox(width: 6),
                   GestureDetector(
                     onTap: () {
