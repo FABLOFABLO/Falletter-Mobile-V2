@@ -56,7 +56,7 @@ class ThemeColors {
 
 Map<AppTheme, ThemeColors> appThemeColors = {
   AppTheme.blue: ThemeColors(
-    primaryColor: FalletterColor.blue,
+    primaryColor: FalletterColor.blueGradient[1],
     primaryGradient: FalletterGradient.horizontal(FalletterColor.blueGradient),
     text: FalletterGradient.vertical(FalletterColor.blueGradient),
     button: FalletterGradient.horizontal(FalletterColor.blueGradient),
@@ -81,7 +81,7 @@ Map<AppTheme, ThemeColors> appThemeColors = {
   ),
 
   AppTheme.pink: ThemeColors(
-    primaryColor: FalletterColor.pink,
+    primaryColor: FalletterColor.pinkGradient[0],
     primaryGradient: FalletterGradient.horizontal(FalletterColor.pinkGradient),
     text: FalletterGradient.vertical(FalletterColor.pinkGradient),
     button: FalletterGradient.horizontal(FalletterColor.pinkGradient),
@@ -106,7 +106,7 @@ Map<AppTheme, ThemeColors> appThemeColors = {
   ),
 
   AppTheme.purple: ThemeColors(
-    primaryColor: FalletterColor.purple,
+    primaryColor: FalletterColor.purpleGradient[0],
     primaryGradient: FalletterGradient.horizontal(FalletterColor.purpleGradient),
     text: FalletterGradient.vertical(FalletterColor.purpleGradient),
     button: FalletterGradient.horizontal(FalletterColor.purpleGradient),
