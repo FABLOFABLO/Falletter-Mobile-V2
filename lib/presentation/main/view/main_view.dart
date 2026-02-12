@@ -40,7 +40,7 @@ class _FalletterMainViewState extends ConsumerState<FalletterMainView> {
                 final commentCount = comments[post.id]?.length ?? 0;
                 return ContentCardButton(
                   onTap: () {
-                    context.push('/posts/detail', extra: post.id);
+                    context.push('${RoutePaths.main}/detail', extra: post.id);
                   },
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
@@ -98,7 +98,7 @@ class _FalletterMainViewState extends ConsumerState<FalletterMainView> {
       ),
       floatingActionButton: CustomFloatingButton(
         onTap: () {
-          context.push('${RoutePaths.main}/posts/create');
+          context.push('${RoutePaths.main}/create');
         },
       ),
     );

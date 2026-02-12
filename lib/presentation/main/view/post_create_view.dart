@@ -4,6 +4,7 @@ import 'package:falletter_mobile_v2/core/components/button/send_button.dart';
 import 'package:falletter_mobile_v2/core/components/text_form_field/text_form_field.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
+import 'package:falletter_mobile_v2/core/router/route_paths.dart';
 import 'package:falletter_mobile_v2/presentation/main/view/post_detail_view.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -106,7 +107,7 @@ class _PostCreateViewState extends State<PostCreateView> {
                 onPressed: isEnabled
                     ? () {
                   int dummyPostid = 2;
-                  context.pushReplacement('/posts/detail', extra: dummyPostid);
+                  context.pushReplacement('${RoutePaths.main}/detail', extra: dummyPostid);
                 }
                     : null,
               ),

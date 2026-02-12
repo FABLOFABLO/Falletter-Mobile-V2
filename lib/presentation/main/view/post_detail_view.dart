@@ -143,7 +143,7 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
                                       ),
                                       onTap: () {
                                         Navigator.pop(context);
-                                        context.push('${RoutePaths.main}/posts/edit', extra: post);
+                                        context.push('${RoutePaths.main}/edit', extra: post);
                                       },
                                     ),
                                   ],
