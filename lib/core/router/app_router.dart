@@ -1,20 +1,19 @@
-// app_router.dart 수정본
 import 'package:falletter_mobile_v2/core/components/bottom_navigatoin_bar/custon_bottom_nav_bar.dart';
 import 'package:falletter_mobile_v2/core/router/route_paths.dart';
 import 'package:falletter_mobile_v2/models/post_detail_model.dart';
 import 'package:falletter_mobile_v2/presentation/answer/view/answer_view.dart';
 import 'package:falletter_mobile_v2/presentation/letter/view/letter_view.dart';
 import 'package:falletter_mobile_v2/presentation/main/view/main_view.dart';
+import 'package:falletter_mobile_v2/presentation/main/view/notification_view.dart';
 import 'package:falletter_mobile_v2/presentation/main/view/post_detail_view.dart';
 import 'package:falletter_mobile_v2/presentation/main/view/post_create_view.dart';
 import 'package:falletter_mobile_v2/presentation/main/view/post_edit_view.dart';
 import 'package:falletter_mobile_v2/presentation/mypage/view/mypage_view.dart';
+import 'package:falletter_mobile_v2/presentation/main/view/announcement_detail_view.dart';
 import 'package:falletter_mobile_v2/presentation/notice/view/notice_view.dart';
 import 'package:falletter_mobile_v2/presentation/signin/view/signin_view.dart';
-// + 추가된 임포트
 import 'package:falletter_mobile_v2/presentation/splash/view/splash_view.dart';
 import 'package:falletter_mobile_v2/presentation/signup/view/gender_view.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -38,13 +37,6 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: '/signin',
         builder: (_, __) => const SigninView(),
       ),
-
-      GoRoute(
-        path: '/posts/detail',
-        builder: (context, state) {
-          return PostDetailView(postId: state.extra as int);
-        },
-      ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
           return Scaffold(
@@ -52,10 +44,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             bottomNavigationBar: CustomBottomNavigationBar(
               currentIndex: navigationShell.currentIndex,
               onTap: (index) {
-                navigationShell.goBranch(
-                  index,
-                  initialLocation: index == navigationShell.currentIndex,
-                );
+                navigationShell.goBranch(index);
               },
             ),
           );
@@ -68,19 +57,39 @@ final goRouterProvider = Provider<GoRouter>((ref) {
                 builder: (_, __) => const FalletterMainView(),
                 routes: [
                   GoRoute(
-                    path: 'posts/create',
+                    path: 'detail',
+                    parentNavigatorKey: _rootNavigatorKey,
+                    builder: (context, state) {
+                      return PostDetailView(postId: state.extra as int);
+                    },
+                  ),
+                  GoRoute(
+                    path: 'create',
                     builder: (_, __) => const PostCreateView(),
                   ),
                   GoRoute(
-                    path: 'posts/edit',
+                    path: 'edit',
                     parentNavigatorKey: _rootNavigatorKey,
                     builder: (context, state) {
                       final post = state.extra as PostDetailModel;
                       return PostEditView(title: post.title, content: post.content);
                     }
-                  )
+                  ),
                 ]
               ),
+              GoRoute(
+                  path: '/notification',
+                  builder: (_, __) => const NotificationView(),
+                  routes: [
+                    GoRoute(
+                        path: 'detail',
+                        parentNavigatorKey: _rootNavigatorKey,
+                        builder: (context, state) {
+                          return AnnouncementDetailView(id: state.extra as int);
+                        }
+                    ),
+                  ]
+              )
             ],
           ),
           StatefulShellBranch(

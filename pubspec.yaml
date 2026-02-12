@@ -62,5 +62,5 @@ flutter:
     - assets/svg/received_letter/
     - assets/svg/roulette_check/
     - assets/svg/theme_mode/
-    - assets/svg/suspend/
     - assets/lottie/
+    - assets/svg/suspend/
