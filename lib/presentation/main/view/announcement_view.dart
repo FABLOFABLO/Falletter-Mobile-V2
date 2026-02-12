@@ -51,7 +51,7 @@ class _AnnouncementViewState extends ConsumerState<AnnouncementView> {
               ),
             ),
             onTap: () {
-              context.push('/announcement/detail', extra: notice.id);
+              context.push('/notification/detail', extra: notice.id);
             },
           );
         },

@@ -37,18 +37,6 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: '/signin',
         builder: (_, __) => const SigninView(),
       ),
-      GoRoute(
-        path: '/posts/detail',
-        builder: (context, state) {
-          return PostDetailView(postId: state.extra as int);
-        },
-      ),
-      GoRoute(
-        path: '/announcement/detail',
-        builder: (context, state) {
-          return AnnouncementDetailView(id: state.extra as int);
-        }
-      ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
           return Scaffold(
@@ -69,23 +57,39 @@ final goRouterProvider = Provider<GoRouter>((ref) {
                 builder: (_, __) => const FalletterMainView(),
                 routes: [
                   GoRoute(
-                    path: 'posts/create',
+                    path: 'detail',
+                    parentNavigatorKey: _rootNavigatorKey,
+                    builder: (context, state) {
+                      return PostDetailView(postId: state.extra as int);
+                    },
+                  ),
+                  GoRoute(
+                    path: 'create',
                     builder: (_, __) => const PostCreateView(),
                   ),
                   GoRoute(
-                    path: 'posts/edit',
+                    path: 'edit',
                     parentNavigatorKey: _rootNavigatorKey,
                     builder: (context, state) {
                       final post = state.extra as PostDetailModel;
                       return PostEditView(title: post.title, content: post.content);
                     }
                   ),
-                  GoRoute(
-                    path: 'notification',
-                    builder: (_, __) => const NotificationView()
-                  )
                 ]
               ),
+              GoRoute(
+                  path: '/notification',
+                  builder: (_, __) => const NotificationView(),
+                  routes: [
+                    GoRoute(
+                        path: 'detail',
+                        parentNavigatorKey: _rootNavigatorKey,
+                        builder: (context, state) {
+                          return AnnouncementDetailView(id: state.extra as int);
+                        }
+                    ),
+                  ]
+              )
             ],
           ),
           StatefulShellBranch(

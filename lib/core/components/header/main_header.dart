@@ -47,7 +47,7 @@ class MainHeader extends ConsumerWidget {
             GestureDetector(
               child: SvgPicture.asset(themeColors.noticeSvg, width: width, height: height,),
               onTap: () {
-                context.go('${RoutePaths.main}/notification');
+                context.go('/notification');
               },
             ),
           ],
