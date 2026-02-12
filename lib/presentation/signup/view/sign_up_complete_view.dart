@@ -1,16 +1,19 @@
 import 'package:falletter_mobile_v2/core/components/app_bar/custom_app_bar.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
+import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
+import 'package:falletter_mobile_v2/core/theme/app_theme_color.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 
-class SignUpCompleteView extends StatefulWidget {
+class SignUpCompleteView extends ConsumerStatefulWidget {
   const SignUpCompleteView({super.key});
 
   @override
-  State<SignUpCompleteView> createState() => _SignUpCompleteViewState();
+  ConsumerState<SignUpCompleteView> createState() => _SignUpCompleteViewState();
 }
 
-class _SignUpCompleteViewState extends State<SignUpCompleteView>
+class _SignUpCompleteViewState extends ConsumerState<SignUpCompleteView>
     with TickerProviderStateMixin {
   late final AnimationController _animationController;
 
@@ -28,13 +31,15 @@ class _SignUpCompleteViewState extends State<SignUpCompleteView>
 
   @override
   Widget build(BuildContext context) {
+    final selectedTheme = ref.watch(themeProvider);
+    final themeColors = appThemeColors[selectedTheme]!;
     return Scaffold(
       appBar: CustomAppBar(icon: false),
       body: Stack(
         children: [
           /// 배경에 홈 페이지 넣기
           Lottie.asset(
-            'assets/lottie/congratulation.json',
+            themeColors.signupLottie,
             controller: _animationController,
             onLoaded: (onLoaded) {
               _animationController.duration = onLoaded.duration;
