@@ -77,7 +77,7 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
                     Text('$count개', style: FalletterTextStyle.body1),
                   ],
                 ),
-                Action.orderStep => RichText(
+                AppBarAction.orderStep => RichText(
                   text: TextSpan(
                     children: [
                       TextSpan(text: '$count', style: FalletterTextStyle.body1),
