@@ -7,12 +7,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
-enum Action { brickCount, letterCount, orderStep }
+enum AppBarAction { brickCount, letterCount, orderStep }
 
 class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
   final bool icon;
   final String? title;
-  final Action? action;
+  final AppBarAction? appBarAction;
   final int? count;
 
   const CustomAppBar({
@@ -20,7 +20,7 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
     required this.icon,
     this.title,
     this.count,
-    this.action,
+    this.appBarAction,
   });
 
   @override
@@ -54,8 +54,8 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
           padding: const EdgeInsets.symmetric(horizontal: paddingWidth),
           child: Row(
             children: [
-              switch (action) {
-                Action.brickCount => Row(
+              switch (appBarAction) {
+                AppBarAction.brickCount => Row(
                   children: [
                     SvgPicture.asset(
                       themeColors.brickSvg,
@@ -66,7 +66,7 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
                     Text('$count개', style: FalletterTextStyle.body1),
                   ],
                 ),
-                Action.letterCount => Row(
+                AppBarAction.letterCount => Row(
                   children: [
                     SvgPicture.asset(
                       themeColors.letterSvg,
