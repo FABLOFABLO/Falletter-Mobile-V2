@@ -5,6 +5,7 @@ abstract final class FalletterColor {
   static const Color black = Color(0xFF141414);
   static const Color middleBlack = Color(0xFF1C1C1C);
   static const Color error = Color(0xFFFF7A7A);
+  static const Color blue = Color(0xFF4FB8EA);
 
   static const Color gray50 = Color(0xFFF4F4F4);
   static const Color gray100 = Color(0xFFE4E4E4);
