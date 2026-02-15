@@ -28,11 +28,11 @@ class Roulette extends ConsumerStatefulWidget {
 }
 
 class _RouletteState extends ConsumerState<Roulette> with SingleTickerProviderStateMixin {
-  late Animation<double> _animation;
   late AnimationController _controller;
+  late Animation<double> _animation;
   bool isSpinning = false;
   int selectedIndex = 0;
-  double currentRotation = 0;
+  double _currentRotation = 0.0; // 라디안 단위로 저장
 
   final rewards = [
     Reward(RewardType.miss, 0, 13),
@@ -49,43 +49,62 @@ class _RouletteState extends ConsumerState<Roulette> with SingleTickerProviderSt
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: const Duration(milliseconds: 3000),
+      duration: const Duration(milliseconds: 4000),
       vsync: this,
     );
-    _animation = Tween<double>(begin: currentRotation, end: currentRotation).animate(_controller);
+
+    _animation = Tween<double>(
+      begin: 0.0,
+      end: 0.0,
+    ).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Curves.easeOutCubic,
+      ),
+    );
   }
 
   @override
   void dispose() {
-    super.dispose();
     _controller.dispose();
+    super.dispose();
   }
 
   void spinRoulette() {
     if (isSpinning) return;
+
     setState(() {
       isSpinning = true;
     });
 
     final prizeIndex = getRandomIndex();
-    final totalRotation = calculateRotation(prizeIndex);
+    final targetRotation = calculateRotation(prizeIndex);
 
-    animateRoulette(totalRotation, prizeIndex);
+    animateRoulette(targetRotation, prizeIndex);
   }
 
-  void animateRoulette(double totalRotation, int prizeIndex) {
-    final newRotation = currentRotation + totalRotation;
+  void animateRoulette(double targetRotationDegrees, int prizeIndex) {
+    // 현재 회전 각도 (라디안)에서 시작
+    final startRotation = _currentRotation;
+    // 목표 회전 각도 (라디안)
+    final endRotation = _currentRotation + (targetRotationDegrees * pi / 180);
 
-    _animation = Tween<double>(begin: currentRotation, end: newRotation).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic),
+    _animation = Tween<double>(
+      begin: startRotation,
+      end: endRotation,
+    ).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Curves.easeOutCubic,
+      ),
     );
 
     _controller.reset();
     _controller.forward().then((_) {
       setState(() {
+        _currentRotation = endRotation;
         isSpinning = false;
         selectedIndex = prizeIndex;
-        currentRotation = newRotation;
       });
       applyReward();
     });
@@ -140,17 +159,18 @@ class _RouletteState extends ConsumerState<Roulette> with SingleTickerProviderSt
           width: 300,
           height: 300,
           child: AnimatedBuilder(
-              animation: _animation,
-              builder: (context, _) {
-                return Transform.rotate(
-                  angle: _animation.value * pi / 180,
-                  child: CustomPaint(
-                    size: const Size(300, 300),
-                    painter: RoulettePaint(count: rewards.length),
-                  )
-                );
-              }
-          )
+            animation: _animation,
+            builder: (context, child) {
+              return Transform.rotate(
+                angle: _animation.value,
+                child: child,
+              );
+            },
+            child: CustomPaint(
+              size: const Size(300, 300),
+              painter: RoulettePaint(count: rewards.length),
+            ),
+          ),
         ),
         Positioned(
           top: 0,
