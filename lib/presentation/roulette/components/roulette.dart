@@ -29,10 +29,10 @@ class Roulette extends ConsumerStatefulWidget {
 
 class _RouletteState extends ConsumerState<Roulette> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  late Animation<double> _animation;
   bool isSpinning = false;
   int selectedIndex = 0;
-  double _currentRotation = 0.0; // 라디안 단위로 저장
+  double _startAngle = 0.0;
+  double _targetAngle = 0.0;
 
   final rewards = [
     Reward(RewardType.miss, 0, 13),
@@ -52,16 +52,6 @@ class _RouletteState extends ConsumerState<Roulette> with SingleTickerProviderSt
       duration: const Duration(milliseconds: 4000),
       vsync: this,
     );
-
-    _animation = Tween<double>(
-      begin: 0.0,
-      end: 0.0,
-    ).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: Curves.easeOutCubic,
-      ),
-    );
   }
 
   @override
@@ -78,36 +68,28 @@ class _RouletteState extends ConsumerState<Roulette> with SingleTickerProviderSt
     });
 
     final prizeIndex = getRandomIndex();
-    final targetRotation = calculateRotation(prizeIndex);
+    final rotationDegrees = calculateRotation(prizeIndex);
 
-    animateRoulette(targetRotation, prizeIndex);
+    animateRoulette(rotationDegrees, prizeIndex);
   }
 
-  void animateRoulette(double targetRotationDegrees, int prizeIndex) {
-    // 현재 회전 각도 (라디안)에서 시작
-    final startRotation = _currentRotation;
-    // 목표 회전 각도 (라디안)
-    final endRotation = _currentRotation + (targetRotationDegrees * pi / 180);
-
-    _animation = Tween<double>(
-      begin: startRotation,
-      end: endRotation,
-    ).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: Curves.easeOutCubic,
-      ),
-    );
+  void animateRoulette(double rotationDegrees, int prizeIndex) {
+    _startAngle = _targetAngle;
+    _targetAngle = _startAngle + (rotationDegrees * pi / 180);
 
     _controller.reset();
     _controller.forward().then((_) {
       setState(() {
-        _currentRotation = endRotation;
         isSpinning = false;
         selectedIndex = prizeIndex;
       });
       applyReward();
     });
+  }
+
+  double _getCurrentAngle() {
+    final t = Curves.easeOutCubic.transform(_controller.value);
+    return _startAngle + (_targetAngle - _startAngle) * t;
   }
 
   void applyReward() {
@@ -159,10 +141,10 @@ class _RouletteState extends ConsumerState<Roulette> with SingleTickerProviderSt
           width: 300,
           height: 300,
           child: AnimatedBuilder(
-            animation: _animation,
+            animation: _controller,
             builder: (context, child) {
               return Transform.rotate(
-                angle: _animation.value,
+                angle: _getCurrentAngle(),
                 child: child,
               );
             },
