@@ -7,7 +7,6 @@ import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/presentation/signin/provider/sign_in_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 class SigninView extends ConsumerStatefulWidget {
   const SigninView({super.key});
@@ -28,6 +27,7 @@ class _SigninViewState extends ConsumerState<SigninView> {
     _emailController.addListener(enabled);
     _passwordController.addListener(enabled);
   }
+
   @override
   void dispose() {
     _emailController.dispose();
@@ -35,12 +35,25 @@ class _SigninViewState extends ConsumerState<SigninView> {
     super.dispose();
   }
 
-  static final double height = 32;
-  static final double lowSize = 8;
+  static const double height = 32;
+  static const double lowSize = 8;
 
-  void enabled(){
-    ref.read(signInProvider.notifier).enabledButton(_emailController.text,_passwordController.text);
+  void enabled() {
+    ref.read(signInProvider.notifier).enabledButton(_emailController.text, _passwordController.text);
   }
+
+  Widget pwCheck() {
+    return pwObsText
+        ? FieldIcon.hidePwIcon(onPressed: stateChange)
+        : FieldIcon.showPwIcon(onPressed: stateChange);
+  }
+
+  void stateChange() {
+    setState(() {
+      pwObsText = !pwObsText;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final isEnabled = ref.watch(
@@ -56,7 +69,7 @@ class _SigninViewState extends ConsumerState<SigninView> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 SizedBox(height: height),
-                Text('로그인하고 \n팔레터 사용하기', style: FalletterTextStyle.title2),
+                Text('로그인하고\n팔레터 사용하기', style: FalletterTextStyle.title2),
                 const SizedBox(height: 40),
                 CustomTextFormFieldLabel(labelText: '이메일'),
                 SizedBox(height: lowSize),
@@ -78,17 +91,7 @@ class _SigninViewState extends ConsumerState<SigninView> {
                   controller: _passwordController,
                   decoration: InputDecoration(
                     hintText: '비밀번호를 입력해주세요.',
-                    suffixIcon: GestureDetector(
-                      child: Icon(
-                        pwObsText ? Symbols.visibility_off : Symbols.visibility,
-                        fill: 1,
-                      ),
-                      onTap: () {
-                        setState(() {
-                          pwObsText = !pwObsText;
-                        });
-                      },
-                    ),
+                    suffixIcon: pwCheck(),
                   ),
                 ),
                 SizedBox(height: lowSize),
@@ -105,7 +108,7 @@ class _SigninViewState extends ConsumerState<SigninView> {
                     SizedBox(width: lowSize),
                     GestureDetector(
                       onTap: () {
-                        /// todo 회원가입 첫 페이지로 이동
+                        /// todo 회원가입 첫 페이지 GoRouter로 이동
                       },
                       child: Text('회원가입', style: baseStyle),
                     ),
@@ -115,7 +118,7 @@ class _SigninViewState extends ConsumerState<SigninView> {
                 CustomElevatedButton(
                   onPressed: isEnabled
                       ? () {
-                          /// 홈 페이지로 이동
+                          /// todo 홈 페이지로 GoRouter로 이동
                         }
                       : null,
                   child: Text('로그인하기'),
