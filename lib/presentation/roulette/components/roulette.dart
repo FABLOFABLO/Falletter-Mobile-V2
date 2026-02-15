@@ -32,6 +32,7 @@ class _RouletteState extends ConsumerState<Roulette> with SingleTickerProviderSt
   late AnimationController _controller;
   bool isSpinning = false;
   int selectedIndex = 0;
+  double currentRotation = 0;
 
   final rewards = [
     Reward(RewardType.miss, 0, 13),
@@ -51,7 +52,7 @@ class _RouletteState extends ConsumerState<Roulette> with SingleTickerProviderSt
       duration: const Duration(milliseconds: 3000),
       vsync: this,
     );
-    _animation = Tween<double>(begin: 0, end: 0).animate(_controller);
+    _animation = Tween<double>(begin: currentRotation, end: currentRotation).animate(_controller);
   }
 
   @override
@@ -73,7 +74,9 @@ class _RouletteState extends ConsumerState<Roulette> with SingleTickerProviderSt
   }
 
   void animateRoulette(double totalRotation, int prizeIndex) {
-    _animation = Tween<double>(begin: 0, end: totalRotation).animate(
+    final newRotation = currentRotation + totalRotation;
+
+    _animation = Tween<double>(begin: currentRotation, end: newRotation).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic),
     );
 
@@ -81,6 +84,7 @@ class _RouletteState extends ConsumerState<Roulette> with SingleTickerProviderSt
       setState(() {
         isSpinning = false;
         selectedIndex = prizeIndex;
+        currentRotation = newRotation % 360;
       });
       applyReward();
     });
