@@ -80,11 +80,12 @@ class _RouletteState extends ConsumerState<Roulette> with SingleTickerProviderSt
       CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic),
     );
 
-    _controller.forward(from: 0).then((_) {
+    _controller.reset();
+    _controller.forward().then((_) {
       setState(() {
         isSpinning = false;
         selectedIndex = prizeIndex;
-        currentRotation = newRotation % 360;
+        currentRotation = newRotation;
       });
       applyReward();
     });
