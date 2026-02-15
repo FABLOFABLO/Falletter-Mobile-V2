@@ -1,7 +1,10 @@
 import 'package:falletter_mobile_v2/core/constants/color.dart';
+import 'package:falletter_mobile_v2/core/providers/roulette_timer_provider.dart';
 import 'package:falletter_mobile_v2/core/router/route_paths.dart';
 import 'package:falletter_mobile_v2/core/theme/app_theme_color.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
+import 'package:falletter_mobile_v2/presentation/roulette/roulette_timer_view.dart';
+import 'package:falletter_mobile_v2/presentation/roulette/roulette_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -41,7 +44,27 @@ class MainHeader extends ConsumerWidget {
             Spacer(),
             GestureDetector(
               child: SvgPicture.asset(themeColors.rouletteCheckSvg, width: width, height: height,),
-              onTap: () {},
+                onTap: () {
+                  loadDummyRouletteTimer(ref);
+
+                  final timer = ref.read(rouletteTimerProvider);
+
+                  if (timer == null) return;
+
+                  if (timer.isActive) {
+                    showGeneralDialog(
+                      context: context,
+                      pageBuilder: (_, __, ___) => RouletteTimerView(
+                        remainingSeconds: timer.remainingSeconds,
+                      ),
+                    );
+                  } else {
+                    showGeneralDialog(
+                      context: context,
+                      pageBuilder: (_, __, ___) => const RouletteView(),
+                    );
+                  }
+                }
             ),
             const SizedBox(width: 10),
             GestureDetector(

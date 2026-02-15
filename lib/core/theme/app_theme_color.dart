@@ -22,6 +22,7 @@ class ThemeColors {
   final String onBoardingSvg;
   final String letterSvg;
   final String brickSvg;
+  final String missSvg;
   final String receivedLetterSvg;
   final String signupLottie;
   final String sendLetterLottie;
@@ -45,6 +46,7 @@ class ThemeColors {
     required this.onBoardingSvg,
     required this.letterSvg,
     required this.brickSvg,
+    required this.missSvg,
     required this.receivedLetterSvg,
     required this.signupLottie,
     required this.sendLetterLottie,
@@ -73,6 +75,7 @@ Map<AppTheme, ThemeColors> appThemeColors = {
     onBoardingSvg: 'assets/svg/on_boarding/on_boarding_blue.svg',
     letterSvg: 'assets/svg/letter/letter_blue.svg',
     brickSvg: 'assets/svg/brick/brick_blue.svg',
+    missSvg: 'assets/svg/miss/miss_blue.svg',
     receivedLetterSvg: 'assets/svg/received_letter/received_letter_blue.svg',
     noticeSvg: 'assets/svg/notice/notice_blue.svg',
     rouletteCheckSvg: 'assets/svg/roulette_check/roulette_blue.svg',
@@ -98,6 +101,7 @@ Map<AppTheme, ThemeColors> appThemeColors = {
     onBoardingSvg: 'assets/svg/on_boarding/on_boarding_pink.svg',
     letterSvg: 'assets/svg/letter/letter_pink.svg',
     brickSvg: 'assets/svg/brick/brick_pink.svg',
+    missSvg: 'assets/svg/miss/miss_pink.svg',
     receivedLetterSvg: 'assets/svg/received_letter/received_letter_pink.svg',
     noticeSvg: 'assets/svg/notice/notice_pink.svg',
     rouletteCheckSvg: 'assets/svg/roulette_check/roulette_pink.svg',
@@ -123,6 +127,7 @@ Map<AppTheme, ThemeColors> appThemeColors = {
     onBoardingSvg: 'assets/svg/on_boarding/on_boarding_purple.svg',
     letterSvg: 'assets/svg/letter/letter_purple.svg',
     brickSvg: 'assets/svg/brick/brick_purple.svg',
+    missSvg: 'assets/svg/miss/miss_purple.svg',
     receivedLetterSvg: 'assets/svg/received_letter/received_letter_purple.svg',
     noticeSvg: 'assets/svg/notice/notice_purple.svg',
     rouletteCheckSvg: 'assets/svg/roulette_check/roulette_purple.svg',
