@@ -24,7 +24,7 @@ class SetGenderView extends ConsumerWidget {
     final isNextStep = ref.watch(signUpProvider.select((enabled)=>enabled.gender?.isNotEmpty ?? false));
 
     return Scaffold(
-      appBar: CustomAppBar(icon: true, appBarAction: AppBarAction.orderStep, count: 1),
+      appBar: CustomAppBar(icon: true, action: Action.orderStep, count: 1),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
