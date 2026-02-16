@@ -7,7 +7,7 @@ class LetterModel {
   factory LetterModel.fromJson(Map<String, dynamic> json) {
     return LetterModel(
       content: json['content'],
-      receptionId: json['reception_id'] ?? 0,
+      receptionId: json['reception_id'],
     );
   }
 

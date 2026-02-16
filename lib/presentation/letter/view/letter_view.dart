@@ -3,12 +3,11 @@ import 'package:falletter_mobile_v2/core/components/button/elevated_button.dart'
 import 'package:falletter_mobile_v2/core/components/text_form_field/text_form_field.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
-import 'package:falletter_mobile_v2/models/student_model.dart';
 import 'package:falletter_mobile_v2/presentation/letter/provider/letter_provider.dart';
 import 'package:falletter_mobile_v2/presentation/letter/widget/send_letter_modal.dart';
-import 'package:flutter/material.dart' hide Action;
+import 'package:falletter_mobile_v2/presentation/letter/widget/type_ahead.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_typeahead/flutter_typeahead.dart';
 
 class FalletterLetterView extends ConsumerStatefulWidget {
   const FalletterLetterView({super.key});
@@ -19,39 +18,35 @@ class FalletterLetterView extends ConsumerStatefulWidget {
 }
 
 class _FalletterLetterViewState extends ConsumerState<FalletterLetterView> {
+  static final double titleHeight = 16;
   String? name;
   final TextEditingController _peopleController = TextEditingController();
   final TextEditingController _contentController = TextEditingController();
-  final List<StudentModel> students = [];
 
-  @override
-  void initState(){
-    super.initState();
-    students.addAll(
-      [StudentModel(id: 1, schoolNumber: '1216', name: '최승우'),
-        StudentModel(id: 1, schoolNumber: '1410', name: '이승현'),
-        StudentModel(id: 1, schoolNumber: '3310', name: '유지우'),],
-    );
-    _peopleController.addListener(enabled);
-    _contentController.addListener(enabled);
-  }
   @override
   void dispose() {
     _peopleController.dispose();
     _contentController.dispose();
     super.dispose();
   }
-  static final double titleHeight = 16;
-  void enabled(){
-    ref.read(letterProvider.notifier).valid(name ?? '', _peopleController.text, _contentController.text);
+
+  void _enabled() {
+    ref
+        .read(letterProvider.notifier)
+        .valid(
+          selectName: name ?? '',
+          inputStudent: _peopleController.text,
+          content: _contentController.text,
+        );
   }
+
   @override
   Widget build(BuildContext context) {
     final count = ref.watch(letterProvider).count;
     final isNextStep = ref.watch(letterProvider).valid;
-    final style = FalletterTextStyle.subTitle1.copyWith(color: count > 0
-        ? FalletterColor.white
-        : FalletterColor.gray400);
+    final style = FalletterTextStyle.subTitle1.copyWith(
+      color: count > 0 ? FalletterColor.white : FalletterColor.gray400,
+    );
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
@@ -60,7 +55,7 @@ class _FalletterLetterViewState extends ConsumerState<FalletterLetterView> {
         appBar: CustomAppBar(
           icon: false,
           count: count,
-          action: Action.letterCount,
+          appBarAction: AppBarAction.letterCount,
         ),
         body: SafeArea(
           child: Column(
@@ -73,17 +68,23 @@ class _FalletterLetterViewState extends ConsumerState<FalletterLetterView> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         const SizedBox(height: 40),
-                        Text(
-                          '누구에게 보내시나요?',
-                          style: style,
-                        ),
+                        Text('누구에게 보내시나요?', style: style),
                         SizedBox(height: titleHeight),
-                        _typeAhead(),
+                        TypeAhead(
+                          controller: _peopleController,
+                          onChanged: _enabled,
+                          onSelected: (selectName) {
+                            setState(() {
+                              name = selectName;
+                            });
+                            _enabled();
+                          },
+                        ),
                         SizedBox(height: titleHeight * 2),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text('레터를 작성해주세요', style: style,),
+                            Text('레터를 작성해주세요', style: style),
                             RichText(
                               textAlign: TextAlign.end,
                               text: TextSpan(
@@ -105,9 +106,9 @@ class _FalletterLetterViewState extends ConsumerState<FalletterLetterView> {
                         ),
                         SizedBox(height: titleHeight),
                         CustomTextFormField(
-                          onChanged: (value){
-                            setState(() {
-                            });
+                          onChanged: (value) {
+                            setState(() {});
+                            _enabled();
                           },
                           controller: _contentController,
                           maxLength: 200,
@@ -138,7 +139,10 @@ class _FalletterLetterViewState extends ConsumerState<FalletterLetterView> {
                           ref.read(letterProvider.notifier).decrease();
                           _peopleController.clear();
                           _contentController.clear();
+                        setState(() {
                           name = null;
+                        });
+                          _enabled();
                         }
                       : null,
                   child: Text('레터 전송하기'),
@@ -149,75 +153,6 @@ class _FalletterLetterViewState extends ConsumerState<FalletterLetterView> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _typeAhead() {
-    final count = ref.watch(letterProvider).count;
-    return TypeAheadField<String>(
-      constraints: BoxConstraints(maxHeight: 140),
-      controller: _peopleController,
-      builder: (context, controller, focusNode) {
-        return CustomTextFormField(
-          maxLength: 10,
-          maxLines: 1,
-          onTapOutside: (event) => FocusScope.of(context).unfocus(),
-          controller: _peopleController,
-          focusNode: focusNode,
-          decoration: InputDecoration(
-            enabled: count > 0,
-            hintText: '학번을 입력해주세요',
-            counterText: '',
-          ),
-        );
-      },
-      decorationBuilder: (context, child) {
-        return Container(
-          decoration: BoxDecoration(color: FalletterColor.middleBlack),
-          child: child,
-        );
-      },
-      itemBuilder: (BuildContext context, value) {
-        final inputText = _peopleController.text;
-        final stressText = value.indexOf(inputText);
-        final baseStyle = FalletterTextStyle.body3;
-        if (stressText >= 0) {
-          return ListTile(
-            visualDensity: VisualDensity.compact,
-            dense: true,
-            title: RichText(
-              text: TextSpan(
-                style: baseStyle.copyWith(color: FalletterColor.gray400),
-                children: [
-                  TextSpan(text: value.substring(0, stressText)),
-                  TextSpan(
-                    text: value.substring(stressText, stressText + inputText.length,),
-                    style: baseStyle.copyWith(color: FalletterColor.white),
-                  ),
-                  TextSpan(
-                    text: value.substring(stressText + inputText.length),
-                  ),
-                ],
-              ),
-            ),
-          );
-        }
-        return SizedBox.shrink();
-      },
-      hideOnEmpty: true,
-      onSelected: (value) {
-        _peopleController.text = value;
-        name = value;
-      },
-      suggestionsCallback: (patten) async {
-        if (patten.isEmpty) {
-          return <String>[];
-        }
-        return students
-            .where((students) => students.name.contains(patten) || students.schoolNumber.contains(patten))
-            .map((e) => '${e.schoolNumber} ${e.name}')
-            .toList();
-      },
     );
   }
 }

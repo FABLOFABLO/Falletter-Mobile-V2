@@ -1,3 +1,4 @@
+import 'package:falletter_mobile_v2/core/providers/letter_count_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class LetterState {
@@ -21,19 +22,23 @@ class LetterStateNotifier extends StateNotifier<LetterState> {
     }
   }
 
-  void valid(String selectName, String inputStudent, String content) {
-    final valid =
-        selectName.isNotEmpty &&
-        selectName == inputStudent &&
-        content.isNotEmpty &&
-        state.count > 0;
+  bool valid({
+    required String selectName,
+    required String inputStudent,
+    required String content,
+  }) {
+    final nameValid = selectName.isNotEmpty && selectName == inputStudent;
+    final contentValid = content.trim().isNotEmpty;
+    final countValid = state.count > 0;
+        final valid = nameValid && contentValid && countValid;
     state = state.copyWith(valid: valid);
+    return valid;
   }
 }
 
-final letterProvider = StateNotifierProvider<LetterStateNotifier, LetterState>((
-  ref,
-) {
-  final letterCount = 3;
-  return LetterStateNotifier(letterCount);
-});
+final letterProvider = StateNotifierProvider<LetterStateNotifier, LetterState>(
+  (ref) {
+   final letterCount =  ref.watch(letterCountProvider);
+   return LetterStateNotifier(letterCount.letterCount);
+  },
+);
