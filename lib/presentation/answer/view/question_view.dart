@@ -13,6 +13,18 @@ class QuestionView extends ConsumerWidget {
 
   const QuestionView({super.key, required this.goNext});
 
+  void _onTap(WidgetRef ref, int index, VoidCallback goNext) {
+    final selected = ref.read(selectedIndexProvider);
+    if (selected != null) return;
+
+    ref.read(selectedIndexProvider.notifier).state = index;
+
+    Future.delayed(
+      const Duration(milliseconds: 700),
+      goNext,
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedTheme = ref.watch(themeProvider);
@@ -20,14 +32,11 @@ class QuestionView extends ConsumerWidget {
     final buttonTextStyle = FalletterTextStyle.button;
 
     final currentIndex = ref.watch(currentIndexProvider);
-    final total = ref.watch(totalProvider);
+    const total = 5;
     final selectedIndex = ref.watch(selectedIndexProvider);
     final questionList = ref.watch(questionListProvider);
     final currentQuestion = questionList[currentIndex];
-    final choices = ref.watch(choicesProvider);
-
-    final question = currentQuestion.question;
-    final emoji = currentQuestion.emoji;
+    final choices = ref.watch(answerProvider);
 
     return Column(
       children: [
@@ -80,58 +89,45 @@ class QuestionView extends ConsumerWidget {
                   color: FalletterColor.middleBlack,
                   borderRadius: BorderRadius.circular(100)
               ),
-              child: Center(child: Text('${emoji}', style: TextStyle(fontSize: 100))),
+              child: Center(
+                  child: Text('${currentQuestion.emoji}',
+                      style: TextStyle(fontSize: 100)
+                  )
+              ),
             ),
           ),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 30),
-          child: Center(child: Text('${question}', style: FalletterTextStyle.title2)),
+          child: Center(child: Text('${currentQuestion.question}', style: FalletterTextStyle.title2)),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              for (int i = 0; i < choices.length; i += 2)
-                Row(
+              ...List.generate(2, (i) {
+                final index = i * 2;
+
+                return Row(
                   children: [
                     Expanded(
-                      child: AnswerCardButton(
-                        name: choices[i],
-                        isSelected: selectedIndex == i,
-                        onTap: () {
-                          final selected = ref.read(selectedIndexProvider);
-                          if (selected != null) return;
-
-                          ref.read(selectedIndexProvider.notifier).state = i;
-
-                          Future.delayed(
-                            const Duration(milliseconds: 700),
-                            goNext,
-                          );
-                        },
-                      ),
+                        child: AnswerCardButton(
+                            name: choices[index],
+                            isSelected: selectedIndex == index,
+                            onTap: () => _onTap(ref, index, goNext)
+                        )
                     ),
                     Expanded(
-                      child: AnswerCardButton(
-                        name: choices[i + 1],
-                        isSelected: selectedIndex == i + 1,
-                        onTap: () {
-                          final selected = ref.read(selectedIndexProvider);
-                          if (selected != null) return;
-
-                          ref.read(selectedIndexProvider.notifier).state = i + 1;
-
-                          Future.delayed(
-                            const Duration(milliseconds: 700),
-                            goNext,
-                          );
-                        },
-                      ),
+                        child: AnswerCardButton(
+                            name: choices[index + 1],
+                            isSelected: selectedIndex == index + 1,
+                            onTap: () => _onTap(ref, index + 1, goNext)
+                        )
                     ),
-                  ],
-                ),
+                  ]
+                );
+              })
             ],
           )
         ),
@@ -144,9 +140,13 @@ class QuestionView extends ConsumerWidget {
               children: [
                 Text('건너뛰기',
                     style: FalletterTextStyle.body3.copyWith(
-                        color: FalletterColor.gray300)
+                        color: FalletterColor.gray300
+                    )
                 ),
-                Icon(Symbols.double_arrow, color: FalletterColor.gray300, size: 12)
+                Icon(Symbols.double_arrow,
+                    color: FalletterColor.gray300,
+                    size: 12
+                )
               ],
             ),
           ),

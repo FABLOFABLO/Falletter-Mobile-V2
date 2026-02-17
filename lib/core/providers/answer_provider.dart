@@ -8,8 +8,6 @@ enum AnswerState {
 
 final currentIndexProvider = StateProvider<int>((ref) => 0);
 
-final totalProvider = Provider<int>((ref) => 5);
-
 final answerStateProvider = StateProvider<AnswerState>(
         (ref) => AnswerState.answering
 );
@@ -48,10 +46,24 @@ final allNamesProvider = Provider<List<String>>((ref) => [
 
 final selectedIndexProvider = StateProvider<int?>((ref) => null);
 
-final choicesProvider = Provider<List<String>>((ref) {
-  ref.watch(currentIndexProvider);
+class AnswerNotifier extends Notifier<List<String>> {
+  @override
+  List<String> build() {
+    return _createAnswerChoices();
+  }
 
-  final allNames = [...ref.watch(allNamesProvider)];
-  allNames.shuffle();
-  return allNames.take(4).toList();
-});
+  List<String> _createAnswerChoices() {
+    final all = ref.read(allNamesProvider);
+    final shuffled = [...all]..shuffle();
+    return shuffled.take(4).toList();
+  }
+
+  void nextQuestion() {
+    ref.read(currentIndexProvider.notifier).state++;
+    ref.read(selectedIndexProvider.notifier).state = null;
+    state = _createAnswerChoices();
+  }
+}
+
+final answerProvider = NotifierProvider<AnswerNotifier, List<String>>(() =>
+    AnswerNotifier());

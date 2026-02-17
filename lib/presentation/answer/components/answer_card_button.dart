@@ -24,25 +24,23 @@ class AnswerCardButton extends ConsumerWidget {
     final selectedTheme = ref.watch(themeProvider);
     final themeColors = appThemeColors[selectedTheme]!;
 
-    return Expanded(
-      child: GestureDetector(
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.all(15),
-          child: Container(
-              width: width ?? double.infinity,
-              height: 80,
-              decoration: BoxDecoration(
-                color: FalletterColor.middleBlack,
-                gradient: (isSelected) ? themeColors.primaryGradient : null,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Center(
-                child: Text(name, style: FalletterTextStyle.title3.copyWith(
-                    color: (isSelected) ? FalletterColor.black : null
-                ),),
-              )
-          ),
+    return GestureDetector(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.all(15),
+        child: Container(
+            width: width ?? double.infinity,
+            height: 80,
+            decoration: BoxDecoration(
+              color: FalletterColor.middleBlack,
+              gradient: (isSelected) ? themeColors.primaryGradient : null,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Center(
+              child: Text(name, style: FalletterTextStyle.title3.copyWith(
+                  color: (isSelected) ? FalletterColor.black : null
+              ),),
+            )
         ),
       ),
     );
