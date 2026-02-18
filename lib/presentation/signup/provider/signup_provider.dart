@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SignupState {
@@ -29,6 +30,7 @@ class SignupState {
     return isValid && input.length >= 6;
   }
 
+
   SignupState copyWith({
     String? gender,
     String? schoolNumber,
@@ -56,7 +58,20 @@ class SignupState {
 
 class SignUpNotifier extends StateNotifier<SignupState> {
   SignUpNotifier() : super(SignupState());
-
+Timer? timer;
+  void startTime() {
+    int limitTime = 300;
+      timer?.cancel();
+      state = state.copyWith(timer: Duration(seconds: limitTime));
+    timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      if (limitTime > 0) {
+        limitTime--;
+        state = state.copyWith(timer: Duration(seconds: limitTime));
+      } else {
+        timer.cancel();
+      }
+    });
+  }
   void setGender(String gender) =>
       state = state.copyWith(gender: gender);
 

@@ -31,36 +31,34 @@ class CustomBottomNavigationBar extends ConsumerWidget {
     final selectedTheme = ref.watch(themeProvider);
     final themeColors = appThemeColors[selectedTheme]!;
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: Container(
-        decoration: const BoxDecoration(
-          color: FalletterColor.black,
-          border: Border(
-            top: BorderSide(
-              color: FalletterColor.gray900,
-              width: 0.5,
-            ),
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 10),
+      decoration: const BoxDecoration(
+        color: FalletterColor.black,
+        border: Border(
+          top: BorderSide(
+            color: FalletterColor.gray900,
+            width: 0.5,
           ),
         ),
-        child: SafeArea(
-          top: false,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: List.generate(_icons.length, (index) {
-                final isSelected = currentIndex == index;
+      ),
+      child: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: List.generate(_icons.length, (index) {
+              final isSelected = currentIndex == index;
 
-                return BottomNavItem(
-                  icon: _icons[index],
-                  label: _labels[index],
-                  isSelected: isSelected,
-                  gradient: themeColors.bottomNavIcon,
-                  onTap: () => onTap(index),
-                );
-              }),
-            ),
+              return BottomNavItem(
+                icon: _icons[index],
+                label: _labels[index],
+                isSelected: isSelected,
+                gradient: themeColors.bottomNavIcon,
+                onTap: () => onTap(index),
+              );
+            }),
           ),
         ),
       ),

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 enum AppTheme { blue, pink, purple }
 
 class ThemeColors {
+  final Color primaryColor;
   final Gradient primaryGradient;
   final Gradient text;
   final Gradient button;
@@ -28,6 +29,7 @@ class ThemeColors {
   final String rouletteCheckSvg;
 
   ThemeColors({
+    required this.primaryColor,
     required this.primaryGradient,
     required this.text,
     required this.button,
@@ -54,6 +56,7 @@ class ThemeColors {
 
 Map<AppTheme, ThemeColors> appThemeColors = {
   AppTheme.blue: ThemeColors(
+    primaryColor: FalletterColor.blueGradient[1],
     primaryGradient: FalletterGradient.horizontal(FalletterColor.blueGradient),
     text: FalletterGradient.vertical(FalletterColor.blueGradient),
     button: FalletterGradient.horizontal(FalletterColor.blueGradient),
@@ -78,6 +81,7 @@ Map<AppTheme, ThemeColors> appThemeColors = {
   ),
 
   AppTheme.pink: ThemeColors(
+    primaryColor: FalletterColor.pinkGradient[0],
     primaryGradient: FalletterGradient.horizontal(FalletterColor.pinkGradient),
     text: FalletterGradient.vertical(FalletterColor.pinkGradient),
     button: FalletterGradient.horizontal(FalletterColor.pinkGradient),
@@ -102,6 +106,7 @@ Map<AppTheme, ThemeColors> appThemeColors = {
   ),
 
   AppTheme.purple: ThemeColors(
+    primaryColor: FalletterColor.purpleGradient[0],
     primaryGradient: FalletterGradient.horizontal(FalletterColor.purpleGradient),
     text: FalletterGradient.vertical(FalletterColor.purpleGradient),
     button: FalletterGradient.horizontal(FalletterColor.purpleGradient),
