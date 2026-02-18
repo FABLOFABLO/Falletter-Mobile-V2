@@ -1,9 +1,11 @@
 import 'package:falletter_mobile_v2/core/components/app_bar/custom_app_bar.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
+import 'package:falletter_mobile_v2/core/router/route_paths.dart';
 import 'package:falletter_mobile_v2/core/theme/app_theme_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 
 class SignUpCompleteView extends ConsumerStatefulWidget {
@@ -44,6 +46,7 @@ class _SignUpCompleteViewState extends ConsumerState<SignUpCompleteView>
             onLoaded: (onLoaded) {
               _animationController.duration = onLoaded.duration;
               _animationController.forward().then((_) {
+                context.go(RoutePaths.main);
                 /// 홈 페이지로 넘어가기
               });
             },

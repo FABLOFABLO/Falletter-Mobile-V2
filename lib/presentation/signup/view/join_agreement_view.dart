@@ -2,36 +2,54 @@ import 'package:falletter_mobile_v2/core/components/app_bar/custom_app_bar.dart'
 import 'package:falletter_mobile_v2/core/components/button/elevated_button.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
-import 'package:falletter_mobile_v2/presentation/signup/view/sign_up_complete_view.dart';
+import 'package:falletter_mobile_v2/presentation/signup/provider/signup_provider.dart';
 import 'package:falletter_mobile_v2/presentation/signup/widget/check_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
-class UserCheckView extends StatefulWidget {
-  const UserCheckView({super.key});
+enum Agree { all, use, privacy, community, push }
+
+class JoinAgreementView extends ConsumerStatefulWidget {
+  const JoinAgreementView({super.key});
 
   @override
-  State<UserCheckView> createState() => _UserCheckViewState();
+  ConsumerState<JoinAgreementView> createState() => _JoinAgreementViewState();
 }
 
-class _UserCheckViewState extends State<UserCheckView> {
-  List<bool> _isChecked = List.generate(5, (_) => false);
+class _JoinAgreementViewState extends ConsumerState<JoinAgreementView> {
+  final Map<Agree, bool> _isChecked = {
+    Agree.all: false,
+    Agree.use: false,
+    Agree.privacy: false,
+    Agree.community: false,
+    Agree.push: false,
+  };
 
-  bool get _isCheckedToggle => _isChecked[1] && _isChecked[2] && _isChecked[3];
+  bool get _isCheckedToggle =>
+      (_isChecked[Agree.use] ?? false) &&
+      (_isChecked[Agree.privacy] ?? false) &&
+      (_isChecked[Agree.community] ?? false);
 
-  void _checkBoxList(int index) {
+  void _checkBoxList(Agree type) {
     setState(() {
-      if (index == 0) {
-        bool isAllChecked = !_isChecked.every((element) => element);
-        _isChecked = List.generate(5, (index) => isAllChecked);
+      if (type == Agree.all) {
+        bool allTrue = !(_isChecked[Agree.all] ?? false);
+        _isChecked.updateAll((key, value) => allTrue);
       } else {
-        _isChecked[index] = !_isChecked[index];
-        _isChecked[0] = _isChecked.getRange(1, 5).every((element) => element);
+        _isChecked[type] = !(_isChecked[type] ?? false);
+        _isChecked[Agree.all] =
+            _isChecked[Agree.use]! &&
+            _isChecked[Agree.privacy]! &&
+            _isChecked[Agree.community]! &&
+            _isChecked[Agree.push]!;
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final name = ref.watch(signUpProvider);
     return Scaffold(
       appBar: CustomAppBar(icon: true, title: '약관 동의'),
       body: SafeArea(
@@ -41,7 +59,10 @@ class _UserCheckViewState extends State<UserCheckView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 28),
-              Text('3209 유하은님\n환영합니다!', style: FalletterTextStyle.title2),
+              Text(
+                '${name.schoolNumber} ${name.name}님\n환영합니다!',
+                style: FalletterTextStyle.title2,
+              ),
               const SizedBox(height: 8),
               Text(
                 '서비스 이용을 위해 약관에 동의해주세요',
@@ -56,12 +77,7 @@ class _UserCheckViewState extends State<UserCheckView> {
                 width: double.infinity,
                 onPressed: _isCheckedToggle
                     ? () {
-                        Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(
-                            builder: (_) => const SignUpCompleteView(),
-                          ),
-                          (route) => false,
-                        );
+                        context.go('/signup/complete');
                       }
                     : null,
                 child: Text('가입하기'),

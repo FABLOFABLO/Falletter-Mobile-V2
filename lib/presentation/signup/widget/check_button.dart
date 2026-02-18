@@ -4,27 +4,29 @@ import 'package:falletter_mobile_v2/presentation/signup/view/detail_agree_view/a
 import 'package:falletter_mobile_v2/presentation/signup/view/detail_agree_view/community_service_view.dart';
 import 'package:falletter_mobile_v2/presentation/signup/view/detail_agree_view/privacy_policy_view.dart';
 import 'package:falletter_mobile_v2/presentation/signup/view/detail_agree_view/push_notification_view.dart';
+import 'package:falletter_mobile_v2/presentation/signup/view/join_agreement_view.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class CheckButton extends StatefulWidget {
-  final List<bool> isChecked;
-  final void Function(int) toggle;
+class CheckButton extends ConsumerStatefulWidget {
+  final Map<Agree, bool> isChecked;
+  final void Function(Agree) toggle;
 
   const CheckButton({super.key, required this.toggle, required this.isChecked});
 
   @override
-  State<CheckButton> createState() => _CheckButtonState();
+  ConsumerState<CheckButton> createState() => _CheckButtonState();
 }
 
-class _CheckButtonState extends State<CheckButton> {
-  final navigator = [
-    null,
-    (_) => AgreeServiceView(),
-    (_) => PrivacyPolicyView(),
-    (_) => CommunityServiceView(),
-    (_) => PushNotificationView(),
-  ];
+class _CheckButtonState extends ConsumerState<CheckButton> {
+  final Map<Agree, WidgetBuilder?> navigator = {
+    Agree.all: null,
+    Agree.use: (_) => AgreeServiceView(),
+    Agree.privacy: (_) => PrivacyPolicyView(),
+    Agree.community: (_) => CommunityServiceView(),
+    Agree.push: (_) => PushNotificationView(),
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -34,60 +36,62 @@ class _CheckButtonState extends State<CheckButton> {
   Widget _listCheckText() {
     final style = FalletterTextStyle.agreeService;
     final blueStyle = FalletterTextStyle.button.copyWith(
-      color: FalletterColor.blue,
+      color: FalletterColor.blueGradient[0],
     );
-    List<Widget> labels = [
-      Text('약관 전체 동의', style: FalletterTextStyle.body1),
-      Text.rich(
+    Map<Agree, Widget> labels = {
+      Agree.all: Text('약관 전체 동의', style: FalletterTextStyle.body1),
+      Agree.use: Text.rich(
         TextSpan(
           text: '팔레터 이용약관 동의 ',
           style: style,
           children: [TextSpan(text: '(필수)', style: blueStyle)],
         ),
       ),
-      Text.rich(
+      Agree.privacy: Text.rich(
         TextSpan(
           text: '개인정보 수집 및 이용동의 ',
           style: style,
           children: [TextSpan(text: '(필수)', style: blueStyle)],
         ),
       ),
-      Text.rich(
+      Agree.community: Text.rich(
         TextSpan(
           text: '커뮤니티 이용약관 동의 ',
           style: style,
           children: [TextSpan(text: '(필수)', style: blueStyle)],
         ),
       ),
-      Text.rich(
+      Agree.push: Text.rich(
         TextSpan(
           text: '푸시 알림 동의 ',
           style: style,
           children: [TextSpan(text: '(선택)', style: blueStyle)],
         ),
       ),
-    ];
+    };
     List<Widget> list = [
       renderContainer(
-        widget.isChecked[0],
-        labels[0],
-        () => widget.toggle(0),
+        widget.isChecked[Agree.all] ?? false,
+        labels[Agree.all]!,
+        () => widget.toggle(Agree.all),
         null,
       ),
       const Divider(thickness: 1),
     ];
     list.addAll(
-      List.generate(
-        4,
-        (index) => renderContainer(
-          widget.isChecked[index + 1],
-          labels[index + 1],
-          () => widget.toggle(index + 1),
-          navigator[index + 1],
-        ),
-      ),
+      List.generate(Agree.values.length - 1, (index) {
+        final type = Agree.values[index + 1];
+        return renderContainer(
+          widget.isChecked[type] ?? false,
+          labels[type]!,
+          () {
+            widget.toggle(type);
+          },
+          navigator[type],
+        );
+      }),
     );
-    return Column(children: list);
+    return Column(children: list,);
   }
 
   Widget renderContainer(
@@ -106,7 +110,7 @@ class _CheckButtonState extends State<CheckButton> {
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(4),
-                color: checked ? FalletterColor.blue : FalletterColor.gray400,
+                color: checked ? FalletterColor.blueGradient[0] : FalletterColor.gray400,
               ),
               child: checked
                   ? Icon(Symbols.check, size: 20, color: FalletterColor.white)
