@@ -30,7 +30,7 @@ class LetterStateNotifier extends StateNotifier<LetterState> {
     final nameValid = selectName.isNotEmpty && selectName == inputStudent;
     final contentValid = content.trim().isNotEmpty;
     final countValid = state.count > 0;
-        final valid = nameValid && contentValid && countValid;
+    final valid = nameValid && contentValid && countValid;
     state = state.copyWith(valid: valid);
     return valid;
   }
