@@ -1,16 +1,14 @@
 import 'dart:math';
-
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
+import 'package:falletter_mobile_v2/core/providers/roulette_provider.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
 import 'package:falletter_mobile_v2/core/theme/app_theme_color.dart';
 import 'package:falletter_mobile_v2/presentation/roulette/components/roulette_pointer.dart';
-import 'package:falletter_mobile_v2/presentation/roulette/roulette_reward_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-
-enum RewardType { brick, letter, miss }
 
 class Reward {
   final RewardType type;
@@ -29,20 +27,19 @@ class Roulette extends ConsumerStatefulWidget {
 
 class _RouletteState extends ConsumerState<Roulette> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  bool isSpinning = false;
   int selectedIndex = 0;
   double _startAngle = 0.0;
   double _targetAngle = 0.0;
 
-  final rewards = [
-    Reward(RewardType.miss, 0, 13),
-    Reward(RewardType.miss, 0, 13),
-    Reward(RewardType.brick, 1, 21),
+  final rewards = const [
     Reward(RewardType.letter, 1, 18),
     Reward(RewardType.brick, 3, 15),
     Reward(RewardType.letter, 2, 10),
-    Reward(RewardType.brick, 5, 7),
+    Reward(RewardType.brick, 5, 5),
     Reward(RewardType.letter, 4, 3),
+    Reward(RewardType.miss, 0, 26),
+    Reward(RewardType.rewardSet, 2, 2),
+    Reward(RewardType.brick, 1, 21),
   ];
 
   @override
@@ -60,15 +57,16 @@ class _RouletteState extends ConsumerState<Roulette> with SingleTickerProviderSt
     super.dispose();
   }
 
-  void spinRoulette() {
-    if (isSpinning) return;
+  void spin() {
+    final manager = ref.read(rouletteManagerProvider.notifier);
+    final currentState = ref.read(rouletteManagerProvider);
 
-    setState(() {
-      isSpinning = true;
-    });
+    if (currentState.isSpinning) return;
 
-    final prizeIndex = getRandomIndex();
-    final rotationDegrees = calculateRotation(prizeIndex);
+    manager.startSpin();
+
+    final prizeIndex = manager.getRandomIndex();
+    final rotationDegrees = manager.calculateRotation(prizeIndex, rewards.length);
 
     animateRoulette(rotationDegrees, prizeIndex);
   }
@@ -79,8 +77,14 @@ class _RouletteState extends ConsumerState<Roulette> with SingleTickerProviderSt
 
     _controller.reset();
     _controller.forward().then((_) {
+      if (!mounted) return;
+
+      final manager = ref.read(rouletteManagerProvider.notifier);
+
+      manager.stopSpin();
+      manager.updateFinalAngle(_targetAngle);
+
       setState(() {
-        isSpinning = false;
         selectedIndex = prizeIndex;
       });
       applyReward();
@@ -94,45 +98,17 @@ class _RouletteState extends ConsumerState<Roulette> with SingleTickerProviderSt
 
   void applyReward() {
     final reward = rewards[selectedIndex];
-    final type = reward.type;
-    final amount = reward.amount;
-
-    if (type == RewardType.brick) {
-      // TODO: 상태관리로 브릭 추가
-    } else if (type == RewardType.letter) {
-      // TODO: 상태관리로 레터 추가
-    } else {
-
-    }
-
+    final manager = ref.read(rouletteManagerProvider.notifier);
+    manager.applyReward(reward.type, reward.amount);
     context.push('/reward', extra: reward);
     context.pop();
-  }
-
-  double calculateRotation(int targetIndex) {
-    final random = Random();
-    final spins = 5 + random.nextDouble() * 2;
-    final sectionAngle = 360.0 / rewards.length;
-    final prizeAngle = targetIndex * sectionAngle;
-    return (spins * 360) + (360 - prizeAngle) + (sectionAngle / 2);
-  }
-
-  int getRandomIndex() {
-    final random = Random().nextInt(100);
-
-    if (random < 26) return 0;
-    else if (random < 47) return 1;
-    else if (random < 65) return 2;
-    else if (random < 80) return 3;
-    else if (random < 90) return 4;
-    else if (random < 97) return 5;
-    else return 6;
   }
 
   @override
   Widget build(BuildContext context) {
     final selectedTheme = ref.watch(themeProvider);
     final themeColors = appThemeColors[selectedTheme]!;
+    final rouletteState = ref.watch(rouletteManagerProvider);
 
     return Stack(
       alignment: Alignment.center,
@@ -143,43 +119,139 @@ class _RouletteState extends ConsumerState<Roulette> with SingleTickerProviderSt
           child: AnimatedBuilder(
             animation: _controller,
             builder: (context, child) {
+              final angle = _getCurrentAngle();
               return Transform.rotate(
-                angle: _getCurrentAngle(),
-                child: child,
+                angle: angle,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    CustomPaint(
+                      size: const Size(300, 300),
+                      painter: RoulettePaint(count: rewards.length),
+                    ),
+                    ..._buildRewardWidgets(angle),
+                  ],
+                ),
               );
             },
-            child: CustomPaint(
-              size: const Size(300, 300),
-              painter: RoulettePaint(count: rewards.length),
-            ),
           ),
         ),
+
         Positioned(
           top: 0,
           child: CustomPaint(
-            size: Size(30, 40),
+            size: const Size(30, 40),
             painter: PointerPaint(),
           ),
         ),
+
         GestureDetector(
-          onTap: (isSpinning) ? null : spinRoulette,
+          onTap: rouletteState.isSpinning ? null : spin,
           child: Container(
             width: 80,
             height: 80,
             decoration: BoxDecoration(
               gradient: themeColors.button,
-              shape: BoxShape.circle
+              shape: BoxShape.circle,
             ),
             child: Center(
-              child: Text('GO',
-                  style: FalletterTextStyle.title1.copyWith(
-                      color: FalletterColor.black)
+              child: Text(
+                'GO',
+                style: FalletterTextStyle.title1.copyWith(
+                  color: FalletterColor.black,
+                ),
               ),
             ),
           ),
-        )
+        ),
       ],
     );
+  }
+
+  List<Widget> _buildRewardWidgets(double currentAngle) {
+    final count = rewards.length;
+    final sweep = 2 * pi / count;
+    const radius = 100;
+
+    return List.generate(count, (i) {
+      final reward = rewards[i];
+
+      final itemAngle = (i * sweep) - (pi / 2);
+
+      final dx = radius * cos(itemAngle);
+      final dy = radius * sin(itemAngle);
+
+      return Transform.translate(
+        offset: Offset(dx, dy),
+        child: Transform.rotate(
+          angle: -currentAngle,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              if (reward.type == RewardType.miss)
+                _buildIcon(reward)
+              else Padding(
+                padding: const EdgeInsets.only(bottom: 25),
+                child: _buildIcon(reward),
+              ),
+              if (reward.type != RewardType.miss && reward.type != RewardType.rewardSet)
+                Padding(
+                  padding: const EdgeInsets.only(top: 45),
+                  child: Text(
+                      'X${reward.amount}',
+                      style: FalletterTextStyle.subTitle2
+                  ),
+                ),
+              if (reward.type == RewardType.rewardSet)
+                Padding(
+                  padding: const EdgeInsets.only(top: 40, left: 20),
+                  child: Text(
+                      '선물세트',
+                      style: FalletterTextStyle.body2.copyWith(
+                          fontWeight: FontWeight.bold
+                      )
+                  ),
+                ),
+            ],
+          ),
+        ),
+      );
+    });
+  }
+
+  Widget _buildIcon(Reward reward) {
+    final selectedTheme = ref.watch(themeProvider);
+    final themeColors = appThemeColors[selectedTheme]!;
+
+    switch (reward.type) {
+      case RewardType.brick:
+        return SvgPicture.asset(
+          themeColors.brickSvg,
+          width: 42,
+          height: 42,
+        );
+      case RewardType.letter:
+        return SvgPicture.asset(
+          themeColors.letterSvg,
+          width: 32,
+          height: 32,
+        );
+      case RewardType.miss:
+        return SvgPicture.asset(
+          themeColors.missSvg,
+          width: 46,
+          height: 46,
+        );
+      case RewardType.rewardSet:
+        return Padding(
+          padding: const EdgeInsets.only(top: 20, right: 5),
+          child: SvgPicture.asset(
+            themeColors.rewardSetSvg,
+            width: 100,
+            height: 100,
+          ),
+        );
+    }
   }
 }
 
@@ -195,24 +267,26 @@ class RoulettePaint extends CustomPainter {
     final sweep = 2 * pi / count;
 
     for (int i = 0; i < count; i++) {
-      final paint = Paint();
-      paint.color = i % 2 == 0
-          ? FalletterColor.gray800
-          : FalletterColor.gray900;
-      paint.style = PaintingStyle.fill;
+      final paint = Paint()
+        ..color = i.isEven ? FalletterColor.gray800 : FalletterColor.gray900
+        ..style = PaintingStyle.fill;
+
+      final startAngle = (i * sweep) - (pi / 2) - (sweep / 2);
+
       canvas.drawArc(
         Rect.fromCircle(center: center, radius: radius),
-        i * sweep,
+        startAngle,
         sweep,
         true,
         paint,
       );
     }
 
-    final border = Paint();
-    border.color = FalletterColor.gray200;
-    border.style = PaintingStyle.stroke;
-    border.strokeWidth = 5;
+    final border = Paint()
+      ..color = FalletterColor.gray200
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 6;
+
     canvas.drawCircle(center, radius, border);
   }
 
