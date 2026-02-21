@@ -3,11 +3,13 @@ import 'dart:ui';
 import 'package:falletter_mobile_v2/core/components/gradient_text.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
+import 'package:falletter_mobile_v2/core/providers/roulette_provider.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
 import 'package:falletter_mobile_v2/core/theme/app_theme_color.dart';
 import 'package:falletter_mobile_v2/presentation/roulette/components/roulette.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class RouletteView extends ConsumerWidget {
   const RouletteView({super.key});
@@ -16,6 +18,7 @@ class RouletteView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = ref.watch(themeProvider);
     final themeColors = appThemeColors[theme]!;
+    final rouletteState = ref.watch(rouletteManagerProvider);
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -45,7 +48,21 @@ class RouletteView extends ConsumerWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 30),
                     child: Roulette(),
-                  )
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20),
+                    child: GestureDetector(
+                      onTap: rouletteState.isSpinning ? null
+                      : () {
+                        context.pop();
+                      },
+                      child: Text('닫기',
+                          style: FalletterTextStyle.subTitle2.copyWith(
+                              color: FalletterColor.gray600
+                          )
+                      ),
+                    ),
+                  ),
                 ],
               ),
             )
