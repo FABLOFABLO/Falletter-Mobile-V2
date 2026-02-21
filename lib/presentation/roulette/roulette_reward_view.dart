@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:falletter_mobile_v2/core/components/gradient_text.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
+import 'package:falletter_mobile_v2/core/providers/roulette_provider.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
 import 'package:falletter_mobile_v2/core/router/route_paths.dart';
 import 'package:falletter_mobile_v2/core/theme/app_theme_color.dart';
@@ -31,22 +32,30 @@ class _RouletteRewardViewState extends ConsumerState<RouletteRewardView> {
   Widget build(BuildContext context) {
     final theme = ref.watch(themeProvider);
     final themeColors = appThemeColors[theme]!;
-    final isMiss = widget.type == RewardType.miss;
 
     String rewardName;
     String? iconPath;
+    String titleText;
 
     if (widget.type == RewardType.brick) {
       rewardName = '브릭';
       iconPath = themeColors.brickSvg;
+      titleText = '$rewardName ${widget.amount}개 획득';
     }
     else if (widget.type == RewardType.letter) {
       rewardName = '레터';
       iconPath = themeColors.letterSvg;
+      titleText = '$rewardName ${widget.amount}개 획득';
     }
-    else {
+    else if (widget.type == RewardType.miss) {
       rewardName = '꽝';
       iconPath = themeColors.missSvg;
+      titleText = '$rewardName! 다음에...';
+    }
+    else {
+      rewardName = '선물세트';
+      iconPath = themeColors.rewardSetSvg;
+      titleText = '$rewardName 획득';
     }
 
     return Scaffold(
@@ -62,47 +71,46 @@ class _RouletteRewardViewState extends ConsumerState<RouletteRewardView> {
               ),
             ),
             SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 80),
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('출석체크 보상',
-                            style: FalletterTextStyle.title3.copyWith(
-                                color: FalletterColor.white)
-                        ),
-                        GradientText(
-                            text: isMiss
-                            ? '$rewardName 획득'
-                            : '$rewardName ${widget.amount}개 획득',
-                            gradient: themeColors.primaryGradient,
-                            style: FalletterTextStyle.title1
-                        ),
-                        SizedBox(height: 20),
-                        if(iconPath != null)
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: SvgPicture.asset(
-                              iconPath
-                            ),
-                          ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 100),
-                          child: GestureDetector(
-                            onTap: () {
-                              context.go('${RoutePaths.main}');
-                              },
-                            child: Text('닫기',
-                                style: FalletterTextStyle.subTitle2.copyWith(
-                                    color: FalletterColor.gray600
-                                )
-                            ),
-                          ),
-                        )
-                      ],
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    SvgPicture.asset(
+                      iconPath
                     ),
-                  ),
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 80),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('출석체크 보상',
+                                style: FalletterTextStyle.title3.copyWith(
+                                    color: FalletterColor.white)
+                            ),
+                            GradientText(
+                                text: titleText,
+                                gradient: themeColors.primaryGradient,
+                                style: FalletterTextStyle.title1
+                            ),
+                            SizedBox(height: 330),
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 30),
+                              child: GestureDetector(
+                                onTap: () {
+                                  context.go('${RoutePaths.main}');
+                                  },
+                                child: Text('닫기',
+                                    style: FalletterTextStyle.subTitle2.copyWith(
+                                        color: FalletterColor.gray600
+                                    )
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 )
             ),
           ]
