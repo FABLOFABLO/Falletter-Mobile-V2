@@ -18,7 +18,13 @@ class ThemeSelectView extends ConsumerStatefulWidget {
 
 class _ThemeSelectViewState extends ConsumerState<ThemeSelectView> {
   static final double cardBetween = 24;
-  late AppTheme _appTheme = ref.read(themeProvider);
+  late AppTheme _appTheme;
+
+  @override
+  void initState() {
+    super.initState();
+    _appTheme = ref.read(themeProvider);
+  }
 
   void _selectTheme(AppTheme value) {
     setState(() {
@@ -31,6 +37,13 @@ class _ThemeSelectViewState extends ConsumerState<ThemeSelectView> {
     AppTheme.pink,
     AppTheme.purple,
   ];
+  Map<AppTheme, Gradient> themeList = {
+    AppTheme.blue: FalletterGradient.horizontal(FalletterColor.blueGradient),
+    AppTheme.pink: FalletterGradient.horizontal(FalletterColor.pinkGradient),
+    AppTheme.purple: FalletterGradient.horizontal(
+      FalletterColor.purpleGradient,
+    ),
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -50,32 +63,14 @@ class _ThemeSelectViewState extends ConsumerState<ThemeSelectView> {
               Wrap(
                 spacing: cardBetween,
                 runSpacing: cardBetween,
-                children: [
-                  themeButton(
-                    'BLUE',
-                    _appTheme == AppTheme.blue,
-                    () {
-                      _selectTheme(AppTheme.blue);
-                    },
-                    FalletterGradient.horizontal(FalletterColor.blueGradient),
-                  ),
-                  themeButton(
-                    'PINK',
-                    _appTheme == AppTheme.pink,
-                    () {
-                      _selectTheme(AppTheme.pink);
-                    },
-                    FalletterGradient.horizontal(FalletterColor.pinkGradient),
-                  ),
-                  themeButton(
-                    'PURPLE',
-                    _appTheme == AppTheme.purple,
-                    () {
-                      _selectTheme(AppTheme.purple);
-                    },
-                    FalletterGradient.horizontal(FalletterColor.purpleGradient),
-                  ),
-                ],
+                children: appThemes.map((theme) {
+                  return themeButton(
+                    theme.name.toUpperCase(),
+                    _appTheme == theme,
+                    () => _selectTheme(theme),
+                    themeList[theme]!,
+                  );
+                }).toList(),
               ),
               const Spacer(),
               CustomElevatedButton(
@@ -92,7 +87,6 @@ class _ThemeSelectViewState extends ConsumerState<ThemeSelectView> {
       ),
     );
   }
-
   Widget themeButton(
     final String label,
     bool isSelected,
@@ -100,7 +94,7 @@ class _ThemeSelectViewState extends ConsumerState<ThemeSelectView> {
     final Gradient gradient,
   ) {
     return SizedBox(
-      width: (MediaQuery.of(context).size.width - cardBetween - 40) / 2,
+      width: (MediaQuery.sizeOf(context).width - cardBetween - 40) / 2,
       child: SelectableButton(
         icon: Symbols.circle,
         iconGradient: gradient,
