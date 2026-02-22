@@ -12,6 +12,7 @@ import 'package:falletter_mobile_v2/presentation/mypage/view/mypage_view.dart';
 import 'package:falletter_mobile_v2/presentation/main/view/announcement_detail_view.dart';
 import 'package:falletter_mobile_v2/presentation/notice/view/notice_view.dart';
 import 'package:falletter_mobile_v2/presentation/signin/view/signin_view.dart';
+import 'package:falletter_mobile_v2/presentation/signup/view/sign_up_complete_view.dart';
 import 'package:falletter_mobile_v2/presentation/splash/view/splash_view.dart';
 import 'package:falletter_mobile_v2/presentation/signup/view/gender_view.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +33,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/signup/gender',
         builder: (_, __) => const SetGenderView(),
+      ),
+      GoRoute(
+        path: '/signup/complete',
+        builder: (_, __) => const SignUpCompleteView(),
       ),
       GoRoute(
         path: '/signin',
