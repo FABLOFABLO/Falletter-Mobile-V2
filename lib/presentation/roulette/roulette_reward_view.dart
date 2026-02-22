@@ -77,6 +77,26 @@ class _RouletteRewardViewState extends ConsumerState<RouletteRewardView> {
                     SvgPicture.asset(
                       iconPath
                     ),
+                    if (widget.amount > 1 && widget.type != RewardType.rewardSet)
+                      Positioned(
+                        right: 80,
+                        bottom: 300,
+                        child: Container(
+                          width: 60,
+                          height: 60,
+                          decoration: BoxDecoration(
+                              color: FalletterColor.gray100,
+                              borderRadius: BorderRadius.circular(100)
+                          ),
+                          child: Center(
+                              child: Text('X${widget.amount}',
+                                  style: FalletterTextStyle.title2.copyWith(
+                                      color: FalletterColor.gray900
+                                  )
+                              )
+                          ),
+                        ),
+                      ),
                     Center(
                       child: Padding(
                         padding: const EdgeInsets.only(top: 80),
