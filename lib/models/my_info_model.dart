@@ -35,11 +35,11 @@ class UserInfoModel {
   Map<String, dynamic> toJson() => {
     'id': id,
     'email': email,
-    'schoolNumber': schoolNumber,
+    'school_number': schoolNumber,
     'name': name,
     'gender': gender,
     'theme': theme,
-    'profileImage': profileImage,
+    'profile_image': profileImage,
     'attend_day' : attendDay,
   };
 }
