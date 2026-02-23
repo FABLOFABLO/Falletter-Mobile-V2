@@ -40,9 +40,7 @@ class _ThemeSelectViewState extends ConsumerState<ThemeSelectView> {
   Map<AppTheme, Gradient> themeList = {
     AppTheme.blue: FalletterGradient.horizontal(FalletterColor.blueGradient),
     AppTheme.pink: FalletterGradient.horizontal(FalletterColor.pinkGradient),
-    AppTheme.purple: FalletterGradient.horizontal(
-      FalletterColor.purpleGradient,
-    ),
+    AppTheme.purple: FalletterGradient.horizontal(FalletterColor.purpleGradient,),
   };
 
   @override
@@ -87,6 +85,7 @@ class _ThemeSelectViewState extends ConsumerState<ThemeSelectView> {
       ),
     );
   }
+
   Widget themeButton(
     final String label,
     bool isSelected,

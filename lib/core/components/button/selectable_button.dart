@@ -34,7 +34,7 @@ class SelectableButton extends ConsumerWidget {
       child: Container(
         decoration: isSelected
             ? BoxDecoration(
-          gradient: themeColors.answerButton,
+          gradient: iconGradient ?? themeColors.answerButton,
           borderRadius: BorderRadius.circular(8),
         )
             : null,
