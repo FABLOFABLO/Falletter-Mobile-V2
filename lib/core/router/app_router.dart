@@ -11,6 +11,9 @@ import 'package:falletter_mobile_v2/presentation/main/view/post_edit_view.dart';
 import 'package:falletter_mobile_v2/presentation/mypage/view/mypage_view.dart';
 import 'package:falletter_mobile_v2/presentation/main/view/announcement_detail_view.dart';
 import 'package:falletter_mobile_v2/presentation/notice/view/notice_view.dart';
+import 'package:falletter_mobile_v2/presentation/roulette/components/roulette.dart';
+import 'package:falletter_mobile_v2/presentation/roulette/roulette_reward_view.dart';
+import 'package:falletter_mobile_v2/presentation/roulette/roulette_view.dart';
 import 'package:falletter_mobile_v2/presentation/signin/view/signin_view.dart';
 import 'package:falletter_mobile_v2/presentation/splash/view/splash_view.dart';
 import 'package:falletter_mobile_v2/presentation/signup/view/gender_view.dart';
@@ -36,6 +39,21 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/signin',
         builder: (_, __) => const SigninView(),
+      ),
+      GoRoute(
+        path: '/roulette',
+        builder: (_, __) => const RouletteView(),
+      ),
+      GoRoute(
+          path: '/reward',
+          pageBuilder: (context, state) {
+            final reward = state.extra as Reward;
+            return CustomTransitionPage(
+              opaque: false,
+              child: RouletteRewardView(type: reward.type, amount: reward.amount,),
+              transitionsBuilder: (context, anim1, anim2, child) => FadeTransition(opacity: anim1, child: child),
+            );
+          }
       ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
