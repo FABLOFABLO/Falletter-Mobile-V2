@@ -37,7 +37,7 @@ class MainHeader extends ConsumerWidget {
             if (leadingIcon)
               GestureDetector(
                 onTap: () {
-                  context.go('${RoutePaths.main}');
+                  context.pop();
                 },
                   child: Icon(Symbols.close, color: FalletterColor.white, size: 18)
               ),
@@ -70,7 +70,9 @@ class MainHeader extends ConsumerWidget {
             GestureDetector(
               child: SvgPicture.asset(themeColors.noticeSvg, width: width, height: height,),
               onTap: () {
-                context.go('/notification');
+                if (GoRouterState.of(context).uri.toString() != '/notification') {
+                  context.push('/notification');
+                }
               },
             ),
           ],
