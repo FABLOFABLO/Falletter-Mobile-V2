@@ -1,6 +1,10 @@
 import 'package:falletter_mobile_v2/models/my_info_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+final userInfoProvider = Provider<UserInfoModel>((ref) {
+  return dummy;
+});
+
 final dummy = UserInfoModel(
   id: 1,
   email: 'fablo',
@@ -11,8 +15,3 @@ final dummy = UserInfoModel(
   profileImage: '',
   attendDay: 4,
 );
-
-final userInfoProvider = FutureProvider<UserInfoModel>((ref) async {
-  return dummy;
-});
-
