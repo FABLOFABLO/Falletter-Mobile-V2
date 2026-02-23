@@ -30,11 +30,11 @@ class BrickUseCheckModel {
       amount: json['amount'],
       type: json['type'],
       question: json['question'],
-      targetUserId: json['targetUserId'],
-      writerUserId: json['writerUserId'],
+      targetUserId: json['target_user_id'],
+      writerUserId: json['writer_user_id'],
       gender: json['gender'],
-      schoolNumber: json['schoolNumber'],
-      createdAt: DateTime.parse(json['createdAt']),
+      schoolNumber: json['school_number'],
+      createdAt: DateTime.parse(json['created_at']),
     );
   }
 
@@ -48,7 +48,7 @@ class BrickUseCheckModel {
     'writer_user_id': writerUserId,
     'gender': gender,
     'school_number': schoolNumber,
-    'createdAt': createdAt,
+    'created_at': createdAt,
   };
 }
 
