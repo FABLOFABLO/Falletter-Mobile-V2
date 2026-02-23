@@ -11,7 +11,7 @@ import 'package:falletter_mobile_v2/core/utils/date_time.dart';
 class SendLetterView extends ConsumerWidget {
   const SendLetterView({super.key});
 
-  static final double h = 20;
+  static final double spacing = 20;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -21,9 +21,9 @@ class SendLetterView extends ConsumerWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: h),
+          SizedBox(height: spacing),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: h),
+            padding: EdgeInsets.symmetric(horizontal: spacing),
             child: Text('내가 보낸 레터', style: FalletterTextStyle.title2),
           ),
           SizedBox(height: 24),
@@ -47,7 +47,10 @@ class SendLetterView extends ConsumerWidget {
                     );
                   },
                   child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: h, vertical: 16),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: spacing,
+                      vertical: 16,
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [

@@ -11,7 +11,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class GetLetterView extends ConsumerWidget {
   const GetLetterView({super.key});
 
-  static final double h = 20;
+  static final double spacing = 20;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -22,9 +22,9 @@ class GetLetterView extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            SizedBox(height: h),
+            SizedBox(height: spacing),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: h),
+              padding: EdgeInsets.symmetric(horizontal: spacing),
               child: Text('내가 받은 레터', style: FalletterTextStyle.title2),
             ),
             const SizedBox(height: 24),
@@ -52,7 +52,7 @@ class GetLetterView extends ConsumerWidget {
                     },
                     child: Padding(
                       padding: EdgeInsets.symmetric(
-                        horizontal: h,
+                        horizontal: spacing,
                         vertical: 16,
                       ),
                       child: Column(
