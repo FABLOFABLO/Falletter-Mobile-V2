@@ -60,7 +60,7 @@ class _PasswordViewState extends ConsumerState<PasswordView> {
       }),
     );
     return Scaffold(
-      appBar: CustomAppBar(icon: true, action: Action.orderStep, count: 5),
+      appBar: CustomAppBar(icon: true, appBarAction: AppBarAction.orderStep, count: 5),
       body: SafeArea(
         child: GestureDetector(
           behavior: HitTestBehavior.translucent,

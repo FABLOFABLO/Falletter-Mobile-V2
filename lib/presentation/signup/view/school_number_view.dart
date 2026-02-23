@@ -45,7 +45,7 @@ class _SchoolNumberViewState extends ConsumerState<SchoolNumberView> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
-        appBar: CustomAppBar(icon: true, action: Action.orderStep, count: 2),
+        appBar: CustomAppBar(icon: true, appBarAction: AppBarAction.orderStep, count: 2),
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),

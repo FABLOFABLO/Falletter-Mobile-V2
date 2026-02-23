@@ -91,7 +91,7 @@ class _VerifyCodeViewState extends ConsumerState<VerifyCodeView> {
     final timer = ref.watch(signUpProvider).timer ?? Duration.zero;
     bool limitTime = timer.inSeconds > 0;
     return Scaffold(
-      appBar: CustomAppBar(icon: true, action: Action.orderStep, count: 4),
+      appBar: CustomAppBar(icon: true, appBarAction: AppBarAction.orderStep, count: 4),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),

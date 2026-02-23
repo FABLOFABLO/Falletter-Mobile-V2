@@ -49,7 +49,7 @@ class JoinAgreementView extends ConsumerWidget {
               CustomElevatedButton(
                 width: double.infinity,
                 onPressed: toggleBox.isCheckedToggle
-                    ? () => context.go('/signup/complete')
+                    ? () => context.go('/signup/gender/complete')
                     : null,
                 child: const Text('가입하기'),
               ),
