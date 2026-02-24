@@ -45,7 +45,7 @@ class _FalletterNoticeViewState extends ConsumerState<FalletterNoticeView> {
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
-                              const FalletterNoticeDetailView(),
+                              FalletterNoticeDetailView(noticeIndex: index),
                         ),
                       );
                       setState(() {
