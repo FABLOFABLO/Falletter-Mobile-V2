@@ -27,20 +27,28 @@ final goRouterProvider = Provider<GoRouter>((ref) {
     navigatorKey: _rootNavigatorKey,
     initialLocation: '/splash',
     routes: [
-      GoRoute(path: '/splash',
-          builder: (_, __) => const SplashView()),
+      GoRoute(
+        path: '/splash',
+        builder: (_, __) => const SplashView(),
+      ),
       GoRoute(
         path: '/signup/gender',
         builder: (_, __) => const SetGenderView(),
         routes: [
+          GoRoute(
+            path: 'joinAgree',
+            builder: (_, __) => const JoinAgreementView(),
+          ),
           GoRoute(
             path: 'complete',
             builder: (_, __) => const SignUpCompleteView(),
           ),
         ],
       ),
-      GoRoute(path: '/signin',
-          builder: (_, __) => const SigninView()),
+      GoRoute(
+        path: '/signin',
+        builder: (_, __) => const SigninView(),
+      ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
           return Scaffold(
