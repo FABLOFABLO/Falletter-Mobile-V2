@@ -4,9 +4,12 @@ import 'package:falletter_mobile_v2/core/components/text_form_field/text_form_fi
 import 'package:falletter_mobile_v2/core/components/text_form_field/text_form_field_label.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
+import 'package:falletter_mobile_v2/core/router/route_paths.dart';
+import 'package:falletter_mobile_v2/data/auth/auth_repository.dart';
 import 'package:falletter_mobile_v2/presentation/signin/provider/sign_in_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class SigninView extends ConsumerStatefulWidget {
   const SigninView({super.key});
@@ -20,6 +23,8 @@ class _SigninViewState extends ConsumerState<SigninView> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool pwObsText = true;
+  String errorText = '';
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -39,13 +44,33 @@ class _SigninViewState extends ConsumerState<SigninView> {
   static const double lowSize = 8;
 
   void enabled() {
-    ref.read(signInProvider.notifier).enabledButton(_emailController.text, _passwordController.text);
+    ref
+        .read(signInProvider.notifier)
+        .enabledButton(_emailController.text, _passwordController.text);
   }
 
   Widget pwCheck() {
     return pwObsText
         ? FieldIcon.hidePwIcon(onPressed: stateChange)
         : FieldIcon.showPwIcon(onPressed: stateChange);
+  }
+
+  Future<void> _login() async {
+    setState(() => errorText = '');
+    final rawEmail = _emailController.text.trim();
+    final email = rawEmail.contains('@') ? rawEmail : '$rawEmail@dsm.hs.kr';
+    final password = _passwordController.text.trim();
+
+    try {
+      await ref.read(authRepositoryProvider).signIn(email: email, password: password);
+      if (!mounted) return;
+      context.go(RoutePaths.main);
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        errorText = '이메일 또는 비밀번호가 일치하지 않습니다.';
+      });
+    }
   }
 
   void stateChange() {
@@ -56,9 +81,7 @@ class _SigninViewState extends ConsumerState<SigninView> {
 
   @override
   Widget build(BuildContext context) {
-    final isEnabled = ref.watch(
-      signInProvider.select((enabled) => enabled.isValid),
-    );
+    final isButtonEnabled = ref.watch(signInProvider.select((s) => s.isValid));
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
@@ -95,8 +118,12 @@ class _SigninViewState extends ConsumerState<SigninView> {
                   ),
                 ),
                 SizedBox(height: lowSize),
-                ///회원가입 값과 일치하면 오류 메시지 X
-                ///회원가입 값과 일치하지 않으면 오류 메시지 O
+                Text(
+                  errorText,
+                  style: FalletterTextStyle.placeholder.copyWith(
+                    color: FalletterColor.error,
+                  ),
+                ),
                 const Spacer(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -116,11 +143,7 @@ class _SigninViewState extends ConsumerState<SigninView> {
                 ),
                 const SizedBox(height: 12),
                 CustomElevatedButton(
-                  onPressed: isEnabled
-                      ? () {
-                          /// todo 홈 페이지로 GoRouter로 이동
-                        }
-                      : null,
+                  onPressed: isButtonEnabled ? _login : null,
                   child: Text('로그인하기'),
                 ),
               ],
