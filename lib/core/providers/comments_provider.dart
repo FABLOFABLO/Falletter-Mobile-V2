@@ -22,8 +22,4 @@ class CommentsNotifier extends StateNotifier<Map<int, List<int>>> {
     final current = state[postId] ?? [];
     state = {...state, postId: current.where((commentIdList) => commentIdList != commentId).toList()};
   }
-
-  int commentCount(int postId) {
-    return state[postId]?.length ?? 0;
-  }
 }
