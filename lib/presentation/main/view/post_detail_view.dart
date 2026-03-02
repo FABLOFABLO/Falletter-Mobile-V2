@@ -258,10 +258,12 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
                   Padding(
                     padding: const EdgeInsets.only(left: 12),
                     child: SendButton(isEnabled: isEnabled, onPressed: () {
+                      FocusScope.of(context).unfocus();
                       ref.read(postsDetailProvider.notifier).addComment(
                           widget.postId,
                           _commentController.text
                       );
+                      _commentController.text = '';
                     }),
                   ),
                 ],
