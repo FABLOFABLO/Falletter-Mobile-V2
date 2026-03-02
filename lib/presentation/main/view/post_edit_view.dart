@@ -114,7 +114,7 @@ class _PostEditViewState extends ConsumerState<PostEditView> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20).copyWith(bottom: 30),
+              padding: EdgeInsets.symmetric(horizontal: 20).copyWith(bottom: 50),
               child: CustomElevatedButton(
                 child: Text('수정하기'),
                 width: double.infinity,
