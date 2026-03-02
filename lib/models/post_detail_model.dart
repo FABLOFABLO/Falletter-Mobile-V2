@@ -31,8 +31,8 @@ class PostDetailModel {
     authorName: json["author"]["name"],
     anonymousNickname: json["anonymous_nickname"],
     isDeleted: json["is_deleted"],
-    createdAt: DateTime.parse(json["created_at"]),
-    updatedAt: DateTime.parse(json["updated_at"]),
+    createdAt: DateTime.parse(json["created_at"] + 'Z').toLocal(),
+    updatedAt: DateTime.parse(json["updated_at"] + 'Z').toLocal(),
     comment: (json["comment"] as List ?? []).map((x) => Comment.fromJson(x)).toList(),
   );
 }
@@ -59,7 +59,7 @@ class Comment {
     userId: json["user"]["user_id"],
     userName: json["user"]["name"],
     comment: json["comment"],
-    createdAt: DateTime.parse(json["created_at"]),
-    updatedAt: DateTime.parse(json["updated_at"]),
+    createdAt: DateTime.parse(json["created_at"] + 'Z').toLocal(),
+    updatedAt: DateTime.parse(json["updated_at"] + 'Z').toLocal(),
   );
 }

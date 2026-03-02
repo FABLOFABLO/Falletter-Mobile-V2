@@ -33,8 +33,8 @@ class PostModel {
         anonymousNickname: json['anonymous_nickname'],
         isDeleted: json['is_deleted'],
         commentCount: json['comment_count'],
-        createdAt: DateTime.parse(json['created_at']),
-        updatedAt: DateTime.parse(json['updated_at'])
+        createdAt: DateTime.parse(json['created_at'] + 'Z').toLocal(),
+        updatedAt: DateTime.parse(json['updated_at'] + 'Z').toLocal()
     );
   }
 }
