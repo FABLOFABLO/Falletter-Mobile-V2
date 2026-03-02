@@ -33,22 +33,22 @@ class PostDetailModel {
     isDeleted: json["is_deleted"],
     createdAt: DateTime.parse(json["created_at"]),
     updatedAt: DateTime.parse(json["updated_at"]),
-    comment: (json["comment"] as List).map((x) => Comment.fromJson(x)).toList(),
+    comment: (json["comment"] as List ?? []).map((x) => Comment.fromJson(x)).toList(),
   );
 }
 
 class Comment {
   final int commentId;
-  final int authorId;
-  final String authorName;
+  final int userId;
+  final String userName;
   final String comment;
   final DateTime createdAt;
   final DateTime updatedAt;
 
   Comment({
     required this.commentId,
-    required this.authorId,
-    required this.authorName,
+    required this.userId,
+    required this.userName,
     required this.comment,
     required this.createdAt,
     required this.updatedAt,
@@ -56,8 +56,8 @@ class Comment {
 
   factory Comment.fromJson(Map<String, dynamic> json) => Comment(
     commentId: json["comment_id"],
-    authorId: json["author"]["user_id"],
-    authorName: json["author"]["name"],
+    userId: json["user"]["user_id"],
+    userName: json["user"]["name"],
     comment: json["comment"],
     createdAt: DateTime.parse(json["created_at"]),
     updatedAt: DateTime.parse(json["updated_at"]),
