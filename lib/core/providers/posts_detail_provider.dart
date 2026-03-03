@@ -11,8 +11,8 @@ final postRepositoryProvider = Provider<PostApiService>((ref) {
 
 final postsDetailProvider = StateNotifierProvider<PostsDetailNotifier, PostDetailModel?>(
     (ref) {
-      final repository = ref.read(postRepositoryProvider);
-      return PostsDetailNotifier(ref, repository);
+      final apiService = ref.read(postRepositoryProvider);
+      return PostsDetailNotifier(ref, apiService);
     }
 );
 

@@ -9,8 +9,8 @@ final postApiServiceProvider = Provider<PostApiService>((ref) {
 });
 
 final postsProvider = StateNotifierProvider<PostsNotifier, List<PostModel>>((ref) {
-  final repository = ref.read(postApiServiceProvider);
-  return PostsNotifier(repository);
+  final apiService = ref.read(postApiServiceProvider);
+  return PostsNotifier(apiService);
 });
 
 class PostsNotifier extends StateNotifier<List<PostModel>> {
