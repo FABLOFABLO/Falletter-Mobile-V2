@@ -23,7 +23,7 @@ class PostsNotifier extends StateNotifier<List<PostModel>> {
       final posts = await apiService.getPostList();
       state = posts;
     } catch (e) {
-      throw Exception('Failed to load posts');
+      throw Exception('게시글 목록 불러오기에 실패했습니다.');
     }
   }
 
@@ -33,7 +33,7 @@ class PostsNotifier extends StateNotifier<List<PostModel>> {
       await loadPosts();
       return postId;
     } catch(e) {
-      throw Exception('Failed to add post');
+      throw Exception('게시글 등록에 실패했습니다.');
     }
   }
 }
