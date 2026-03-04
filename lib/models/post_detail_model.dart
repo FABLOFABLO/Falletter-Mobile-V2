@@ -27,12 +27,12 @@ class PostDetailModel {
     id: json["id"],
     title: json["title"],
     content: json["content"],
-    authorId: json["author"]["user_id"],
+    authorId: json["author"]["userId"],
     authorName: json["author"]["name"],
-    anonymousNickname: json["anonymous_nickname"],
-    isDeleted: json["is_deleted"],
-    createdAt: DateTime.parse(json["created_at"] + 'Z').toLocal(),
-    updatedAt: DateTime.parse(json["updated_at"] + 'Z').toLocal(),
+    anonymousNickname: json["anonymousNickname"],
+    isDeleted: json["isDeleted"],
+    createdAt: DateTime.parse(json["createdAt"] + 'Z').toLocal(),
+    updatedAt: DateTime.parse(json["updatedAt"] + 'Z').toLocal(),
     comment: (json["comment"] as List ?? []).map((x) => Comment.fromJson(x)).toList(),
   );
 }
@@ -41,6 +41,7 @@ class Comment {
   final int commentId;
   final int userId;
   final String userName;
+  final String anonymousNickname;
   final String comment;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -49,17 +50,19 @@ class Comment {
     required this.commentId,
     required this.userId,
     required this.userName,
+    required this.anonymousNickname,
     required this.comment,
     required this.createdAt,
     required this.updatedAt,
   });
 
   factory Comment.fromJson(Map<String, dynamic> json) => Comment(
-    commentId: json["comment_id"],
-    userId: json["user"]["user_id"],
+    commentId: json["commentId"],
+    userId: json["user"]["userId"],
     userName: json["user"]["name"],
+    anonymousNickname: json["anonymousNickname"],
     comment: json["comment"],
-    createdAt: DateTime.parse(json["created_at"] + 'Z').toLocal(),
-    updatedAt: DateTime.parse(json["updated_at"] + 'Z').toLocal(),
+    createdAt: DateTime.parse(json["createdAt"] + 'Z').toLocal(),
+    updatedAt: DateTime.parse(json["updatedAt"] + 'Z').toLocal(),
   );
 }

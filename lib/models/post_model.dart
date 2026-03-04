@@ -28,13 +28,13 @@ class PostModel {
         id: json['id'],
         title: json['title'],
         content: json['content'],
-        authorId: json['author']['user_id'],
+        authorId: json['author']['userId'],
         authorName: json['author']['name'],
-        anonymousNickname: json['anonymous_nickname'],
-        isDeleted: json['is_deleted'],
-        commentCount: json['comment_count'],
-        createdAt: DateTime.parse(json['created_at'] + 'Z').toLocal(),
-        updatedAt: DateTime.parse(json['updated_at'] + 'Z').toLocal()
+        anonymousNickname: json['anonymousNickname'],
+        isDeleted: json['isDeleted'],
+        commentCount: json['commentCount'],
+        createdAt: DateTime.parse(json['createdAt'] + 'Z').toLocal(),
+        updatedAt: DateTime.parse(json['updatedAt'] + 'Z').toLocal()
     );
   }
 }
