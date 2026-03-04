@@ -90,7 +90,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
                     parentNavigatorKey: _rootNavigatorKey,
                     builder: (context, state) {
                       final post = state.extra as PostDetailModel;
-                      return PostEditView(title: post.title, content: post.content);
+                      return PostEditView(postId: post.id, title: post.title, content: post.content);
                     }
                   ),
                 ]

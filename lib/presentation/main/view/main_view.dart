@@ -24,9 +24,17 @@ class FalletterMainView extends ConsumerStatefulWidget {
 class _FalletterMainViewState extends ConsumerState<FalletterMainView> {
 
   @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      ref.read(postsProvider.notifier).loadPosts();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final posts = ref.watch(postsProvider);
-    final comments = ref.watch(commentsProvider);
+
     return Scaffold(
       body: Column(
         children: [
@@ -37,7 +45,6 @@ class _FalletterMainViewState extends ConsumerState<FalletterMainView> {
               itemCount: posts.length,
               itemBuilder: (BuildContext context, int index) {
                 final post = posts[index];
-                final commentCount = comments[post.id]?.length ?? 0;
                 return ContentCardButton(
                   onTap: () {
                     context.push('${RoutePaths.main}/detail', extra: post.id);
@@ -65,7 +72,7 @@ class _FalletterMainViewState extends ConsumerState<FalletterMainView> {
                         Row(
                           children: [
                             Text(
-                              post.author.name,
+                              post.anonymousNickname,
                               style: FalletterTextStyle.body4.copyWith(
                                 color: FalletterColor.gray500,
                               ),
@@ -80,7 +87,7 @@ class _FalletterMainViewState extends ConsumerState<FalletterMainView> {
                               ),
                             ),
                             Text(
-                              '댓글 $commentCount개',
+                              '댓글 ${post.commentCount}개',
                               style: FalletterTextStyle.body4.copyWith(
                                 color: FalletterColor.white,
                               ),
