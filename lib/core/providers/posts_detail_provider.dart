@@ -27,7 +27,7 @@ class PostsDetailNotifier extends StateNotifier<PostDetailModel?> {
       final post = await apiService.getDetailPost(postId);
       state = post;
     } catch(e) {
-      throw Exception('게시글 상세 조회 실패: $e');
+      throw Exception('Failed to load detail post');
     }
   }
 
@@ -37,7 +37,7 @@ class PostsDetailNotifier extends StateNotifier<PostDetailModel?> {
       await loadDetailPost(postId);
       ref.read(postsProvider.notifier).loadPosts();
     } catch(e) {
-      throw Exception('게시물 수정 실패: $e');
+      throw Exception('Failed to edit post');
     }
   }
 
@@ -46,7 +46,7 @@ class PostsDetailNotifier extends StateNotifier<PostDetailModel?> {
       await apiService.deletePost(postId);
       ref.read(postsProvider.notifier).loadPosts();
     } catch(e) {
-      throw Exception('게시물 삭제 실패: $e');
+      throw Exception('Failed to delete post');
     }
   }
 
@@ -59,7 +59,7 @@ class PostsDetailNotifier extends StateNotifier<PostDetailModel?> {
       await loadDetailPost(postId);
       ref.read(postsProvider.notifier).loadPosts();
     } catch(e) {
-      throw Exception('댓글 등록 실패: $e');
+      throw Exception('Failed to add comment');
     }
   }
 
@@ -71,7 +71,7 @@ class PostsDetailNotifier extends StateNotifier<PostDetailModel?> {
       await loadDetailPost(postId);
       ref.read(postsProvider.notifier).loadPosts();
     } catch(e) {
-      throw Exception('댓글 삭제 실패: $e');
+      throw Exception('Failed to delete comment');
     }
   }
 }
