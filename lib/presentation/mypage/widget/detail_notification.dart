@@ -3,27 +3,28 @@ import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class DetailNotification extends StatefulWidget {
+class DetailNotification extends StatelessWidget {
   final String title;
+  final bool isEnabled;
+  final void Function(bool) onTap;
 
-  const DetailNotification({super.key, required this.title});
-
-  @override
-  State<DetailNotification> createState() => _DetailNotificationState();
-}
-
-class _DetailNotificationState extends State<DetailNotification> {
-  bool isEnabled = true;
+  const DetailNotification({
+    super.key,
+    required this.title,
+    required this.isEnabled,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            widget.title,
+            title,
             style: FalletterTextStyle.body2.copyWith(
               fontSize: 15,
               color: FalletterColor.gray400,
@@ -47,15 +48,10 @@ class _DetailNotificationState extends State<DetailNotification> {
                   color: isEnabled ? null : FalletterColor.gray400,
                 ),
                 child: CupertinoSwitch(
-                  thumbIcon: WidgetStateProperty.all(Icon(null)),
                   inactiveTrackColor: Colors.transparent,
                   activeTrackColor: Colors.transparent,
                   value: isEnabled,
-                  onChanged: (bool value) {
-                    setState(() {
-                      isEnabled = value;
-                    });
-                  },
+                  onChanged: onTap,
                 ),
               ),
             ),
