@@ -13,7 +13,6 @@ class SelectableButton extends ConsumerWidget {
   final Gradient? iconGradient;
   final bool isSelected;
   final VoidCallback onTap;
-
   const SelectableButton({
     super.key,
     required this.label,
@@ -35,11 +34,11 @@ class SelectableButton extends ConsumerWidget {
       child: Container(
         decoration: isSelected
             ? BoxDecoration(
-          gradient: themeColors.answerButton,
+          gradient: iconGradient ?? themeColors.answerButton,
           borderRadius: BorderRadius.circular(8),
         )
             : null,
-        padding: isSelected ? const EdgeInsets.all(2) : EdgeInsets.zero,
+        padding: isSelected ? const EdgeInsets.all(3) : EdgeInsets.zero,
         child: Container(
           decoration: BoxDecoration(
             color: FalletterColor.middleBlack,
