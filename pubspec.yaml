@@ -65,6 +65,8 @@ flutter:
     - assets/svg/roulette_check/
     - assets/svg/theme_mode/
     - assets/lottie/
+    - assets/text/
+    - assets/svg/suspend/
     - assets/svg/suspend/
     - assets/svg/miss/
     - assets/svg/reward_set/

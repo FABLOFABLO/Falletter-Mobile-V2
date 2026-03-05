@@ -15,6 +15,8 @@ import 'package:falletter_mobile_v2/presentation/roulette/components/roulette.da
 import 'package:falletter_mobile_v2/presentation/roulette/roulette_reward_view.dart';
 import 'package:falletter_mobile_v2/presentation/roulette/roulette_view.dart';
 import 'package:falletter_mobile_v2/presentation/signin/view/signin_view.dart';
+import 'package:falletter_mobile_v2/presentation/signup/view/join_agreement_view.dart';
+import 'package:falletter_mobile_v2/presentation/signup/view/sign_up_complete_view.dart';
 import 'package:falletter_mobile_v2/presentation/splash/view/splash_view.dart';
 import 'package:falletter_mobile_v2/presentation/signup/view/gender_view.dart';
 import 'package:flutter/material.dart';
@@ -35,6 +37,16 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/signup/gender',
         builder: (_, __) => const SetGenderView(),
+        routes: [
+          GoRoute(
+            path: 'joinAgree',
+            builder: (_, __) => const JoinAgreementView(),
+          ),
+          GoRoute(
+            path: 'complete',
+            builder: (_, __) => const SignUpCompleteView(),
+          ),
+        ],
       ),
       GoRoute(
         path: '/signin',
@@ -62,7 +74,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             bottomNavigationBar: CustomBottomNavigationBar(
               currentIndex: navigationShell.currentIndex,
               onTap: (index) {
-                navigationShell.goBranch(index);
+                navigationShell.goBranch(
+                  index,
+                  initialLocation: index == navigationShell.currentIndex,
+                );
               },
             ),
           );
@@ -90,24 +105,29 @@ final goRouterProvider = Provider<GoRouter>((ref) {
                     parentNavigatorKey: _rootNavigatorKey,
                     builder: (context, state) {
                       final post = state.extra as PostDetailModel;
+                      return PostEditView(
+                        title: post.title,
+                        content: post.content,
+                      );
+                    },
                       return PostEditView(postId: post.id, title: post.title, content: post.content);
                     }
                   ),
-                ]
+                ],
               ),
               GoRoute(
-                  path: '/notification',
-                  builder: (_, __) => const NotificationView(),
-                  routes: [
-                    GoRoute(
-                        path: 'detail',
-                        parentNavigatorKey: _rootNavigatorKey,
-                        builder: (context, state) {
-                          return AnnouncementDetailView(id: state.extra as int);
-                        }
-                    ),
-                  ]
-              )
+                path: '/notification',
+                builder: (_, __) => const NotificationView(),
+                routes: [
+                  GoRoute(
+                    path: 'detail',
+                    parentNavigatorKey: _rootNavigatorKey,
+                    builder: (context, state) {
+                      return AnnouncementDetailView(id: state.extra as int);
+                    },
+                  ),
+                ],
+              ),
             ],
           ),
           StatefulShellBranch(

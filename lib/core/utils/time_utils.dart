@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 String timeCheck(DateTime date) {
   final diff = DateTime.now().difference(date);
   print(DateTime.now());
@@ -8,4 +10,9 @@ String timeCheck(DateTime date) {
   if (diff.inDays < 7) return '${diff.inDays}일 전';
   if (diff.inDays < 30) return '${(diff.inDays / 7).floor()}주 전';
   return '${(diff.inDays / 30).floor()}개월 전';
+}
+
+String brickTime(DateTime date){
+  final format = DateFormat('yyyy-MM-dd-HH:mm').format(date);
+  return format;
 }
