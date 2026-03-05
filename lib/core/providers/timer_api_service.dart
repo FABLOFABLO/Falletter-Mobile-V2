@@ -39,9 +39,9 @@ class TimerApiService {
       if (response.statusCode == 200) {
         return TimerModel.fromJson(response.data);
       }
-      throw Exception('Failed to get brick timer');
+      throw Exception('브릭 타이머 조회에 실패');
     } catch(e) {
-      throw Exception('Failed to get brick timer: $e');
+      throw Exception('브릭 타이머 조회 실패: $e');
     }
   }
 
@@ -50,9 +50,9 @@ class TimerApiService {
       final response = await dio.post(ApiEndpoints.brickTimer);
 
       if (response.statusCode == 201) return;
-      throw Exception('Failed to start brick timer');
+      throw Exception('브릭 타이머 시작 실패');
     } catch(e) {
-      throw Exception('Failed to start brick timer: $e');
+      throw Exception('브릭 타이머 시작 실패: $e');
     }
   }
 }
