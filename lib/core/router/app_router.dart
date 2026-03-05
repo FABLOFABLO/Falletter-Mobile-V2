@@ -110,6 +110,8 @@ final goRouterProvider = Provider<GoRouter>((ref) {
                         content: post.content,
                       );
                     },
+                      return PostEditView(postId: post.id, title: post.title, content: post.content);
+                    }
                   ),
                 ],
               ),
