@@ -25,7 +25,7 @@ class RouletteTimerNotifier extends StateNotifier<TimerModel?> {
       final timer = await apiService.getRouletteTimer();
       state = timer;
     } catch(e) {
-      throw Exception('Failed to load roulette timer: $e');
+      throw Exception('룰렛 타이머 조회에 실패했습니다.');
     }
   }
 
@@ -34,7 +34,7 @@ class RouletteTimerNotifier extends StateNotifier<TimerModel?> {
       await apiService.startRouletteTimer();
       await loadRouletteTimer();
     } catch(e) {
-      throw Exception('Failed to start roulette timer: $e');
+      throw Exception('룰렛 타이머 시작에 실패했습니다.');
     }
   }
 }

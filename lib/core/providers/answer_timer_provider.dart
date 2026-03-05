@@ -27,7 +27,7 @@ class AnswerTimerNotifier extends StateNotifier<TimerModel?> {
       final timer = await apiService.getBrickTimer();
       state = timer;
     } catch(e) {
-      throw Exception('브릭 타이머 조회에 실패했습니다.');
+      throw Exception('답변 타이머 조회에 실패했습니다.');
     }
   }
 
@@ -36,7 +36,7 @@ class AnswerTimerNotifier extends StateNotifier<TimerModel?> {
       await apiService.startBrickTimer();
       state = await apiService.getBrickTimer();
     } catch(e) {
-      throw Exception('브릭 타이머 시작에 실패했습니다.');
+      throw Exception('답변 타이머 시작에 실패했습니다.');
     }
   }
  }
