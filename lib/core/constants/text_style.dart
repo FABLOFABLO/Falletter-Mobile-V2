@@ -65,6 +65,10 @@ abstract final class FalletterTextStyle {
     fontSize: 16,
     fontWeight: FontWeight.w600,
   );
+  static TextStyle agreeService = defaultTextStyle.copyWith(
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+  );
 }
 
 const TextStyle defaultTextStyle = TextStyle(
