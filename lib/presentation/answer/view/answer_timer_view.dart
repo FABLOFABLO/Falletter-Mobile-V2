@@ -1,27 +1,73 @@
+import 'dart:async';
 import 'package:falletter_mobile_v2/core/components/progress/circle_progress.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
+import 'package:falletter_mobile_v2/core/providers/answer_provider.dart';
 import 'package:falletter_mobile_v2/core/providers/answer_timer_provider.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
 import 'package:falletter_mobile_v2/core/theme/app_theme_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
-class TimerView extends ConsumerWidget {
+class AnswerTimerView extends ConsumerStatefulWidget {
+  final int remainingSeconds;
 
-  const TimerView({super.key});
+  const AnswerTimerView({
+    super.key,
+    required this.remainingSeconds,
+  });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<AnswerTimerView> createState() => _AnswerTimerViewState();
+}
+
+class _AnswerTimerViewState extends ConsumerState<AnswerTimerView> {
+  late int _remainingSeconds;
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _remainingSeconds = widget.remainingSeconds;
+    startTimer();
+  }
+
+  void startTimer() {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (_remainingSeconds <= 0) {
+        timer.cancel();
+        return;
+      }
+
+      setState(() {
+        _remainingSeconds--;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
     final selectedTheme = ref.watch(themeProvider);
     final themeColors = appThemeColors[selectedTheme]!;
 
-    ref.watch(answerTimerProvider);
+    final duration = Duration(seconds: _remainingSeconds);
+    final totalSeconds = 14400;
 
-    final answerTimerNotifier = ref.read(answerTimerProvider.notifier);
-    final progress = answerTimerNotifier.progress;
-    final hours = answerTimerNotifier.hours;
-    final minutes = answerTimerNotifier.minutes;
+    final minutes =
+    duration.inMinutes.remainder(60).toString().padLeft(2, '0');
+    final hours = duration.inHours.toString().padLeft(2, '0');
+
+    final progress = totalSeconds > 0
+        ? _remainingSeconds / totalSeconds
+        : 0.0;
 
     return Center(
       child: Column(
