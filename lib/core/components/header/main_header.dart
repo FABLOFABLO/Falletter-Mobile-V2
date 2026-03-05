@@ -44,12 +44,10 @@ class MainHeader extends ConsumerWidget {
             Spacer(),
             GestureDetector(
               child: SvgPicture.asset(themeColors.rouletteCheckSvg, width: width, height: height,),
-                onTap: () {
-                  loadDummyRouletteTimer(ref);
+                onTap: () async {
+                  await ref.read(rouletteTimerProvider.notifier).loadRouletteTimer();
 
-                  final timer = ref.read(rouletteTimerProvider);
-
-                  if (timer == null) return;
+                  final timer = ref.read(rouletteTimerProvider)!;
 
                   if (timer.isActive) {
                     showGeneralDialog(

@@ -4,6 +4,7 @@ import 'package:falletter_mobile_v2/core/components/gradient_text.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/providers/roulette_provider.dart';
+import 'package:falletter_mobile_v2/core/providers/roulette_timer_provider.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
 import 'package:falletter_mobile_v2/core/router/route_paths.dart';
 import 'package:falletter_mobile_v2/core/theme/app_theme_color.dart';
@@ -117,6 +118,7 @@ class _RouletteRewardViewState extends ConsumerState<RouletteRewardView> {
                               padding: const EdgeInsets.only(bottom: 30),
                               child: GestureDetector(
                                 onTap: () {
+                                  ref.read(rouletteTimerProvider.notifier).startRouletteTimer();
                                   context.go('${RoutePaths.main}');
                                   },
                                 child: Text('닫기',
