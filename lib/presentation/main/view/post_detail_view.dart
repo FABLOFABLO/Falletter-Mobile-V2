@@ -30,6 +30,9 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
   @override
   void initState() {
     _commentController.addListener(_onChanged);
+    Future.microtask(() {
+      ref.read(postsDetailProvider.notifier).loadDetailPost(widget.postId);
+    });
     super.initState();
   }
 
@@ -48,6 +51,18 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
   @override
   Widget build(BuildContext context) {
     final post = ref.watch(postsDetailProvider);
+
+    if (post == null) {
+      return Container(
+        color: FalletterColor.black,
+        child: Center(
+            child: CircularProgressIndicator(
+              color: FalletterColor.middleBlack,
+            )
+        ),
+      );
+    }
+
     return GestureDetector(
       onTap: FocusScope.of(context).unfocus,
       child: Scaffold(
@@ -67,7 +82,7 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
                         Row(
                           children: [
                             Text(
-                              post.author.name,
+                              post.anonymousNickname,
                               style: baseInfoStyle,
                             ),
                             SizedBox(width: 8),
@@ -121,7 +136,10 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
                                               onLeftPressed: () {
                                                 Navigator.pop(context);
                                               },
-                                              onRightPressed: () {},
+                                              onRightPressed: () {
+                                                ref.read(postsDetailProvider.notifier).deletePost(widget.postId);
+                                                context.go('${RoutePaths.main}');
+                                              },
                                             ),
                                           ),
                                         );
@@ -187,7 +205,7 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
                                 Row(
                                   children: [
                                     Text(
-                                      comment.user.name,
+                                      comment.userName, //TODO: 익명 닉네임으로 수정하기 (아직 서버에서 수정 안 됨)
                                       style: commentInfoStyle,
                                     ),
                                     SizedBox(width: 8),
@@ -205,8 +223,13 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
                               ],
                             ),
                           ),
-                          IconButton(
-                            onPressed: () {},
+                          IconButton( //TODO: 내 정보 조회 연동되면 내 아이디랑 댓글 아이디 같을 때만 버튼 표시하도록 수정
+                            onPressed: () {
+                              ref.read(postsDetailProvider.notifier).deleteComment(
+                                  comment.commentId,
+                                  post.id
+                              );
+                            },
                             icon: Icon(
                               Symbols.delete,
                               color: FalletterColor.gray400,
@@ -234,7 +257,14 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 12),
-                    child: SendButton(isEnabled: isEnabled, onPressed: () {}),
+                    child: SendButton(isEnabled: isEnabled, onPressed: () {
+                      FocusScope.of(context).unfocus();
+                      ref.read(postsDetailProvider.notifier).addComment(
+                          widget.postId,
+                          _commentController.text
+                      );
+                      _commentController.text = '';
+                    }),
                   ),
                 ],
               ),

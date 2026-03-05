@@ -22,6 +22,7 @@ dependencies:
   firebase_messaging: ^16.1.0
   permission_handler: ^12.0.1
   flutter_local_notifications: ^19.5.0
+  flutter_typeahead: ^5.2.0
   flutter_secure_storage: ^9.2.2
 
 dev_dependencies:
@@ -65,3 +66,5 @@ flutter:
     - assets/svg/theme_mode/
     - assets/lottie/
     - assets/svg/suspend/
+    - assets/svg/miss/
+    - assets/svg/reward_set/

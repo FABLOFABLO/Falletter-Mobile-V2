@@ -3,20 +3,28 @@ import 'package:falletter_mobile_v2/core/components/button/elevated_button.dart'
 import 'package:falletter_mobile_v2/core/components/text_form_field/text_form_field.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
+import 'package:falletter_mobile_v2/core/providers/posts_detail_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class PostEditView extends StatefulWidget {
+class PostEditView extends ConsumerStatefulWidget {
+  final int postId;
   final String title;
   final String content;
 
-  const PostEditView({super.key, required this.title, required this.content});
+  const PostEditView({
+    super.key,
+    required this.postId,
+    required this.title,
+    required this.content
+  });
 
   @override
-  State<PostEditView> createState() => _PostEditViewState();
+  ConsumerState<PostEditView> createState() => _PostEditViewState();
 }
 
-class _PostEditViewState extends State<PostEditView> {
+class _PostEditViewState extends ConsumerState<PostEditView> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _contentController = TextEditingController();
   final int maxLength = 200;
@@ -106,13 +114,17 @@ class _PostEditViewState extends State<PostEditView> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20).copyWith(bottom: 30),
+              padding: EdgeInsets.symmetric(horizontal: 20).copyWith(bottom: 50),
               child: CustomElevatedButton(
                 child: Text('수정하기'),
                 width: double.infinity,
                 onPressed: isEnabled
-                    ? () {
-                  int dummyPostid = 2;
+                    ? () async {
+                  await ref.read(postsDetailProvider.notifier).editPost(
+                      widget.postId,
+                      _titleController.text,
+                      _contentController.text
+                  );
                   context.pop();
                 }
                     : null,
