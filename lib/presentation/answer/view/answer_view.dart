@@ -1,15 +1,22 @@
 import 'dart:async';
+import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/providers/answer_provider.dart';
 import 'package:falletter_mobile_v2/core/providers/answer_timer_provider.dart';
 import 'package:falletter_mobile_v2/presentation/answer/view/question_view.dart';
-import 'package:falletter_mobile_v2/presentation/answer/view/timer_view.dart';
+import 'package:falletter_mobile_v2/presentation/answer/view/answer_timer_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class FalletterAnswerView extends ConsumerWidget {
+class FalletterAnswerView extends ConsumerStatefulWidget {
   const FalletterAnswerView({super.key});
 
-  void goNext(WidgetRef ref) {
+  @override
+  ConsumerState<FalletterAnswerView> createState() => _FalletterAnswerViewState();
+}
+
+class _FalletterAnswerViewState extends ConsumerState<FalletterAnswerView> {
+
+  void goNext() {
 
     final current = ref.read(currentIndexProvider);
     const total = 5;
@@ -17,20 +24,37 @@ class FalletterAnswerView extends ConsumerWidget {
     if (current + 1 < total) {
       ref.read(answerProvider.notifier).nextQuestion();
     } else {
-      ref.read(answerStateProvider.notifier).state = AnswerState.waiting;
-      ref.read(answerTimerProvider.notifier).startCountdown();
+      ref.read(answerTimerProvider.notifier).startAnswerTimer();
     }
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final answerState = ref.watch(answerStateProvider);
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      ref.read(answerTimerProvider.notifier).loadAnswerTimer();
+    });
+  }
 
+  @override
+  Widget build(BuildContext context) {
+    final timer = ref.watch(answerTimerProvider);
+
+    if (timer == null) {
+      return Container(
+        color: FalletterColor.black,
+        child: Center(
+            child: CircularProgressIndicator(
+              color: FalletterColor.middleBlack,
+            )
+        ),
+      );
+    }
     return SafeArea(
       child: Scaffold(
-        body: answerState == AnswerState.waiting
-            ? TimerView()
-            : QuestionView(goNext: () => goNext(ref))
+        body: timer!.isActive
+            ? AnswerTimerView(remainingSeconds: timer.remainingSeconds,)
+            : QuestionView(goNext: goNext)
       ),
     );
   }

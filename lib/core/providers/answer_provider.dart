@@ -8,10 +8,6 @@ enum AnswerState {
 
 final currentIndexProvider = StateProvider<int>((ref) => 0);
 
-final answerStateProvider = StateProvider<AnswerState>(
-        (ref) => AnswerState.answering
-);
-
 final questionListProvider = Provider<List<QuestionModel>>((ref) => [
   QuestionModel(
     id: 1,
