@@ -14,9 +14,9 @@ class TimerApiService {
       if (response.statusCode == 200) {
         return TimerModel.fromJson(response.data);
       }
-      throw Exception('Failed to get roulette timer');
+      throw Exception('룰렛 타이머 조회 실패');
     } catch(e) {
-      print('Failed to get roulette timer: $e');
+      print('룰렛 타이머 조회 실패: $e');
       rethrow;
     }
   }
@@ -26,9 +26,9 @@ class TimerApiService {
       final response = await dio.post(ApiEndpoints.rouletteTimer);
 
       if (response.statusCode == 201) return;
-      throw Exception('Failed to start roulette timer');
+      throw Exception('룰렛 타이머 시작 실패');
     } catch(e) {
-      throw Exception('Failed to start roulette timer: $e');
+      throw Exception('룰렛 타이머 시작 실패: $e');
     }
   }
 
