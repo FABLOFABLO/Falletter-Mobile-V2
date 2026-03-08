@@ -5,6 +5,7 @@ import 'package:falletter_mobile_v2/core/components/gradient_text.dart';
 import 'package:falletter_mobile_v2/core/components/progress/circle_progress.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
+import 'package:falletter_mobile_v2/core/providers/roulette_timer_provider.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
 import 'package:falletter_mobile_v2/core/router/route_paths.dart';
 import 'package:falletter_mobile_v2/core/theme/app_theme_color.dart';
@@ -13,56 +14,30 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 class RouletteTimerView extends ConsumerStatefulWidget {
-  final int remainingSeconds;
 
-  const RouletteTimerView({
-    super.key,
-    required this.remainingSeconds
-  });
+  const RouletteTimerView({super.key});
 
   @override
   ConsumerState<RouletteTimerView> createState() => _RouletteTimerViewState();
 }
 
 class _RouletteTimerViewState extends ConsumerState<RouletteTimerView> {
-  late int _remainingSeconds;
-  Timer? _timer;
-
-  @override
-  void initState() {
-    super.initState();
-    _remainingSeconds = widget.remainingSeconds;
-    startTimer();
-  }
-
-  void startTimer() {
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (_remainingSeconds <= 0) {
-        timer.cancel();
-        if(mounted) {
-          context.pop();
-        }
-        return;
-      }
-
-      setState(() {
-        _remainingSeconds--;
-      });
-    });
-  }
-
-  @override
-  void dispose() {
-    _timer?.cancel();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
     final theme = ref.watch(themeProvider);
     final themeColors = appThemeColors[theme]!;
+    final remainingSeconds = ref.watch(rouletteCountdownProvider);
+    final timer = ref.watch(rouletteTimerProvider);
 
-    final duration = Duration(seconds: _remainingSeconds);
+    if (timer != null && timer.isActive && remainingSeconds == 0) {
+      Future.microtask(() {
+        ref.read(rouletteCountdownProvider.notifier)
+            .startTimer(timer.remainingSeconds);
+      });
+    }
+
+    final duration = Duration(seconds: remainingSeconds);
     final totalSeconds = 86400;
 
     final minutes =
@@ -70,7 +45,7 @@ class _RouletteTimerViewState extends ConsumerState<RouletteTimerView> {
     final hours = duration.inHours.toString().padLeft(2, '0');
 
     final progress = totalSeconds > 0
-        ? _remainingSeconds / totalSeconds
+        ? remainingSeconds / totalSeconds
         : 0.0;
 
     return Scaffold(

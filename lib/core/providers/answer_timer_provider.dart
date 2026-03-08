@@ -1,48 +1,70 @@
 import 'dart:async';
+import 'package:falletter_mobile_v2/core/network/dio.dart';
+import 'package:falletter_mobile_v2/core/providers/timer_api_service.dart';
+import 'package:falletter_mobile_v2/models/timer_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'answer_provider.dart';
 
-class AnswerTimerNotifier extends Notifier<Duration> {
-  static const Duration _initialCountdown = Duration(hours: 4);
-  Timer? _timer;
+final answerTimerApiServiceProvider = Provider<TimerApiService>((ref) {
+  final dio = ref.read(dioClientProvider).dio;
+  return TimerApiService(dio);
+});
 
-  @override
-  Duration build() {
-    return _initialCountdown;
-  }
-
-  double get progress {
-    return _initialCountdown.inSeconds > 0
-        ? state.inSeconds / _initialCountdown.inSeconds : 0.0;
-  }
-
-  String get hours {
-    return state.inHours.toString().padLeft(2, '0');
-  }
-
-  String get minutes {
-    return state.inMinutes.remainder(60).toString().padLeft(2, '0');
-  }
-
-  void startCountdown() {
-    _timer?.cancel();
-
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      if (state.inSeconds > 0) {
-        state = state - const Duration(seconds: 1);
-      }
-      else {
-        timer.cancel();
-        ref.read(answerStateProvider.notifier).state = AnswerState.answering;
-        ref.read(currentIndexProvider.notifier).state = 0;
-        ref.read(selectedIndexProvider.notifier).state = null;
-
-        state = _initialCountdown;
-      }
-    });
-  }
-}
-
-final answerTimerProvider = NotifierProvider<AnswerTimerNotifier, Duration>(
-    () => AnswerTimerNotifier()
+final answerTimerProvider = StateNotifierProvider<AnswerTimerNotifier, TimerModel?>(
+    (ref) {
+      final apiService = ref.read(answerTimerApiServiceProvider);
+      return AnswerTimerNotifier(apiService);
+    }
 );
+
+class AnswerTimerNotifier extends StateNotifier<TimerModel?> {
+  final TimerApiService apiService;
+
+  AnswerTimerNotifier(this.apiService) : super(null);
+
+  Future<void> loadAnswerTimer() async {
+    try {
+      final timer = await apiService.getBrickTimer();
+      state = timer;
+    } catch(e) {
+      throw Exception('답변 타이머 조회에 실패했습니다.');
+    }
+  }
+
+  Future<void> startAnswerTimer() async {
+    try {
+      await apiService.startBrickTimer();
+      state = await apiService.getBrickTimer();
+    } catch(e) {
+      throw Exception('답변 타이머 시작에 실패했습니다.');
+    }
+  }
+ }
+
+ final answerCountdownProvider = StateNotifierProvider<AnswerCountdownNotifier, int>(
+     (ref) => AnswerCountdownNotifier()
+ );
+
+ class AnswerCountdownNotifier extends StateNotifier<int> {
+   Timer? _timer;
+
+   AnswerCountdownNotifier() : super(0);
+
+   void startTimer(int remainingSeconds) {
+     state = remainingSeconds;
+
+     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+       if (state <= 0 || !mounted) {
+         timer.cancel();
+         return;
+       }
+       state--;
+     });
+   }
+
+   @override
+   void dispose() {
+     _timer?.cancel();
+     super.dispose();
+   }
+ }
