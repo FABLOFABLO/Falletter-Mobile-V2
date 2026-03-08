@@ -57,7 +57,6 @@ class rouletteCountdownNotifier extends StateNotifier<int> {
         timer.cancel();
         return;
       }
-
       state--;
     });
   }

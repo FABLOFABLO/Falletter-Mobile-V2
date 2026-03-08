@@ -58,7 +58,6 @@ class AnswerTimerNotifier extends StateNotifier<TimerModel?> {
          timer.cancel();
          return;
        }
-
        state--;
      });
    }
