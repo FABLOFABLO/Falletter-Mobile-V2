@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/providers/answer_provider.dart';
 import 'package:falletter_mobile_v2/core/providers/answer_timer_provider.dart';
+import 'package:falletter_mobile_v2/core/providers/roulette_timer_provider.dart';
 import 'package:falletter_mobile_v2/presentation/answer/view/question_view.dart';
 import 'package:falletter_mobile_v2/presentation/answer/view/answer_timer_view.dart';
 import 'package:flutter/material.dart';
@@ -53,7 +54,7 @@ class _FalletterAnswerViewState extends ConsumerState<FalletterAnswerView> {
     return SafeArea(
       child: Scaffold(
         body: timer!.isActive
-            ? AnswerTimerView(remainingSeconds: timer.remainingSeconds,)
+            ? AnswerTimerView()
             : QuestionView(goNext: goNext)
       ),
     );

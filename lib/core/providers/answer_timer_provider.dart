@@ -40,3 +40,32 @@ class AnswerTimerNotifier extends StateNotifier<TimerModel?> {
     }
   }
  }
+
+ final answerCountdownProvider = StateNotifierProvider<AnswerCountdownNotifier, int>(
+     (ref) => AnswerCountdownNotifier()
+ );
+
+ class AnswerCountdownNotifier extends StateNotifier<int> {
+   Timer? _timer;
+
+   AnswerCountdownNotifier() : super(0);
+
+   void startTimer(int remainingSeconds) {
+     state = remainingSeconds;
+
+     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+       if (remainingSeconds <= 0) {
+         timer.cancel();
+         return;
+       }
+
+       state--;
+     });
+   }
+
+   @override
+   void dispose() {
+     _timer?.cancel();
+     super.dispose();
+   }
+ }

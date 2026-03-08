@@ -52,9 +52,7 @@ class MainHeader extends ConsumerWidget {
                   if (timer.isActive) {
                     showGeneralDialog(
                       context: context,
-                      pageBuilder: (_, __, ___) => RouletteTimerView(
-                        remainingSeconds: timer.remainingSeconds,
-                      ),
+                      pageBuilder: (_, __, ___) => RouletteTimerView(),
                     );
                   } else {
                     showGeneralDialog(

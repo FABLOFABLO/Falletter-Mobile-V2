@@ -11,54 +11,23 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 class AnswerTimerView extends ConsumerStatefulWidget {
-  final int remainingSeconds;
 
-  const AnswerTimerView({
-    super.key,
-    required this.remainingSeconds,
-  });
+  const AnswerTimerView({super.key});
 
   @override
   ConsumerState<AnswerTimerView> createState() => _AnswerTimerViewState();
 }
 
 class _AnswerTimerViewState extends ConsumerState<AnswerTimerView> {
-  late int _remainingSeconds;
-  Timer? _timer;
-
-  @override
-  void initState() {
-    super.initState();
-    _remainingSeconds = widget.remainingSeconds;
-    startTimer();
-  }
-
-  void startTimer() {
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (_remainingSeconds <= 0) {
-        timer.cancel();
-        return;
-      }
-
-      setState(() {
-        _remainingSeconds--;
-      });
-    });
-  }
-
-  @override
-  void dispose() {
-    _timer?.cancel();
-    super.dispose();
-  }
-
 
   @override
   Widget build(BuildContext context) {
     final selectedTheme = ref.watch(themeProvider);
     final themeColors = appThemeColors[selectedTheme]!;
+    final timer = ref.watch(answerTimerProvider);
+    final remainingSeconds = ref.watch(answerCountdownProvider);
 
-    final duration = Duration(seconds: _remainingSeconds);
+    final duration = Duration(seconds: remainingSeconds);
     final totalSeconds = 14400;
 
     final minutes =
@@ -66,8 +35,15 @@ class _AnswerTimerViewState extends ConsumerState<AnswerTimerView> {
     final hours = duration.inHours.toString().padLeft(2, '0');
 
     final progress = totalSeconds > 0
-        ? _remainingSeconds / totalSeconds
+        ? remainingSeconds / totalSeconds
         : 0.0;
+
+    if (timer != null && timer.isActive && remainingSeconds == 0) {
+      Future.microtask(() {
+        ref.read(answerCountdownProvider.notifier)
+            .startTimer(timer.remainingSeconds);
+      });
+    }
 
     return Center(
       child: Column(
