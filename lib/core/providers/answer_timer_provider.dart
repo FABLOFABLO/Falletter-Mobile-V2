@@ -54,7 +54,7 @@ class AnswerTimerNotifier extends StateNotifier<TimerModel?> {
      state = remainingSeconds;
 
      _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-       if (remainingSeconds <= 0) {
+       if (state <= 0 || !mounted) {
          timer.cancel();
          return;
        }
