@@ -24,11 +24,6 @@ class RouletteTimerView extends ConsumerStatefulWidget {
 class _RouletteTimerViewState extends ConsumerState<RouletteTimerView> {
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final theme = ref.watch(themeProvider);
     final themeColors = appThemeColors[theme]!;
