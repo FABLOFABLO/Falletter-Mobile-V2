@@ -33,7 +33,7 @@ class PostApiService {
       );
 
       if (response.statusCode == 201) {
-        return response.data['community_id'] as int;
+        return response.data['communityId'] as int;
       }
       throw Exception('Failed to create post');
     } catch(e) {
