@@ -2,6 +2,7 @@ import 'package:falletter_mobile_v2/core/components/app_bar/custom_app_bar.dart'
 import 'package:falletter_mobile_v2/core/components/button/elevated_button.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
+import 'package:falletter_mobile_v2/models/signup_model.dart';
 import 'package:falletter_mobile_v2/presentation/signup/provider/join_agreement_provider.dart';
 import 'package:falletter_mobile_v2/presentation/signup/provider/signup_provider.dart';
 import 'package:falletter_mobile_v2/presentation/signup/widget/check_button.dart';
@@ -49,7 +50,29 @@ class JoinAgreementView extends ConsumerWidget {
               CustomElevatedButton(
                 width: double.infinity,
                 onPressed: toggleBox.isCheckedToggle
-                    ? () => context.go('/signup/gender/complete')
+                    ? () async {
+                  final state = ref.read(signUpProvider);
+                  final agreeState = ref.read(agreeProvider);
+                  final request = SignupModel(
+                      email: state.email!,
+                      password: state.password!,
+                      schoolNumber: state.schoolNumber!,
+                      name: state.name!,
+                      gender: state.gender!,
+                      theme: "BLUE",
+                      profileImage: "",
+                      serviceTerms: agreeState[Agree.use] ?? false,
+                      privacyPolicy: agreeState[Agree.privacy] ?? false,
+                      communityTerms: agreeState[Agree.community] ?? false,
+                      pushNotification: agreeState[Agree.push] ?? false
+                  );
+                  final success = await ref.read(signUpProvider.notifier).signup(request);
+                  if (success) {
+                    context.go('/signup/gender/complete');
+                  } else {
+
+                  }
+                }
                     : null,
                 child: const Text('가입하기'),
               ),

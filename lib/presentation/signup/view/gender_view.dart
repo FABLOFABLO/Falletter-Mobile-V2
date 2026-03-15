@@ -6,6 +6,7 @@ import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/presentation/signup/provider/signup_provider.dart';
 import 'package:flutter/material.dart' hide Action;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 class SetGenderView extends ConsumerWidget {
@@ -65,7 +66,7 @@ class SetGenderView extends ConsumerWidget {
               CustomElevatedButton(
                 onPressed: isNextStep
                     ? () {
-                        /// TODO: 다음 페이지 이동
+                        context.push('/signup/gender/schoolNumber');
                       }
                     : null,
                 width: double.infinity,

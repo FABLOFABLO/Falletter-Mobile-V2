@@ -6,6 +6,7 @@ import 'package:falletter_mobile_v2/presentation/signup/provider/signup_provider
 import 'package:flutter/material.dart' hide Action;
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class SchoolNumberView extends ConsumerStatefulWidget {
   const SchoolNumberView({super.key});
@@ -86,7 +87,9 @@ class _SchoolNumberViewState extends ConsumerState<SchoolNumberView> {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 16),
                   child: CustomElevatedButton(
-                    onPressed: isNextStep ? () {} : null,
+                    onPressed: isNextStep ? () {
+                      context.push('/signup/gender/email');
+                    } : null,
                     width: double.infinity,
                     child: Text('다음'),
                   ),

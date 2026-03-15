@@ -7,6 +7,7 @@ import 'package:falletter_mobile_v2/presentation/signup/provider/signup_provider
 import 'package:flutter/material.dart' hide Action;
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class VerifyCodeView extends ConsumerStatefulWidget {
   const VerifyCodeView({super.key});
@@ -188,7 +189,9 @@ class _VerifyCodeViewState extends ConsumerState<VerifyCodeView> {
               ),
               const SizedBox(height: 16),
               CustomElevatedButton(
-                onPressed: isNextStep ? () {} : null,
+                onPressed: isNextStep ? () {
+                  context.push('/signup/gender/password');
+                } : null,
                 child: Text('다음'),
               ),
             ],

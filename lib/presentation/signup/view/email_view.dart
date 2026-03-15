@@ -6,6 +6,7 @@ import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/presentation/signup/provider/signup_provider.dart';
 import 'package:flutter/material.dart' hide Action;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class EmailView extends ConsumerStatefulWidget {
   const EmailView({super.key});
@@ -62,8 +63,7 @@ class _EmailViewState extends ConsumerState<EmailView> {
                 onPressed: isNextStep
                     ? () {
                         ref.read(signUpProvider.notifier).setTimer(Duration(seconds: 300));
-
-                        /// 인증 페이지 연결
+                        context.push('/signup/gender/verifyCode');
                       }
                     : null,
                 width: double.infinity,
