@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:falletter_mobile_v2/core/components/button/theme_toggle_button.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
@@ -32,15 +34,18 @@ class MyContainer extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           if (image.isNotEmpty)
-            Image.network(image)
-          else
-            Container(
-              decoration: BoxDecoration(
-                gradient: themeColor.profile,
-                shape: BoxShape.circle,
-              ),
-              width: 52,
-              height: 52,
+            Image.network(
+              image,
+              errorBuilder: (context, e, st) {
+                return Container(
+                  decoration: BoxDecoration(
+                    gradient: themeColor.profile,
+                    shape: BoxShape.circle,
+                  ),
+                  width: 52,
+                  height: 52,
+                );
+              },
             ),
           const SizedBox(width: 20),
           Column(
