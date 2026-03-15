@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:falletter_mobile_v2/core/network/api_endpoints.dart';
 import 'package:falletter_mobile_v2/models/student_model.dart';
-import 'package:falletter_mobile_v2/models/user_info_model.dart';
+import 'package:falletter_mobile_v2/models/my_info_model.dart';
 import 'package:falletter_mobile_v2/models/signup_model.dart';
 import 'package:falletter_mobile_v2/models/token_model.dart';
 
@@ -14,15 +14,13 @@ class UserApiService {
     try {
       final response = await dio.post(
           ApiEndpoints.signup,
-        data: {
-            request.toJson()
-        }
+        data: request.toJson()
       );
 
       if (response.statusCode == 201) return;
       throw Exception('회원가입 실패');
     } catch(e) {
-      throw Exception('회원가입 실패: $e');
+      throw Exception('회원가입 실패');
     }
   }
 
@@ -41,7 +39,7 @@ class UserApiService {
       }
       throw Exception('로그인 실패');
     } catch(e) {
-      throw Exception('로그인 실패: $e');
+      throw Exception('로그인 실패');
     }
   }
 
@@ -65,7 +63,7 @@ class UserApiService {
       }
       throw Exception('학생 조회 실패');
     } catch(e) {
-      throw Exception('학생 조회 실패: $e');
+      throw Exception('학생 조회 실패');
     }
   }
 
@@ -75,7 +73,7 @@ class UserApiService {
       if (response.statusCode == 204) return;
       throw Exception('로그아웃 실패');
     } catch(e) {
-      throw Exception('로그아웃 실패: $e');
+      throw Exception('로그아웃 실패');
     }
   }
 }
