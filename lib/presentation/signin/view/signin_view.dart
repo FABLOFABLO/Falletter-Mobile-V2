@@ -47,11 +47,11 @@ class _SigninViewState extends ConsumerState<SigninView> {
 
   Widget pwCheck() {
     return pwObsText
-        ? FieldIcon.hidePwIcon(onPressed: stateChange)
-        : FieldIcon.showPwIcon(onPressed: stateChange);
+        ? FieldIcon.hidePwIcon(onPressed: toggle)
+        : FieldIcon.showPwIcon(onPressed: toggle);
   }
 
-  void stateChange() {
+  void toggle() {
     setState(() {
       pwObsText = !pwObsText;
     });
