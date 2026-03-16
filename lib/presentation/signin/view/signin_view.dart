@@ -112,7 +112,7 @@ class _SigninViewState extends ConsumerState<SigninView> {
                     lowSpacing,
                     GestureDetector(
                       onTap: () {
-                        context.go(RoutePaths.gender);
+                        context.push(RoutePaths.gender);
                       },
                       child: Text('회원가입', style: baseStyle),
                     ),
@@ -122,7 +122,7 @@ class _SigninViewState extends ConsumerState<SigninView> {
                 CustomElevatedButton(
                   onPressed: isEnabled
                       ? () async {
-                    final success = await ref.read(signInProvider.notifier).login(
+                    final success = await ref.read(signInProvider.notifier).signIn(
                         email: _emailController.text.trim(),
                         password: _passwordController.text.trim()
                     );

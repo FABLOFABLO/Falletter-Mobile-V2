@@ -33,7 +33,7 @@ class SignInNotifier extends StateNotifier<SignInState> {
     state = state.copyWith(isValid: emailWrite && passwordWrite);
   }
 
-  Future<bool> login({required String email, required String password}) async {
+  Future<bool> signIn({required String email, required String password}) async {
     try {
       final token = await apiService.signin(
           email: email,
