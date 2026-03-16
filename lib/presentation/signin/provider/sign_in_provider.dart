@@ -20,6 +20,10 @@ final loginApiServiceProvider = Provider<UserApiService>((ref) {
   return UserApiService(dio);
 });
 
+final tokenStorageProvider = Provider<TokenStorage>((ref) {
+  return TokenStorage(FlutterSecureStorage());
+});
+
 class SignInNotifier extends Notifier<SignInState> {
   late final UserApiService apiService;
   late final TokenStorage tokenStorage;
@@ -27,7 +31,7 @@ class SignInNotifier extends Notifier<SignInState> {
   @override
   SignInState build() {
     apiService = ref.read(loginApiServiceProvider);
-    tokenStorage = TokenStorage(FlutterSecureStorage());
+    tokenStorage = ref.read(tokenStorageProvider);
     return SignInState();
   }
 
