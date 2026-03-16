@@ -42,7 +42,7 @@ class _SigninViewState extends ConsumerState<SigninView> {
   static const double lowSize = 8;
 
   void enabled() {
-    ref.read(signInProvider.notifier).enabledButton(_emailController.text, _passwordController.text);
+    ref.read(signInProvider.notifier).enabledButton(_emailController.text.trim(), _passwordController.text);
   }
 
   Widget pwCheck() {

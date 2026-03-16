@@ -27,7 +27,7 @@ class SignInNotifier extends StateNotifier<SignInState> {
   SignInNotifier(this.apiService, this.tokenStorage) : super(SignInState());
 
   void enabledButton(String email, String password) {
-    final bool emailWrite = emailValid(email.trim());
+    final bool emailWrite = emailValid(email);
     final bool passwordWrite = password.isNotEmpty;
 
     state = state.copyWith(isValid: emailWrite && passwordWrite);
