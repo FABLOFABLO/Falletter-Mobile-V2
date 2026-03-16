@@ -81,7 +81,7 @@ class _SigninViewState extends ConsumerState<SigninView> {
                   maxLines: 1,
                   decoration: InputDecoration(
                     hintText: '이메일을 입력해주세요.',
-                    suffixIconConstraints: BoxConstraints(minWidth: 60),
+                    suffixIconConstraints: const BoxConstraints(minWidth: 60),
                     suffixIcon: FieldIcon.emailText(),
                   ),
                 ),
