@@ -1,6 +1,8 @@
 import 'package:falletter_mobile_v2/core/components/modal/default_modal.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
+import 'package:falletter_mobile_v2/core/network/token_storage.dart';
+import 'package:falletter_mobile_v2/core/providers/auth_status_provider.dart';
 import 'package:falletter_mobile_v2/core/providers/item_count_provider.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
 import 'package:falletter_mobile_v2/core/theme/app_theme_color.dart';
@@ -11,10 +13,17 @@ import 'package:falletter_mobile_v2/presentation/mypage/widget/menu_button.dart'
 import 'package:falletter_mobile_v2/presentation/mypage/widget/my_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
 
-class FalletterMypageView extends ConsumerWidget {
+class FalletterMypageView extends ConsumerStatefulWidget {
   const FalletterMypageView({super.key});
+
+  @override
+  ConsumerState<FalletterMypageView> createState() => _FalletterMypageViewState();
+}
+
+class _FalletterMypageViewState extends ConsumerState<FalletterMypageView> {
 
   static const SizedBox betweenHeight = SizedBox(height: 12);
   static const SizedBox titleHeight = SizedBox(height: 32);
@@ -24,7 +33,15 @@ class FalletterMypageView extends ConsumerWidget {
   );
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      ref.read(userInfoProvider.notifier).getUserInfo();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final selectedTheme = ref.watch(themeProvider);
     final themeColors = appThemeColors[selectedTheme]!;
     final myInfo = ref.watch(userInfoProvider);
@@ -60,7 +77,7 @@ class FalletterMypageView extends ConsumerWidget {
                     titleHeight,
                     MyContainer(
                       name: data.name,
-                      day: data.attendDay,
+                      day: 4, // TODO: 연속 출석 개발되면 추후 수정 예정 (현재 더미데이터)
                       image: data.profileImage,
                     ),
                     titleHeight,
@@ -115,8 +132,13 @@ class FalletterMypageView extends ConsumerWidget {
                       description:
                           '기기내 계정에서 로그아웃 할 수 있어요\n다음 이용 시에는 다시 로그인 해야합니다.\n정말 로그아웃하시겠어요?',
                       rightButtonText: '로그아웃',
-                      onConfirm: () {
+                      onConfirm: () async {
                         /// todo splash 뷰로 이동
+                        final apiService = ref.read(userInfoApiService);
+                        apiService.logout();
+                        final tokenStorage = ref.read(tokenStorageProvider);
+                        await tokenStorage.clear();
+                        context.go('/splash');
                       },
                     ),
                     betweenHeight,

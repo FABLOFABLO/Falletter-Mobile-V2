@@ -6,7 +6,6 @@ class UserInfoModel {
   final String gender;
   final String theme;
   final String profileImage;
-  final int attendDay;
 
   UserInfoModel({
     required this.id,
@@ -16,30 +15,27 @@ class UserInfoModel {
     required this.gender,
     required this.theme,
     required this.profileImage,
-    required this.attendDay,
   });
 
   factory UserInfoModel.fromJson(Map<String, dynamic> json) {
     return UserInfoModel(
       id: json['id'],
       email: json['email'],
-      schoolNumber: json['school_number'],
+      schoolNumber: json['schoolNumber'],
       name: json['name'],
       gender: json['gender'],
       theme: json['theme'],
-      profileImage: json['profile_image'],
-      attendDay: json['addend_day'],
+      profileImage: json['profileImage'],
     );
   }
 
   Map<String, dynamic> toJson() => {
     'id': id,
     'email': email,
-    'school_number': schoolNumber,
+    'schoolNumber': schoolNumber,
     'name': name,
     'gender': gender,
     'theme': theme,
-    'profile_image': profileImage,
-    'attend_day' : attendDay,
+    'profileImage': profileImage,
   };
 }

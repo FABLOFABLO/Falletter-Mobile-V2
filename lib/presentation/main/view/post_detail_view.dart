@@ -7,6 +7,7 @@ import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/router/route_paths.dart';
 import 'package:falletter_mobile_v2/core/utils/time_utils.dart';
+import 'package:falletter_mobile_v2/presentation/mypage/provider/user_info_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -31,6 +32,7 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
   void initState() {
     _commentController.addListener(_onChanged);
     Future.microtask(() {
+      ref.read(userInfoProvider.notifier).getUserInfo();
       ref.read(postsDetailProvider.notifier).loadDetailPost(widget.postId);
     });
     super.initState();
@@ -51,6 +53,7 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
   @override
   Widget build(BuildContext context) {
     final post = ref.watch(postsDetailProvider);
+    final myInfo = ref.watch(userInfoProvider);
 
     if (post == null) {
       return Container(
@@ -205,7 +208,7 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
                                 Row(
                                   children: [
                                     Text(
-                                      comment.userName, //TODO: 익명 닉네임으로 수정하기 (아직 서버에서 수정 안 됨)
+                                      comment.anonymousNickname,
                                       style: commentInfoStyle,
                                     ),
                                     SizedBox(width: 8),
@@ -223,18 +226,19 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
                               ],
                             ),
                           ),
-                          IconButton( //TODO: 내 정보 조회 연동되면 내 아이디랑 댓글 아이디 같을 때만 버튼 표시하도록 수정
-                            onPressed: () {
-                              ref.read(postsDetailProvider.notifier).deleteComment(
-                                  comment.commentId,
-                                  post.id
-                              );
-                            },
-                            icon: Icon(
-                              Symbols.delete,
-                              color: FalletterColor.gray400,
+                          if (myInfo.value?.id != null && myInfo.value?.id == comment.userId)
+                            IconButton(
+                              onPressed: () {
+                                ref.read(postsDetailProvider.notifier).deleteComment(
+                                    comment.commentId,
+                                    post.id
+                                );
+                              },
+                              icon: Icon(
+                                Symbols.delete,
+                                color: FalletterColor.gray400,
+                              ),
                             ),
-                          ),
                         ],
                       ),
                     ),

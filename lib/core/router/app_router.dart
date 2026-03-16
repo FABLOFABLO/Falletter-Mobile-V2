@@ -15,8 +15,12 @@ import 'package:falletter_mobile_v2/presentation/roulette/components/roulette.da
 import 'package:falletter_mobile_v2/presentation/roulette/roulette_reward_view.dart';
 import 'package:falletter_mobile_v2/presentation/roulette/roulette_view.dart';
 import 'package:falletter_mobile_v2/presentation/signin/view/signin_view.dart';
+import 'package:falletter_mobile_v2/presentation/signup/view/email_view.dart';
 import 'package:falletter_mobile_v2/presentation/signup/view/join_agreement_view.dart';
+import 'package:falletter_mobile_v2/presentation/signup/view/password_view.dart';
+import 'package:falletter_mobile_v2/presentation/signup/view/school_number_view.dart';
 import 'package:falletter_mobile_v2/presentation/signup/view/sign_up_complete_view.dart';
+import 'package:falletter_mobile_v2/presentation/signup/view/verify_code_view.dart';
 import 'package:falletter_mobile_v2/presentation/splash/view/splash_view.dart';
 import 'package:falletter_mobile_v2/presentation/signup/view/gender_view.dart';
 import 'package:flutter/material.dart';
@@ -45,6 +49,22 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: 'complete',
             builder: (_, __) => const SignUpCompleteView(),
+          ),
+          GoRoute(
+              path: 'schoolNumber',
+              builder: (_, __) => const SchoolNumberView()
+          ),
+          GoRoute(
+              path: 'email',
+              builder: (_, __) => const EmailView()
+          ),
+          GoRoute(
+              path: 'verifyCode',
+              builder: (_, __) => const VerifyCodeView()
+          ),
+          GoRoute(
+              path: 'password',
+              builder: (_, __) => const PasswordView()
           ),
         ],
       ),
@@ -106,12 +126,11 @@ final goRouterProvider = Provider<GoRouter>((ref) {
                     builder: (context, state) {
                       final post = state.extra as PostDetailModel;
                       return PostEditView(
+                        postId: post.id,
                         title: post.title,
                         content: post.content,
                       );
                     },
-                      return PostEditView(postId: post.id, title: post.title, content: post.content);
-                    }
                   ),
                 ],
               ),

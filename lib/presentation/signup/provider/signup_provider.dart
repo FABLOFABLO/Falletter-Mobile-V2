@@ -1,5 +1,13 @@
 import 'dart:async';
+import 'package:falletter_mobile_v2/core/network/dio.dart';
+import 'package:falletter_mobile_v2/core/providers/user_api_service.dart';
+import 'package:falletter_mobile_v2/models/signup_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+final signUpApiServiceProvider = Provider<UserApiService>((ref) {
+  final dio = ref.read(dioClientProvider).dio;
+  return UserApiService(dio);
+});
 
 class SignupState {
   final String? gender;
@@ -27,9 +35,8 @@ class SignupState {
   bool emailValid() {
     final input = email ?? '';
     final isValid = RegExp(r'^[a-zA-Z0-9._]+$').hasMatch(input);
-    return isValid && input.length >= 6;
+    return isValid && input.length >= 4;
   }
-
 
   SignupState copyWith({
     String? gender,
@@ -57,7 +64,9 @@ class SignupState {
 }
 
 class SignUpNotifier extends StateNotifier<SignupState> {
-  SignUpNotifier() : super(SignupState());
+  final UserApiService apiService;
+
+  SignUpNotifier(this.apiService) : super(SignupState());
 Timer? timer;
   void startTime() {
     int limitTime = 300;
@@ -98,9 +107,19 @@ Timer? timer;
 
   void setHasError(String error) =>
       state = state.copyWith(hasError: error);
+
+  Future<bool> signup(SignupModel request) async {
+    try {
+      final response = await apiService.signup(request);
+      print('회원가입 성공');
+      return true;
+    } catch(e) {
+      throw Exception('회원가입 실패: $e');
+      return false;
+    }
+  }
 }
 final signUpProvider = StateNotifierProvider<SignUpNotifier, SignupState>((ref) {
-  return SignUpNotifier();
+  final apiService = ref.read(signUpApiServiceProvider);
+  return SignUpNotifier(apiService);
 });
-
-
