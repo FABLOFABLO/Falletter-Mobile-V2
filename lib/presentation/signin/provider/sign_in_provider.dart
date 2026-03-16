@@ -20,11 +20,16 @@ final loginApiServiceProvider = Provider<UserApiService>((ref) {
   return UserApiService(dio);
 });
 
-class SignInNotifier extends StateNotifier<SignInState> {
-  final UserApiService apiService;
-  final TokenStorage tokenStorage;
+class SignInNotifier extends Notifier<SignInState> {
+  late final UserApiService apiService;
+  late final TokenStorage tokenStorage;
 
-  SignInNotifier(this.apiService, this.tokenStorage) : super(SignInState());
+  @override
+  SignInState build() {
+    apiService = ref.read(loginApiServiceProvider);
+    tokenStorage = TokenStorage(FlutterSecureStorage());
+    return SignInState();
+  }
 
   void enabledButton(String email, String password) {
     final bool emailWrite = emailValid(email);
@@ -52,9 +57,6 @@ class SignInNotifier extends StateNotifier<SignInState> {
   }
 }
 
-final signInProvider = StateNotifierProvider<SignInNotifier, SignInState>((ref) {
-      final apiService = ref.read(loginApiServiceProvider);
-      final storage = TokenStorage(FlutterSecureStorage());
-      return SignInNotifier(apiService, storage);
-    }
+final signInProvider = NotifierProvider<SignInNotifier, SignInState>(
+    () => SignInNotifier()
 );
