@@ -38,8 +38,8 @@ class _SigninViewState extends ConsumerState<SigninView> {
     super.dispose();
   }
 
-  static const double height = 32;
-  static SizedBox lowSpacing = SizedBox(height: 8);
+  static const SizedBox spacing = SizedBox(height: 32);
+  static const SizedBox smallSpacing = SizedBox(height: 8);
 
   void enabled() {
     ref.read(signInProvider.notifier).enabledButton(_emailController.text.trim(), _passwordController.text);
@@ -71,11 +71,11 @@ class _SigninViewState extends ConsumerState<SigninView> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                SizedBox(height: height),
+                spacing,
                 Text('로그인하고\n팔레터 사용하기', style: FalletterTextStyle.title2),
                 const SizedBox(height: 40),
                 CustomTextFormFieldLabel(labelText: '이메일'),
-                lowSpacing,
+                smallSpacing,
                 CustomTextFormField(
                   controller: _emailController,
                   maxLines: 1,
@@ -85,9 +85,9 @@ class _SigninViewState extends ConsumerState<SigninView> {
                     suffixIcon: FieldIcon.emailText(),
                   ),
                 ),
-                SizedBox(height: height),
+                spacing,
                 CustomTextFormFieldLabel(labelText: '비밀번호'),
-                lowSpacing,
+                smallSpacing,
                 CustomTextFormField(
                   maxLines: 1,
                   obscureText: pwObsText,
@@ -97,7 +97,7 @@ class _SigninViewState extends ConsumerState<SigninView> {
                     suffixIcon: pwCheck(),
                   ),
                 ),
-                lowSpacing,
+                smallSpacing,
                 Text(errorMessage, style: FalletterTextStyle.body2
                     .copyWith(color: FalletterColor.error)
                 ),
@@ -109,7 +109,7 @@ class _SigninViewState extends ConsumerState<SigninView> {
                       '아직 계정이 없으신가요?',
                       style: baseStyle.copyWith(color: FalletterColor.gray400),
                     ),
-                    lowSpacing,
+                    smallSpacing,
                     GestureDetector(
                       onTap: () {
                         context.push(RoutePaths.gender);
