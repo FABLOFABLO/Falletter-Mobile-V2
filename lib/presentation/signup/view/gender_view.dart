@@ -3,6 +3,7 @@ import 'package:falletter_mobile_v2/core/components/button/elevated_button.dart'
 import 'package:falletter_mobile_v2/core/components/button/selectable_button.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
+import 'package:falletter_mobile_v2/core/router/route_paths.dart';
 import 'package:falletter_mobile_v2/presentation/signup/provider/signup_provider.dart';
 import 'package:flutter/material.dart' hide Action;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -66,7 +67,7 @@ class SetGenderView extends ConsumerWidget {
               CustomElevatedButton(
                 onPressed: isNextStep
                     ? () {
-                        context.push('/signup/gender/schoolNumber');
+                        context.push(RoutePaths.schoolNumber);
                       }
                     : null,
                 width: double.infinity,

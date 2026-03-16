@@ -47,7 +47,6 @@ class _SignUpCompleteViewState extends ConsumerState<SignUpCompleteView>
               _animationController.duration = onLoaded.duration;
               _animationController.forward().then((_) {
                 context.go(RoutePaths.main);
-                /// 홈 페이지로 넘어가기
               });
             },
           ),

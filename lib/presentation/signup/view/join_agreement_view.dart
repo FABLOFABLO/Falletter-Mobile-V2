@@ -2,6 +2,7 @@ import 'package:falletter_mobile_v2/core/components/app_bar/custom_app_bar.dart'
 import 'package:falletter_mobile_v2/core/components/button/elevated_button.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
+import 'package:falletter_mobile_v2/core/router/route_paths.dart';
 import 'package:falletter_mobile_v2/models/signup_model.dart';
 import 'package:falletter_mobile_v2/presentation/signup/provider/join_agreement_provider.dart';
 import 'package:falletter_mobile_v2/presentation/signup/provider/signup_provider.dart';
@@ -68,7 +69,7 @@ class JoinAgreementView extends ConsumerWidget {
                   );
                   final success = await ref.read(signUpProvider.notifier).signup(request);
                   if (success) {
-                    context.go('/signup/gender/complete');
+                    context.go(RoutePaths.signupComplete);
                   } else {
 
                   }

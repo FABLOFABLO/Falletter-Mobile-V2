@@ -2,6 +2,7 @@ import 'package:falletter_mobile_v2/core/components/app_bar/custom_app_bar.dart'
 import 'package:falletter_mobile_v2/core/components/button/elevated_button.dart';
 import 'package:falletter_mobile_v2/core/components/text_form_field/text_form_field.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
+import 'package:falletter_mobile_v2/core/router/route_paths.dart';
 import 'package:falletter_mobile_v2/presentation/signup/provider/signup_provider.dart';
 import 'package:flutter/material.dart' hide Action;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -118,7 +119,7 @@ class _PasswordViewState extends ConsumerState<PasswordView> {
                             });
                             if (errorValid() != null) return;
 
-                            context.push('/signup/gender/joinAgree');
+                            context.push(RoutePaths.joinAgree);
                           }
                         : null,
                     width: double.infinity,

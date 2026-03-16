@@ -112,7 +112,7 @@ class _SigninViewState extends ConsumerState<SigninView> {
                     SizedBox(width: lowSize),
                     GestureDetector(
                       onTap: () {
-                        context.go('/signup/gender');
+                        context.go(RoutePaths.gender);
                       },
                       child: Text('회원가입', style: baseStyle),
                     ),
@@ -127,7 +127,7 @@ class _SigninViewState extends ConsumerState<SigninView> {
                         password: _passwordController.text.trim()
                     );
                     if (success) {
-                      context.go('${RoutePaths.main}');
+                      context.go(RoutePaths.main);
                     } else {
                       setState(() {
                         errorMessage = '이메일 또는 비밀번호가 일치하지 않습니다.';

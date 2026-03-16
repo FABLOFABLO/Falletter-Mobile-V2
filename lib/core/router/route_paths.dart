@@ -4,4 +4,12 @@ abstract class RoutePaths {
   static const answer = '/answer';
   static const notice = '/notice';
   static const mypage = '/mypage';
+
+  static const gender = '/signup/gender';
+  static const verifyCode = '/signup/gender/verifyCode';
+  static const schoolNumber = '/signup/gender/schoolNumber';
+  static const signupComplete = '/signup/gender/complete';
+  static const joinAgree = '/signup/gender/joinAgree';
+  static const email = '/signup/gender/email';
+  static const password = '/signup/gender/password';
 }
