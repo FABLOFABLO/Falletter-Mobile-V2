@@ -39,7 +39,7 @@ class _SigninViewState extends ConsumerState<SigninView> {
   }
 
   static const double height = 32;
-  static const double lowSize = 8;
+  static SizedBox lowSpacing = SizedBox(height: 8);
 
   void enabled() {
     ref.read(signInProvider.notifier).enabledButton(_emailController.text.trim(), _passwordController.text);
@@ -75,7 +75,7 @@ class _SigninViewState extends ConsumerState<SigninView> {
                 Text('로그인하고\n팔레터 사용하기', style: FalletterTextStyle.title2),
                 const SizedBox(height: 40),
                 CustomTextFormFieldLabel(labelText: '이메일'),
-                SizedBox(height: lowSize),
+                lowSpacing,
                 CustomTextFormField(
                   controller: _emailController,
                   maxLines: 1,
@@ -87,7 +87,7 @@ class _SigninViewState extends ConsumerState<SigninView> {
                 ),
                 SizedBox(height: height),
                 CustomTextFormFieldLabel(labelText: '비밀번호'),
-                SizedBox(height: lowSize),
+                lowSpacing,
                 CustomTextFormField(
                   maxLines: 1,
                   obscureText: pwObsText,
@@ -97,7 +97,7 @@ class _SigninViewState extends ConsumerState<SigninView> {
                     suffixIcon: pwCheck(),
                   ),
                 ),
-                SizedBox(height: lowSize),
+                lowSpacing,
                 Text(errorMessage, style: FalletterTextStyle.body2
                     .copyWith(color: FalletterColor.error)
                 ),
@@ -109,7 +109,7 @@ class _SigninViewState extends ConsumerState<SigninView> {
                       '아직 계정이 없으신가요?',
                       style: baseStyle.copyWith(color: FalletterColor.gray400),
                     ),
-                    SizedBox(width: lowSize),
+                    lowSpacing,
                     GestureDetector(
                       onTap: () {
                         context.go(RoutePaths.gender);
