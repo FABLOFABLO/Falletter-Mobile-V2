@@ -77,7 +77,6 @@ class _FalletterMypageViewState extends ConsumerState<FalletterMypageView> {
                     titleHeight,
                     MyContainer(
                       name: data.name,
-                      day: 4, // TODO: 연속 출석 개발되면 추후 수정 예정 (현재 더미데이터)
                       image: data.profileImage,
                     ),
                     titleHeight,
