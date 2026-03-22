@@ -1,13 +1,10 @@
 import 'dart:async';
+import 'package:dio/dio.dart';
 import 'package:falletter_mobile_v2/core/network/dio.dart';
+import 'package:falletter_mobile_v2/core/providers/auth_api_service.dart';
 import 'package:falletter_mobile_v2/core/providers/user_api_service.dart';
 import 'package:falletter_mobile_v2/models/signup_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-final signUpApiServiceProvider = Provider<UserApiService>((ref) {
-  final dio = ref.read(dioClientProvider).dio;
-  return UserApiService(dio);
-});
 
 class SignupState {
   final String? gender;
@@ -35,8 +32,9 @@ class SignupState {
   bool emailValid() {
     final input = email ?? '';
     final isValid = RegExp(r'^[a-zA-Z0-9._]+$').hasMatch(input);
-    return isValid && input.length >= 4;
+    return isValid && input.length >= 6;
   }
+
 
   SignupState copyWith({
     String? gender,
@@ -64,11 +62,15 @@ class SignupState {
 }
 
 class SignUpNotifier extends StateNotifier<SignupState> {
-  final UserApiService apiService;
+  final AuthApiService authApiService;
+  final UserApiService userApiService;
 
-  SignUpNotifier(this.apiService) : super(SignupState());
+  SignUpNotifier(
+      this.authApiService,
+      this.userApiService
+  ) : super(SignupState());
 Timer? timer;
-  void startTime() {
+  void startTimer() {
     int limitTime = 300;
       timer?.cancel();
       state = state.copyWith(timer: Duration(seconds: limitTime));
@@ -81,6 +83,11 @@ Timer? timer;
       }
     });
   }
+
+  void stopTimer() {
+    timer?.cancel();
+  }
+
   void setGender(String gender) =>
       state = state.copyWith(gender: gender);
 
@@ -110,16 +117,51 @@ Timer? timer;
 
   Future<bool> signup(SignupModel request) async {
     try {
-      final response = await apiService.signup(request);
-      print('회원가입 성공');
+      await userApiService.signup(request);
       return true;
     } catch(e) {
-      throw Exception('회원가입 실패: $e');
+      return false;
+    }
+  }
+
+  Future<bool> sendEmailCode() async {
+    try {
+      final email = state.email;
+      if (email == null) throw Exception('이메일이 올바르지 않습니다.');
+      await authApiService.sendEmailVerify(email: email);
+      return true;
+    } catch(e) {
+      return false;
+    }
+  }
+
+  Future<bool> checkVerifyCode(String verifyCode) async {
+    try {
+      final email = state.email;
+      if (email == null) return false;
+      await authApiService.checkVerifyCode(
+          email: '$email@dsm.hs.kr',
+          verifyCode: verifyCode
+      );
+      return true;
+    } catch(e) {
       return false;
     }
   }
 }
+
 final signUpProvider = StateNotifierProvider<SignUpNotifier, SignupState>((ref) {
-  final apiService = ref.read(signUpApiServiceProvider);
-  return SignUpNotifier(apiService);
+  final authApiService = ref.read(authApiServiceProvider);
+  final userApiService = ref.read(userApiServiceProvider);
+  return SignUpNotifier(authApiService, userApiService);
+});
+
+final authApiServiceProvider = Provider<AuthApiService>((ref) {
+  final dio = ref.read(dioClientProvider).dio;
+  return AuthApiService(dio);
+});
+
+final userApiServiceProvider = Provider<UserApiService>((ref) {
+  final dio = ref.read(dioClientProvider).dio;
+  return UserApiService(dio);
 });
