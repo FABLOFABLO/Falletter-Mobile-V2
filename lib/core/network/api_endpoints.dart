@@ -5,6 +5,7 @@ class ApiEndpoints {
   static const baseUrl = AppEnv.baseUrl;
 
   /// Auth
+  static const refreshToken = "/auth/refresh";
   static const emailVerify = "/auth/email/verify";
   static const emailMatch = "/auth/email/match";
 
