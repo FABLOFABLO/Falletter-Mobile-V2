@@ -12,14 +12,14 @@ class StudentModel {
   factory StudentModel.fromJson(Map<String, dynamic> json) {
     return StudentModel(
       id: json['id'],
-      schoolNumber: json['school_number'],
+      schoolNumber: json['schoolNumber'],
       name: json['name'],
     );
   }
 
   Map<String, dynamic> toJson() => {
     'id': id,
-    'school_number': schoolNumber,
+    'schoolNumber': schoolNumber,
     'name': name,
   };
 }
