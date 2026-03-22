@@ -11,13 +11,11 @@ import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 class MyContainer extends ConsumerWidget {
   final String name;
-  final int day;
   final String image;
 
   const MyContainer({
     super.key,
     required this.name,
-    required this.day,
     required this.image,
   });
 
@@ -57,13 +55,6 @@ class MyContainer extends ConsumerWidget {
                   color: FalletterColor.white,
                 ),
                 overflow: TextOverflow.ellipsis,
-              ),
-              const SizedBox(height: 4),
-              Text(
-                '$day일 연속 출석 중',
-                style: FalletterTextStyle.body3.copyWith(
-                  color: FalletterColor.gray400,
-                ),
               ),
             ],
           ),
