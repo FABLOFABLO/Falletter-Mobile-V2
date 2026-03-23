@@ -2,12 +2,12 @@ import 'package:dio/dio.dart';
 import 'package:falletter_mobile_v2/core/network/api_endpoints.dart';
 import 'package:falletter_mobile_v2/core/network/token_storage.dart';
 
-class AuthIntercepter extends Interceptor {
+class AuthInterceptor extends Interceptor {
   final Dio dio;
   final TokenStorage tokenStorage;
   final String refreshTokenEndpoint;
 
-  AuthIntercepter({
+  AuthInterceptor({
     required this.dio,
     required this.tokenStorage,
     required this.refreshTokenEndpoint
@@ -33,7 +33,8 @@ class AuthIntercepter extends Interceptor {
         if (refreshToken == null) {
           return handler.next(err);
         }
-        
+
+
         final response = await dio.post(
             ApiEndpoints.refreshToken,
           data: {
