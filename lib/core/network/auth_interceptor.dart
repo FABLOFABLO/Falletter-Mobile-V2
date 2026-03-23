@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:dio/dio.dart';
 import 'package:falletter_mobile_v2/core/network/api_endpoints.dart';
 import 'package:falletter_mobile_v2/core/network/token_storage.dart';
@@ -6,11 +8,13 @@ class AuthInterceptor extends Interceptor {
   final Dio dio;
   final TokenStorage tokenStorage;
   final String refreshTokenEndpoint;
+  final VoidCallback onAuthFailed;
 
   AuthInterceptor({
     required this.dio,
     required this.tokenStorage,
-    required this.refreshTokenEndpoint
+    required this.refreshTokenEndpoint,
+    required this.onAuthFailed
   });
 
   @override
@@ -63,6 +67,7 @@ class AuthInterceptor extends Interceptor {
         return handler.resolve(retryResponse);
       } catch(e) {
         await tokenStorage.clear();
+        onAuthFailed();
       }
     }
     handler.next(err);
