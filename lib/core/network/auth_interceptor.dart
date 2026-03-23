@@ -34,8 +34,12 @@ class AuthInterceptor extends Interceptor {
           return handler.next(err);
         }
 
-
-        final response = await dio.post(
+        final refreshDio = Dio(
+            BaseOptions(
+              baseUrl: ApiEndpoints.baseUrl,
+            )
+        );
+        final response = await refreshDio.post(
             ApiEndpoints.refreshToken,
           data: {
               "refreshToken": refreshToken
