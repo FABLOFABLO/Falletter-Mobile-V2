@@ -51,7 +51,7 @@ class AuthIntercepter extends Interceptor {
 
         final options = err.requestOptions;
 
-        options.headers['Authorization'] = 'Berear: $newAccessToken}';
+        options.headers['Authorization'] = 'Bearer $newAccessToken';
 
         final retryResponse = await dio.fetch(options);
 
