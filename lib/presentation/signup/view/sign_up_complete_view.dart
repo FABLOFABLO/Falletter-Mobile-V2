@@ -3,6 +3,8 @@ import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
 import 'package:falletter_mobile_v2/core/router/route_paths.dart';
 import 'package:falletter_mobile_v2/core/theme/app_theme_color.dart';
+import 'package:falletter_mobile_v2/presentation/main/view/main_view.dart';
+import 'package:falletter_mobile_v2/presentation/mypage/provider/user_info_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -45,7 +47,9 @@ class _SignUpCompleteViewState extends ConsumerState<SignUpCompleteView>
             controller: _animationController,
             onLoaded: (onLoaded) {
               _animationController.duration = onLoaded.duration;
-              _animationController.forward().then((_) {
+              _animationController.forward().then((_) async {
+                ref.invalidate(userInfoProvider);
+                ref.read(userInfoProvider);
                 context.go(RoutePaths.main);
               });
             },

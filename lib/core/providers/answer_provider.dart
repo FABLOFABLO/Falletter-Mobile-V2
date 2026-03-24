@@ -1,44 +1,35 @@
+import 'package:falletter_mobile_v2/core/network/dio.dart';
+import 'package:falletter_mobile_v2/core/providers/user_api_service.dart';
 import 'package:falletter_mobile_v2/models/question_model.dart';
+import 'package:falletter_mobile_v2/models/student_model.dart';
+import 'package:falletter_mobile_v2/presentation/answer/provider/question_api_service.dart';
+import 'package:falletter_mobile_v2/presentation/mypage/provider/user_info_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-enum AnswerState {
-  answering,
-  waiting,
-}
 
 final currentIndexProvider = StateProvider<int>((ref) => 0);
 
-final questionListProvider = Provider<List<QuestionModel>>((ref) => [
-  QuestionModel(
-    id: 1,
-    question: '감수성이 풍부한 사람',
-    emoji: '🎧',
-  ),
-  QuestionModel(
-    id: 2,
-    question: '리더십이 뛰어난 사람',
-    emoji: '🧭',
-  ),
-  QuestionModel(
-    id: 3,
-    question: '분위기를 잘 읽는 사람',
-    emoji: '👀',
-  ),
-  QuestionModel(
-    id: 4,
-    question: '가장 친한 친구는?',
-    emoji: '😊',
-  ),
-  QuestionModel(
-    id: 5,
-    question: '아이디어가 많은 사람',
-    emoji: '💡',
-  ),
-]);
+final questionApiServiceProvider = Provider<QuestionApiService>((ref) {
+  final dio = ref.read(dioClientProvider).dio;
+  return QuestionApiService(dio);
+});
 
-final allNamesProvider = Provider<List<String>>((ref) => [
-  '홍길동1', '홍길동2', '홍길동3', '홍길동4'
-]);
+final userApiServiceProvider = Provider<UserApiService>((ref) {
+  final dio = ref.read(dioClientProvider).dio;
+  return UserApiService(dio);
+});
+
+final questionListProvider = FutureProvider<List<QuestionModel>>((ref) async {
+  final apiService = ref.read(questionApiServiceProvider);
+  final list = await apiService.getQuestionList();
+  final shuffle = [...list]..shuffle();
+  return shuffle;
+});
+
+final allNamesProvider = FutureProvider<List<StudentModel>>((ref) async {
+  final apiService = ref.read(userApiServiceProvider);
+  final list = await apiService.getAllStudent();
+  return list;
+});
 
 final selectedIndexProvider = StateProvider<int?>((ref) => null);
 
@@ -49,8 +40,20 @@ class AnswerNotifier extends Notifier<List<String>> {
   }
 
   List<String> _createAnswerChoices() {
-    final all = ref.read(allNamesProvider);
-    final shuffled = [...all]..shuffle();
+    final allAsync = ref.watch(allNamesProvider);
+    final userAsync = ref.watch(userInfoProvider);
+    final used = ref.watch(userNamesProvider);
+
+    if (!allAsync.hasValue || !userAsync.hasValue) return [];
+
+    final all = allAsync.value!;
+    final userInfo = userAsync.value!;
+
+    final filtered = all.where((e) => e.id != userInfo.id).toList();
+
+    final names = filtered.map((e) => e.name).where((name) => !used.contains(name)).toList();
+    final shuffled = [...names]..shuffle();
+
     return shuffled.take(4).toList();
   }
 
@@ -63,3 +66,5 @@ class AnswerNotifier extends Notifier<List<String>> {
 
 final answerProvider = NotifierProvider<AnswerNotifier, List<String>>(() =>
     AnswerNotifier());
+
+final userNamesProvider = StateProvider<Set<String>>((ref) => {});

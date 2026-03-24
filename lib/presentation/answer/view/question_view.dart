@@ -34,124 +34,135 @@ class QuestionView extends ConsumerWidget {
     final currentIndex = ref.watch(currentIndexProvider);
     const total = 5;
     final selectedIndex = ref.watch(selectedIndexProvider);
-    final questionList = ref.watch(questionListProvider);
-    final currentQuestion = questionList[currentIndex];
     final choices = ref.watch(answerProvider);
+    final questionAsync = ref.watch(questionListProvider);
 
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-          child: Row(
-            children: [
-              Expanded(
-                child: Stack(
-                  children: [
-                    Container(
-                      height: 15,
-                      decoration: BoxDecoration(
-                        color: FalletterColor.middleBlack,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ),
-                    FractionallySizedBox(
-                      widthFactor: (currentIndex + 1) / total,
-                      child: Container(
-                        height: 15,
-                        decoration: BoxDecoration(
-                          gradient: themeColors.progressIndicator,
-                          borderRadius: BorderRadius.circular(20),
+    return questionAsync.when(
+      data: (questionList) {
+        final currentQuestion = questionList[currentIndex];
+
+        return Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Stack(
+                      children: [
+                        Container(
+                          height: 15,
+                          decoration: BoxDecoration(
+                            color: FalletterColor.middleBlack,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
                         ),
-                      ),
+                        FractionallySizedBox(
+                          widthFactor: (currentIndex + 1) / total,
+                          child: Container(
+                            height: 15,
+                            decoration: BoxDecoration(
+                              gradient: themeColors.progressIndicator,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
+                  ),
+                  SizedBox(width: 8),
+                  RichText(
+                      text: TextSpan(
+                          children: [
+                            TextSpan(text: '${currentIndex + 1}', style: buttonTextStyle),
+                            TextSpan(text: '/$total', style: buttonTextStyle.copyWith(color: FalletterColor.gray600))
+                          ]
+                      )
+                  )
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 30),
+              child: Center(
+                child: Container(
+                  width: 160,
+                  height: 160,
+                  decoration: BoxDecoration(
+                      color: FalletterColor.middleBlack,
+                      borderRadius: BorderRadius.circular(100)
+                  ),
+                  child: Center(
+                      child: Text('${currentQuestion.emoji}',
+                          style: TextStyle(fontSize: 100)
+                      )
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 30),
+              child: Center(child: Text('${currentQuestion.question}', style: FalletterTextStyle.title2)),
+            ),
+            Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ...List.generate(2, (i) {
+                      final index = i * 2;
+
+                      return Row(
+                          children: [
+                            Expanded(
+                                child: AnswerCardButton(
+                                    name: choices[index],
+                                    isSelected: selectedIndex == index,
+                                    onTap: () => _onTap(ref, index, goNext)
+                                )
+                            ),
+                            Expanded(
+                                child: AnswerCardButton(
+                                    name: choices[index + 1],
+                                    isSelected: selectedIndex == index + 1,
+                                    onTap: () => _onTap(ref, index + 1, goNext)
+                                )
+                            ),
+                          ]
+                      );
+                    })
+                  ],
+                )
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 20),
+              child: GestureDetector(
+                onTap: goNext,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('건너뛰기',
+                        style: FalletterTextStyle.body3.copyWith(
+                            color: FalletterColor.gray300
+                        )
+                    ),
+                    Icon(Symbols.double_arrow,
+                        color: FalletterColor.gray300,
+                        size: 12
+                    )
                   ],
                 ),
               ),
-              SizedBox(width: 8),
-              RichText(
-                  text: TextSpan(
-                      children: [
-                        TextSpan(text: '${currentIndex + 1}', style: buttonTextStyle),
-                        TextSpan(text: '/$total', style: buttonTextStyle.copyWith(color: FalletterColor.gray600))
-                      ]
-                  )
-              )
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 30),
-          child: Center(
-            child: Container(
-              width: 160,
-              height: 160,
-              decoration: BoxDecoration(
-                  color: FalletterColor.middleBlack,
-                  borderRadius: BorderRadius.circular(100)
-              ),
-              child: Center(
-                  child: Text('${currentQuestion.emoji}',
-                      style: TextStyle(fontSize: 100)
-                  )
-              ),
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 30),
-          child: Center(child: Text('${currentQuestion.question}', style: FalletterTextStyle.title2)),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ...List.generate(2, (i) {
-                final index = i * 2;
-
-                return Row(
-                  children: [
-                    Expanded(
-                        child: AnswerCardButton(
-                            name: choices[index],
-                            isSelected: selectedIndex == index,
-                            onTap: () => _onTap(ref, index, goNext)
-                        )
-                    ),
-                    Expanded(
-                        child: AnswerCardButton(
-                            name: choices[index + 1],
-                            isSelected: selectedIndex == index + 1,
-                            onTap: () => _onTap(ref, index + 1, goNext)
-                        )
-                    ),
-                  ]
-                );
-              })
-            ],
+            )
+          ],
+        );
+      },
+      loading: () => Center(child: CircularProgressIndicator(color: FalletterColor.middleBlack)),
+      error: (e, _) => Center(
+          child: Text('질문 조회에 실패했습니다.',
+              style: TextStyle(color: FalletterColor.white)
           )
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 20),
-          child: GestureDetector(
-            onTap: goNext,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('건너뛰기',
-                    style: FalletterTextStyle.body3.copyWith(
-                        color: FalletterColor.gray300
-                    )
-                ),
-                Icon(Symbols.double_arrow,
-                    color: FalletterColor.gray300,
-                    size: 12
-                )
-              ],
-            ),
-          ),
-        )
-      ],
+      )
     );
   }
 }

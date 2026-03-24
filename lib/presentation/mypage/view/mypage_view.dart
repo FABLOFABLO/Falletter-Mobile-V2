@@ -33,14 +33,6 @@ class _FalletterMypageViewState extends ConsumerState<FalletterMypageView> {
   );
 
   @override
-  void initState() {
-    super.initState();
-    Future.microtask(() {
-      ref.read(userInfoProvider.notifier).getUserInfo();
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     final selectedTheme = ref.watch(themeProvider);
     final themeColors = appThemeColors[selectedTheme]!;
