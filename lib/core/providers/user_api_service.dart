@@ -55,11 +55,13 @@ class UserApiService {
     }
   }
 
-  Future<StudentModel> getAllStudent() async {
+  Future<List<StudentModel>> getAllStudent() async {
     try {
       final response = await dio.get(ApiEndpoints.student);
       if (response.statusCode == 200) {
-        return StudentModel.fromJson(response.data);
+        print(response.data);
+        final List<dynamic> data = response.data is List ? response.data : [];
+        return data.map((json) => StudentModel.fromJson(json)).toList();
       }
       throw Exception('학생 조회 실패');
     } catch(e) {

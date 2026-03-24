@@ -3,7 +3,9 @@ import 'package:falletter_mobile_v2/core/components/button/elevated_button.dart'
 import 'package:falletter_mobile_v2/core/components/text_form_field/text_form_field.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
+import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
 import 'package:falletter_mobile_v2/core/router/route_paths.dart';
+import 'package:falletter_mobile_v2/core/theme/app_theme_color.dart';
 import 'package:falletter_mobile_v2/presentation/signup/provider/signup_provider.dart';
 import 'package:flutter/material.dart' hide Action;
 import 'package:flutter/services.dart';
@@ -28,7 +30,7 @@ class _VerifyCodeViewState extends ConsumerState<VerifyCodeView> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(signUpProvider.notifier).startTime();
+      ref.read(signUpProvider.notifier).startTimer();
     });
   }
 
@@ -48,23 +50,34 @@ class _VerifyCodeViewState extends ConsumerState<VerifyCodeView> {
     ref.read(signUpProvider.notifier).setVerified(value);
   }
 
-  // 임시코드
-  String number = '123456';
-
-  void _check() {
+  Future<void> _check() async {
     setState(() {
       isPressed = true;
-      verifyResult = (verifyController.text == number);
     });
-    if (verifyController.text == number) {
-      ref.read(signUpProvider.notifier).setVerified(true);
+
+    final result = await ref.read(signUpProvider.notifier)
+        .checkVerifyCode(verifyController.text.trim());
+
+    setState(() {
+      verifyResult = result;
+    });
+
+    if (result) {
+      ref.read(signUpProvider.notifier).stopTimer();
     }
-    if (verifyController.text != number) {
-      ref.read(signUpProvider.notifier).setVerified(false);
-    }
+
+    ref.read(signUpProvider.notifier).setVerified(result);
   }
 
   Widget? _errorValid() {
+    final timer = ref.read(signUpProvider).timer ?? Duration.zero;
+    if (timer.inSeconds <= 0) {
+      return Text(
+        '인증번호가 만료되었습니다',
+        style: errorStyle.copyWith(color: FalletterColor.error),
+        textAlign: TextAlign.center,
+      );
+    }
     if (!isPressed || verifyResult == null) return null;
     if (verifyResult == false) {
       return Text(
@@ -85,6 +98,9 @@ class _VerifyCodeViewState extends ConsumerState<VerifyCodeView> {
 
   @override
   Widget build(BuildContext context) {
+    final selectedTheme = ref.watch(themeProvider);
+    final themeColors = appThemeColors[selectedTheme]!;
+
     final isNextStep = ref.watch(
       signUpProvider.select((enWrite) {
         return enWrite.verified ?? false;
@@ -120,7 +136,7 @@ class _VerifyCodeViewState extends ConsumerState<VerifyCodeView> {
                       controller: verifyController,
                       maxLines: 1,
                       decoration: InputDecoration(
-                        enabled: limitTime,
+                        enabled: limitTime && !isNextStep,
                         hintText: '인증번호를 입력해주세요',
                         suffixIconConstraints: BoxConstraints(
                           minHeight: 0,
@@ -142,12 +158,12 @@ class _VerifyCodeViewState extends ConsumerState<VerifyCodeView> {
                   ),
                   const SizedBox(width: 16),
                   GestureDetector(
-                    onTap: _check,
+                    onTap: isNextStep ? null : _check,
                     child: Container(
                       padding: EdgeInsets.all(12),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(4),
-                        color: FalletterColor.blueGradient.first,
+                        gradient: themeColors.progressIndicator
                       ),
                       child: Text(
                         '인증번호 확인',
@@ -168,15 +184,18 @@ class _VerifyCodeViewState extends ConsumerState<VerifyCodeView> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('만약 인증번호가 오지 않으셨나요?', style: baseStyle),
+                  Text('인증번호가 오지 않으셨나요?', style: baseStyle),
                   const SizedBox(width: 6),
                   GestureDetector(
                     onTap: () {
-                      setState(() {
-                        verifyController.clear();
-                        verifyResult = null;
-                      });
-                      ref.read(signUpProvider.notifier).startTime();
+                      if (!isNextStep) {
+                        setState(() {
+                          verifyController.clear();
+                          verifyResult = null;
+                        });
+                        ref.read(signUpProvider.notifier).startTimer();
+                        ref.read(signUpProvider.notifier).sendEmailCode();
+                      }
                     },
                     child: Text(
                       '재전송',
@@ -191,7 +210,7 @@ class _VerifyCodeViewState extends ConsumerState<VerifyCodeView> {
               const SizedBox(height: 16),
               CustomElevatedButton(
                 onPressed: isNextStep ? () {
-                  context.push(RoutePaths.password);
+                    context.push(RoutePaths.password);
                 } : null,
                 child: Text('다음'),
               ),

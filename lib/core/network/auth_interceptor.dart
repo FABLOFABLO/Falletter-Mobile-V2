@@ -1,0 +1,75 @@
+import 'dart:ui';
+
+import 'package:dio/dio.dart';
+import 'package:falletter_mobile_v2/core/network/api_endpoints.dart';
+import 'package:falletter_mobile_v2/core/network/token_storage.dart';
+
+class AuthInterceptor extends Interceptor {
+  final Dio dio;
+  final TokenStorage tokenStorage;
+  final String refreshTokenEndpoint;
+  final VoidCallback onAuthFailed;
+
+  AuthInterceptor({
+    required this.dio,
+    required this.tokenStorage,
+    required this.refreshTokenEndpoint,
+    required this.onAuthFailed
+  });
+
+  @override
+  Future<void> onRequest(
+      RequestOptions options, RequestInterceptorHandler handler) async {
+    final accessToken = await tokenStorage.readAccessToken();
+
+    if (accessToken != null) {
+      options.headers['Authorization'] = 'Bearer $accessToken';
+    }
+    handler.next(options);
+  }
+
+  @override
+  Future<void> onError(DioException err, ErrorInterceptorHandler handler) async {
+    if (err.response?.statusCode == 401) {
+      try {
+        final refreshToken = await tokenStorage.readRefreshToken();
+
+        if (refreshToken == null) {
+          return handler.next(err);
+        }
+
+        final refreshDio = Dio(
+            BaseOptions(
+              baseUrl: ApiEndpoints.baseUrl,
+            )
+        );
+        final response = await refreshDio.post(
+            ApiEndpoints.refreshToken,
+          data: {
+              "refreshToken": refreshToken
+          }
+        );
+
+        final newAccessToken = response.data['accessToken'];
+        final newRefreshToken = response.data['refreshToken'];
+
+        await tokenStorage.saveTokens(
+            accessToken: newAccessToken,
+            refreshToken: newRefreshToken
+        );
+
+        final options = err.requestOptions;
+
+        options.headers['Authorization'] = 'Bearer $newAccessToken';
+
+        final retryResponse = await dio.fetch(options);
+
+        return handler.resolve(retryResponse);
+      } catch(e) {
+        await tokenStorage.clear();
+        onAuthFailed();
+      }
+    }
+    handler.next(err);
+  }
+}

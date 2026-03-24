@@ -87,11 +87,14 @@ class SelectableButton extends ConsumerWidget {
       );
     }
 
-    return Icon(
-        icon,
-        color: iconColor,
-        size: 100,
-        fill: 1,
+    return Transform.translate(
+      offset: isSelected ? Offset(-3, 0) : Offset.zero,
+      child: Icon(
+          icon,
+          color: iconColor,
+          size: 100,
+          fill: 1,
+      ),
     );
   }
 }

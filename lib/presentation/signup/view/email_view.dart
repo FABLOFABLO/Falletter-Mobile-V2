@@ -2,6 +2,7 @@ import 'package:falletter_mobile_v2/core/components/app_bar/custom_app_bar.dart'
 import 'package:falletter_mobile_v2/core/components/button/elevated_button.dart';
 import 'package:falletter_mobile_v2/core/components/icon/field_icon.dart';
 import 'package:falletter_mobile_v2/core/components/text_form_field/text_form_field.dart';
+import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/router/route_paths.dart';
 import 'package:falletter_mobile_v2/presentation/signup/provider/signup_provider.dart';
@@ -62,9 +63,24 @@ class _EmailViewState extends ConsumerState<EmailView> {
               const Spacer(),
               CustomElevatedButton(
                 onPressed: isNextStep
-                    ? () {
+                    ? () async {
                         ref.read(signUpProvider.notifier).setTimer(Duration(seconds: 300));
-                        context.push(RoutePaths.verifyCode);
+                        final success = await ref.read(signUpProvider.notifier).sendEmailCode();
+                        if (success) {
+                          context.push(RoutePaths.verifyCode);
+                        }
+                        else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  '이미 가입된 이메일입니다.\n다른 이메일로 시도해주세요.',
+                                  style: TextStyle(color: FalletterColor.error),
+                                ),
+                                duration: Duration(seconds: 2),
+                                backgroundColor: FalletterColor.middleBlack,
+                              )
+                          );
+                        }
                       }
                     : null,
                 width: double.infinity,

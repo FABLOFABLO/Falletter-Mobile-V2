@@ -4,6 +4,7 @@ import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/router/route_paths.dart';
 import 'package:falletter_mobile_v2/models/signup_model.dart';
+import 'package:falletter_mobile_v2/presentation/signin/provider/sign_in_provider.dart';
 import 'package:falletter_mobile_v2/presentation/signup/provider/join_agreement_provider.dart';
 import 'package:falletter_mobile_v2/presentation/signup/provider/signup_provider.dart';
 import 'package:falletter_mobile_v2/presentation/signup/widget/check_button.dart';
@@ -20,7 +21,7 @@ class JoinAgreementView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final name = ref.watch(signUpProvider);
     final agreeCheck = ref.watch(agreeProvider);
-    final  toggleBox = ref.read(agreeProvider.notifier);
+    final toggleBox = ref.read(agreeProvider.notifier);
 
     return Scaffold(
       appBar: CustomAppBar(icon: true, title: '약관 동의'),
@@ -55,7 +56,7 @@ class JoinAgreementView extends ConsumerWidget {
                   final state = ref.read(signUpProvider);
                   final agreeState = ref.read(agreeProvider);
                   final request = SignupModel(
-                      email: state.email!,
+                      email: "${state.email!}@dsm.hs.kr",
                       password: state.password!,
                       schoolNumber: state.schoolNumber!,
                       name: state.name!,
@@ -69,9 +70,22 @@ class JoinAgreementView extends ConsumerWidget {
                   );
                   final success = await ref.read(signUpProvider.notifier).signup(request);
                   if (success) {
+                    await ref.read(signInProvider.notifier).signIn(
+                        email: "${state.email!.trim()}",
+                        password: state.password!
+                    );
                     context.go(RoutePaths.signupComplete);
                   } else {
-
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          '회원가입에 실패했습니다.\n다시 시도해주세요.',
+                          style: TextStyle(color: FalletterColor.error),
+                        ),
+                        duration: Duration(seconds: 2),
+                        backgroundColor: FalletterColor.middleBlack,
+                      )
+                    );
                   }
                 }
                     : null,

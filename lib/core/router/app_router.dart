@@ -10,6 +10,7 @@ import 'package:falletter_mobile_v2/presentation/main/view/post_create_view.dart
 import 'package:falletter_mobile_v2/presentation/main/view/post_edit_view.dart';
 import 'package:falletter_mobile_v2/presentation/mypage/view/mypage_view.dart';
 import 'package:falletter_mobile_v2/presentation/main/view/announcement_detail_view.dart';
+import 'package:falletter_mobile_v2/presentation/mypage/view/theme_select_view.dart';
 import 'package:falletter_mobile_v2/presentation/notice/view/notice_view.dart';
 import 'package:falletter_mobile_v2/presentation/roulette/components/roulette.dart';
 import 'package:falletter_mobile_v2/presentation/roulette/roulette_reward_view.dart';
@@ -51,8 +52,8 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             builder: (_, __) => const SignUpCompleteView(),
           ),
           GoRoute(
-              path: 'schoolNumber',
-              builder: (_, __) => const SchoolNumberView()
+            path: 'schoolNumber',
+            builder: (_, __) => const SchoolNumberView()
           ),
           GoRoute(
               path: 'email',
