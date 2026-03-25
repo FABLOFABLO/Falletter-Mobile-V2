@@ -141,12 +141,14 @@ class QuestionView extends ConsumerWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('건너뛰기',
+                    Text(
+                        '건너뛰기',
                         style: FalletterTextStyle.body3.copyWith(
                             color: FalletterColor.gray300
                         )
                     ),
-                    Icon(Symbols.double_arrow,
+                    Icon(
+                        Symbols.double_arrow,
                         color: FalletterColor.gray300,
                         size: 12
                     )
@@ -159,7 +161,8 @@ class QuestionView extends ConsumerWidget {
       },
       loading: () => Center(child: CircularProgressIndicator(color: FalletterColor.middleBlack)),
       error: (e, _) => Center(
-          child: Text('질문 조회에 실패했습니다.',
+          child: Text(
+              '질문 조회에 실패했습니다.',
               style: TextStyle(color: FalletterColor.white)
           )
       )
