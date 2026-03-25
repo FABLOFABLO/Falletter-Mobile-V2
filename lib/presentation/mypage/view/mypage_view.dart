@@ -129,6 +129,7 @@ class _FalletterMypageViewState extends ConsumerState<FalletterMypageView> {
                         apiService.logout();
                         final tokenStorage = ref.read(tokenStorageProvider);
                         await tokenStorage.clear();
+                        ref.invalidate(userInfoProvider);
                         context.go('/splash');
                       },
                     ),
