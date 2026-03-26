@@ -32,7 +32,6 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
   void initState() {
     _commentController.addListener(_onChanged);
     Future.microtask(() {
-      ref.read(userInfoProvider.notifier).getUserInfo();
       ref.read(postsDetailProvider.notifier).loadDetailPost(widget.postId);
     });
     super.initState();

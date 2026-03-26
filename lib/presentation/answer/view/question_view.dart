@@ -8,10 +8,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 
-class QuestionView extends ConsumerWidget {
+class QuestionView extends ConsumerStatefulWidget {
   final VoidCallback goNext;
 
   const QuestionView({super.key, required this.goNext});
+
+  @override
+  ConsumerState<QuestionView> createState() => _QuestionViewState();
+}
+
+class _QuestionViewState extends ConsumerState<QuestionView> {
 
   void _onTap(WidgetRef ref, int index, VoidCallback goNext) {
     final selected = ref.read(selectedIndexProvider);
@@ -26,7 +32,15 @@ class QuestionView extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      ref.read(quizProvider.notifier).init();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final selectedTheme = ref.watch(themeProvider);
     final themeColors = appThemeColors[selectedTheme]!;
     final buttonTextStyle = FalletterTextStyle.button;
@@ -34,124 +48,128 @@ class QuestionView extends ConsumerWidget {
     final currentIndex = ref.watch(currentIndexProvider);
     const total = 5;
     final selectedIndex = ref.watch(selectedIndexProvider);
-    final questionList = ref.watch(questionListProvider);
-    final currentQuestion = questionList[currentIndex];
-    final choices = ref.watch(answerProvider);
+    final quiz = ref.watch(quizProvider);
+
+    if (quiz == null) {
+      return SizedBox();
+    }
 
     return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-          child: Row(
-            children: [
-              Expanded(
-                child: Stack(
-                  children: [
-                    Container(
-                      height: 15,
-                      decoration: BoxDecoration(
-                        color: FalletterColor.middleBlack,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ),
-                    FractionallySizedBox(
-                      widthFactor: (currentIndex + 1) / total,
-                      child: Container(
-                        height: 15,
-                        decoration: BoxDecoration(
-                          gradient: themeColors.progressIndicator,
-                          borderRadius: BorderRadius.circular(20),
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Stack(
+                      children: [
+                        Container(
+                          height: 15,
+                          decoration: BoxDecoration(
+                            color: FalletterColor.middleBlack,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
                         ),
-                      ),
+                        FractionallySizedBox(
+                          widthFactor: (currentIndex + 1) / total,
+                          child: Container(
+                            height: 15,
+                            decoration: BoxDecoration(
+                              gradient: themeColors.progressIndicator,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
+                  ),
+                  SizedBox(width: 8),
+                  RichText(
+                      text: TextSpan(
+                          children: [
+                            TextSpan(text: '${currentIndex + 1}', style: buttonTextStyle),
+                            TextSpan(text: '/$total', style: buttonTextStyle.copyWith(color: FalletterColor.gray600))
+                          ]
+                      )
+                  )
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 30),
+              child: Center(
+                child: Container(
+                  width: 160,
+                  height: 160,
+                  decoration: BoxDecoration(
+                      color: FalletterColor.middleBlack,
+                      borderRadius: BorderRadius.circular(100)
+                  ),
+                  child: Center(
+                      child: Text('${quiz.question.emoji}',
+                          style: TextStyle(fontSize: 100)
+                      )
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 30),
+              child: Center(child: Text('${quiz.question.question}', style: FalletterTextStyle.title2)),
+            ),
+            Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ...List.generate(2, (i) {
+                      final index = i * 2;
+
+                      return Row(
+                          children: [
+                            Expanded(
+                                child: AnswerCardButton(
+                                    name: quiz.choices[index],
+                                    isSelected: selectedIndex == index,
+                                    onTap: () => _onTap(ref, index, widget.goNext)
+                                )
+                            ),
+                            Expanded(
+                                child: AnswerCardButton(
+                                    name: quiz.choices[index + 1],
+                                    isSelected: selectedIndex == index + 1,
+                                    onTap: () => _onTap(ref, index + 1, widget.goNext)
+                                )
+                            ),
+                          ]
+                      );
+                    })
+                  ],
+                )
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 20),
+              child: GestureDetector(
+                onTap: widget.goNext,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                        '건너뛰기',
+                        style: FalletterTextStyle.body3.copyWith(
+                            color: FalletterColor.gray300
+                        )
+                    ),
+                    Icon(
+                        Symbols.double_arrow,
+                        color: FalletterColor.gray300,
+                        size: 12
+                    )
                   ],
                 ),
               ),
-              SizedBox(width: 8),
-              RichText(
-                  text: TextSpan(
-                      children: [
-                        TextSpan(text: '${currentIndex + 1}', style: buttonTextStyle),
-                        TextSpan(text: '/$total', style: buttonTextStyle.copyWith(color: FalletterColor.gray600))
-                      ]
-                  )
-              )
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 30),
-          child: Center(
-            child: Container(
-              width: 160,
-              height: 160,
-              decoration: BoxDecoration(
-                  color: FalletterColor.middleBlack,
-                  borderRadius: BorderRadius.circular(100)
-              ),
-              child: Center(
-                  child: Text('${currentQuestion.emoji}',
-                      style: TextStyle(fontSize: 100)
-                  )
-              ),
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 30),
-          child: Center(child: Text('${currentQuestion.question}', style: FalletterTextStyle.title2)),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ...List.generate(2, (i) {
-                final index = i * 2;
-
-                return Row(
-                  children: [
-                    Expanded(
-                        child: AnswerCardButton(
-                            name: choices[index],
-                            isSelected: selectedIndex == index,
-                            onTap: () => _onTap(ref, index, goNext)
-                        )
-                    ),
-                    Expanded(
-                        child: AnswerCardButton(
-                            name: choices[index + 1],
-                            isSelected: selectedIndex == index + 1,
-                            onTap: () => _onTap(ref, index + 1, goNext)
-                        )
-                    ),
-                  ]
-                );
-              })
-            ],
-          )
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 20),
-          child: GestureDetector(
-            onTap: goNext,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('건너뛰기',
-                    style: FalletterTextStyle.body3.copyWith(
-                        color: FalletterColor.gray300
-                    )
-                ),
-                Icon(Symbols.double_arrow,
-                    color: FalletterColor.gray300,
-                    size: 12
-                )
-              ],
-            ),
-          ),
-        )
-      ],
-    );
+            )
+          ],
+        );
   }
 }

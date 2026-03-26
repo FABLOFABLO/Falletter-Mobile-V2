@@ -1,65 +1,101 @@
+import 'dart:math';
+import 'package:falletter_mobile_v2/core/network/dio.dart';
+import 'package:falletter_mobile_v2/core/providers/user_api_service.dart';
+import 'package:falletter_mobile_v2/models/my_info_model.dart';
 import 'package:falletter_mobile_v2/models/question_model.dart';
+import 'package:falletter_mobile_v2/models/student_model.dart';
+import 'package:falletter_mobile_v2/presentation/answer/provider/question_api_service.dart';
+import 'package:falletter_mobile_v2/presentation/mypage/provider/user_info_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-enum AnswerState {
-  answering,
-  waiting,
+final currentIndexProvider = StateProvider.autoDispose<int>((ref) => 0);
+
+final questionApiServiceProvider = Provider<QuestionApiService>((ref) {
+  final dio = ref.read(dioClientProvider).dio;
+  return QuestionApiService(dio);
+});
+
+final userApiServiceProvider = Provider<UserApiService>((ref) {
+  final dio = ref.read(dioClientProvider).dio;
+  return UserApiService(dio);
+});
+
+final questionListProvider = FutureProvider<List<QuestionModel>>((ref) async {
+  final apiService = ref.read(questionApiServiceProvider);
+  final list = await apiService.getQuestionList();
+  final shuffle = [...list]..shuffle();
+  return shuffle;
+});
+
+final allNamesProvider = FutureProvider<List<StudentModel>>((ref) async {
+  final apiService = ref.read(userApiServiceProvider);
+  final list = await apiService.getAllStudent();
+  return list;
+});
+
+final selectedIndexProvider = StateProvider.autoDispose<int?>((ref) => null);
+
+final userNamesProvider = StateProvider.autoDispose<Set<String>>((ref) => {});
+
+class QuizItem {
+  final QuestionModel question;
+  final List<String> choices;
+
+  QuizItem({
+    required this.question,
+    required this.choices,
+  });
 }
 
-final currentIndexProvider = StateProvider<int>((ref) => 0);
+class QuizNotifier extends Notifier<QuizItem?> {
+  late List<QuestionModel> questions;
+  late List<StudentModel> students;
+  late UserInfoModel user;
 
-final questionListProvider = Provider<List<QuestionModel>>((ref) => [
-  QuestionModel(
-    id: 1,
-    question: '감수성이 풍부한 사람',
-    emoji: '🎧',
-  ),
-  QuestionModel(
-    id: 2,
-    question: '리더십이 뛰어난 사람',
-    emoji: '🧭',
-  ),
-  QuestionModel(
-    id: 3,
-    question: '분위기를 잘 읽는 사람',
-    emoji: '👀',
-  ),
-  QuestionModel(
-    id: 4,
-    question: '가장 친한 친구는?',
-    emoji: '😊',
-  ),
-  QuestionModel(
-    id: 5,
-    question: '아이디어가 많은 사람',
-    emoji: '💡',
-  ),
-]);
-
-final allNamesProvider = Provider<List<String>>((ref) => [
-  '홍길동1', '홍길동2', '홍길동3', '홍길동4'
-]);
-
-final selectedIndexProvider = StateProvider<int?>((ref) => null);
-
-class AnswerNotifier extends Notifier<List<String>> {
   @override
-  List<String> build() {
-    return _createAnswerChoices();
+  QuizItem? build() {
+    return null;
   }
 
-  List<String> _createAnswerChoices() {
-    final all = ref.read(allNamesProvider);
-    final shuffled = [...all]..shuffle();
-    return shuffled.take(4).toList();
+  Future<void> init() async {
+    questions = await ref.read(questionListProvider.future);
+    students = await ref.read(allNamesProvider.future);
+    user = await ref.read(userInfoProvider.future);
+    questions.shuffle();
+    students.shuffle();
+    _setQuiz(0);
+  }
+
+  List<String> _createChoices(int index) {
+    final filtered = students.where((e) => e.id != user.id).toList();
+    final result = filtered.skip(index * 4).take(4).map((e) => e.name).toList();
+    if (result.length < 4) {
+      final remain = 4 - result.length;
+      result.addAll(
+        filtered.take(remain).map((e) => e.name),
+      );
+    }
+    return result;
+  }
+
+  void _setQuiz(int index) {
+    final question = questions[index];
+    final choices = _createChoices(index);
+
+    state = QuizItem(
+      question: question,
+      choices: choices,
+    );
   }
 
   void nextQuestion() {
-    ref.read(currentIndexProvider.notifier).state++;
     ref.read(selectedIndexProvider.notifier).state = null;
-    state = _createAnswerChoices();
+    final nextIndex = ref.read(currentIndexProvider) + 1;
+    ref.read(currentIndexProvider.notifier).state = nextIndex;
+    _setQuiz(nextIndex);
   }
 }
 
-final answerProvider = NotifierProvider<AnswerNotifier, List<String>>(() =>
-    AnswerNotifier());
+final quizProvider = NotifierProvider<QuizNotifier, QuizItem?>(() {
+  return QuizNotifier();
+});
