@@ -23,7 +23,7 @@ class _FalletterAnswerViewState extends ConsumerState<FalletterAnswerView> {
     const total = 5;
 
     if (current + 1 < total) {
-      ref.read(answerProvider.notifier).nextQuestion();
+      ref.read(quizProvider.notifier).nextQuestion();
     } else {
       ref.read(answerTimerProvider.notifier).startAnswerTimer();
     }

@@ -34,13 +34,10 @@ class QuestionView extends ConsumerWidget {
     final currentIndex = ref.watch(currentIndexProvider);
     const total = 5;
     final selectedIndex = ref.watch(selectedIndexProvider);
-    final choices = ref.watch(answerProvider);
-    final questionAsync = ref.watch(questionListProvider);
+    final quiz = ref.watch(quizProvider);
 
-    return questionAsync.when(
-      data: (questionList) {
-        final currentQuestion = questionList[currentIndex];
-
+    return quiz.when(
+      data: (quiz) {
         return Column(
           children: [
             Padding(
@@ -93,7 +90,7 @@ class QuestionView extends ConsumerWidget {
                       borderRadius: BorderRadius.circular(100)
                   ),
                   child: Center(
-                      child: Text('${currentQuestion.emoji}',
+                      child: Text('${quiz.question.emoji}',
                           style: TextStyle(fontSize: 100)
                       )
                   ),
@@ -102,7 +99,7 @@ class QuestionView extends ConsumerWidget {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 30),
-              child: Center(child: Text('${currentQuestion.question}', style: FalletterTextStyle.title2)),
+              child: Center(child: Text('${quiz.question.question}', style: FalletterTextStyle.title2)),
             ),
             Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -116,14 +113,14 @@ class QuestionView extends ConsumerWidget {
                           children: [
                             Expanded(
                                 child: AnswerCardButton(
-                                    name: choices[index],
+                                    name: quiz.choices[index],
                                     isSelected: selectedIndex == index,
                                     onTap: () => _onTap(ref, index, goNext)
                                 )
                             ),
                             Expanded(
                                 child: AnswerCardButton(
-                                    name: choices[index + 1],
+                                    name: quiz.choices[index + 1],
                                     isSelected: selectedIndex == index + 1,
                                     onTap: () => _onTap(ref, index + 1, goNext)
                                 )

@@ -34,29 +34,42 @@ final allNamesProvider = FutureProvider<List<StudentModel>>((ref) async {
 
 final selectedIndexProvider = StateProvider.autoDispose<int?>((ref) => null);
 
-class AnswerNotifier extends Notifier<List<String>> {
+final userNamesProvider = StateProvider.autoDispose<Set<String>>((ref) => {});
+
+class QuizItem {
+  final QuestionModel question;
+  final List<String> choices;
+
+  QuizItem({
+    required this.question,
+    required this.choices,
+  });
+}
+
+class QuizNotifier extends AsyncNotifier<QuizItem> {
   @override
-  List<String> build() {
-    final allAsync = ref.watch(allNamesProvider);
-    final userAsync = ref.watch(userInfoProvider);
+  Future<QuizItem> build() async {
+    final questions = await ref.watch(questionListProvider.future);
+    final students = await ref.watch(allNamesProvider.future);
+    final user = await ref.watch(userInfoProvider.future);
+    final index = ref.watch(currentIndexProvider);
 
-    if (!allAsync.hasValue || !userAsync.hasValue) return [];
+    final question = questions[index];
+    final choices = _createChoices(students, user, index);
 
-    return _createAnswerChoices(
-      allAsync.value!,
-      userAsync.value!,
+    return QuizItem(
+      question: question,
+      choices: choices,
     );
   }
 
-  List<String> _createAnswerChoices(List<StudentModel> all, UserInfoModel userInfo) {
-    final used = ref.read(userNamesProvider);
-    final filtered = all.where((e) => e.id != userInfo.id).toList();
-    final names = filtered.map((e) => e.name).where((name) => !used.contains(name)).toList();
-
-    if (names.length < 4) {
-      ref.read(userNamesProvider.notifier).state = {};
-      return _createAnswerChoices(all, userInfo);
-    }
+  List<String> _createChoices(
+      List<StudentModel> all,
+      UserInfoModel user,
+      int index,
+      ) {
+    final filtered = all.where((e) => e.id != user.id).toList();
+    final names = filtered.map((e) => e.name).toList();
 
     final shuffled = [...names]..shuffle();
 
@@ -64,18 +77,12 @@ class AnswerNotifier extends Notifier<List<String>> {
   }
 
   void nextQuestion() {
-    ref.read(userNamesProvider.notifier).update(
-        (prev) => {...prev, ...state}
-    );
-    final all = ref.read(allNamesProvider).value!;
-    final user = ref.read(userInfoProvider).value!;
     ref.read(currentIndexProvider.notifier).state++;
     ref.read(selectedIndexProvider.notifier).state = null;
-    state = _createAnswerChoices(all, user);
   }
 }
 
-final answerProvider = NotifierProvider<AnswerNotifier, List<String>>(() =>
-    AnswerNotifier());
-
-final userNamesProvider = StateProvider.autoDispose<Set<String>>((ref) => {});
+final quizProvider =
+AsyncNotifierProvider<QuizNotifier, QuizItem>(() {
+  return QuizNotifier();
+});
