@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:falletter_mobile_v2/core/network/dio.dart';
 import 'package:falletter_mobile_v2/core/providers/user_api_service.dart';
 import 'package:falletter_mobile_v2/models/my_info_model.dart';
@@ -46,43 +47,55 @@ class QuizItem {
   });
 }
 
-class QuizNotifier extends AsyncNotifier<QuizItem> {
+class QuizNotifier extends Notifier<QuizItem?> {
+  late List<QuestionModel> questions;
+  late List<StudentModel> students;
+  late UserInfoModel user;
+
   @override
-  Future<QuizItem> build() async {
-    final questions = await ref.watch(questionListProvider.future);
-    final students = await ref.watch(allNamesProvider.future);
-    final user = await ref.watch(userInfoProvider.future);
-    final index = ref.watch(currentIndexProvider);
+  QuizItem? build() {
+    return null;
+  }
 
+  Future<void> init() async {
+    questions = await ref.read(questionListProvider.future);
+    students = await ref.read(allNamesProvider.future);
+    user = await ref.read(userInfoProvider.future);
+    questions.shuffle();
+    students.shuffle();
+    _setQuiz(0);
+  }
+
+  List<String> _createChoices(int index) {
+    final filtered = students.where((e) => e.id != user.id).toList();
+    final result = filtered.skip(index * 4).take(4).map((e) => e.name).toList();
+    if (result.length < 4) {
+      final remain = 4 - result.length;
+      result.addAll(
+        filtered.take(remain).map((e) => e.name),
+      );
+    }
+    return result;
+  }
+
+  void _setQuiz(int index) {
     final question = questions[index];
-    final choices = _createChoices(students, user, index);
+    final choices = _createChoices(index);
 
-    return QuizItem(
+    state = QuizItem(
       question: question,
       choices: choices,
     );
   }
 
-  List<String> _createChoices(
-      List<StudentModel> all,
-      UserInfoModel user,
-      int index,
-      ) {
-    final filtered = all.where((e) => e.id != user.id).toList();
-    final names = filtered.map((e) => e.name).toList();
-
-    final shuffled = [...names]..shuffle();
-
-    return shuffled.take(4).toList();
-  }
-
   void nextQuestion() {
-    ref.read(currentIndexProvider.notifier).state++;
     ref.read(selectedIndexProvider.notifier).state = null;
+    final nextIndex = ref.read(currentIndexProvider) + 1;
+    ref.read(currentIndexProvider.notifier).state = nextIndex;
+    _setQuiz(nextIndex);
   }
 }
 
-final quizProvider =
-AsyncNotifierProvider<QuizNotifier, QuizItem>(() {
+final quizProvider = NotifierProvider<QuizNotifier, QuizItem?>(() {
   return QuizNotifier();
 });

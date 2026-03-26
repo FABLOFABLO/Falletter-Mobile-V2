@@ -8,10 +8,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 
-class QuestionView extends ConsumerWidget {
+class QuestionView extends ConsumerStatefulWidget {
   final VoidCallback goNext;
 
   const QuestionView({super.key, required this.goNext});
+
+  @override
+  ConsumerState<QuestionView> createState() => _QuestionViewState();
+}
+
+class _QuestionViewState extends ConsumerState<QuestionView> {
 
   void _onTap(WidgetRef ref, int index, VoidCallback goNext) {
     final selected = ref.read(selectedIndexProvider);
@@ -26,7 +32,15 @@ class QuestionView extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      ref.read(quizProvider.notifier).init();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final selectedTheme = ref.watch(themeProvider);
     final themeColors = appThemeColors[selectedTheme]!;
     final buttonTextStyle = FalletterTextStyle.button;
@@ -36,9 +50,11 @@ class QuestionView extends ConsumerWidget {
     final selectedIndex = ref.watch(selectedIndexProvider);
     final quiz = ref.watch(quizProvider);
 
-    return quiz.when(
-      data: (quiz) {
-        return Column(
+    if (quiz == null) {
+      return SizedBox();
+    }
+
+    return Column(
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
@@ -115,14 +131,14 @@ class QuestionView extends ConsumerWidget {
                                 child: AnswerCardButton(
                                     name: quiz.choices[index],
                                     isSelected: selectedIndex == index,
-                                    onTap: () => _onTap(ref, index, goNext)
+                                    onTap: () => _onTap(ref, index, widget.goNext)
                                 )
                             ),
                             Expanded(
                                 child: AnswerCardButton(
                                     name: quiz.choices[index + 1],
                                     isSelected: selectedIndex == index + 1,
-                                    onTap: () => _onTap(ref, index + 1, goNext)
+                                    onTap: () => _onTap(ref, index + 1, widget.goNext)
                                 )
                             ),
                           ]
@@ -134,7 +150,7 @@ class QuestionView extends ConsumerWidget {
             Padding(
               padding: const EdgeInsets.only(top: 20),
               child: GestureDetector(
-                onTap: goNext,
+                onTap: widget.goNext,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -155,14 +171,5 @@ class QuestionView extends ConsumerWidget {
             )
           ],
         );
-      },
-      loading: () => Center(child: CircularProgressIndicator(color: FalletterColor.middleBlack)),
-      error: (e, _) => Center(
-          child: Text(
-              '질문 조회에 실패했습니다.',
-              style: TextStyle(color: FalletterColor.white)
-          )
-      )
-    );
   }
 }
