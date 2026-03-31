@@ -8,13 +8,14 @@ final announcementApiServiceProvider = Provider<AnnouncementApiService>((ref) {
   return AnnouncementApiService(dio);
 });
 
-final announcementProvider = StateNotifierProvider<AnnouncementNotifier, List<AnnouncementModel>> ((ref) {
-  final apiService = ref.read(announcementApiServiceProvider);
-  return AnnouncementNotifier(apiService);
-});
+final announcementProvider =
+    StateNotifierProvider<AnnouncementNotifier, List<AnnouncementModel>>((ref) {
+      final apiService = ref.read(announcementApiServiceProvider);
+      return AnnouncementNotifier(apiService);
+    });
 
 class AnnouncementNotifier extends StateNotifier<List<AnnouncementModel>> {
-    final AnnouncementApiService apiService;
+  final AnnouncementApiService apiService;
 
   AnnouncementNotifier(this.apiService) : super([]);
 
@@ -22,7 +23,7 @@ class AnnouncementNotifier extends StateNotifier<List<AnnouncementModel>> {
     try {
       final announcements = await apiService.getNoticeList();
       state = announcements;
-    } catch(e) {
+    } catch (e) {
       throw Exception('공지사항 목록 조회에 실패했습니다.');
     }
   }

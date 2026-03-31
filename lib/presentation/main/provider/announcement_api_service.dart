@@ -17,20 +17,22 @@ class AnnouncementApiService {
         return data.map((json) => AnnouncementModel.fromJson(json)).toList();
       }
       throw Exception('공지 목록 조회 실패');
-    } catch(e) {
+    } catch (e) {
       throw Exception('공지 목록 조회 실패');
     }
   }
 
   Future<AnnouncementDetailModel> getNotice(int announcementId) async {
     try {
-      final response = await dio.get('${ApiEndpoints.announcement}/$announcementId');
+      final response = await dio.get(
+        '${ApiEndpoints.announcement}/$announcementId',
+      );
 
       if (response.statusCode == 200) {
         return AnnouncementDetailModel.fromJson(response.data);
       }
       throw Exception('공지사항 조회 실패');
-    } catch(e) {
+    } catch (e) {
       throw Exception('공지사항 조회 실패');
     }
   }
