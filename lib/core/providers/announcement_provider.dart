@@ -1,31 +1,30 @@
+import 'package:falletter_mobile_v2/core/network/dio.dart';
+import 'package:falletter_mobile_v2/presentation/main/provider/announcement_api_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:falletter_mobile_v2/models/announcement_model.dart';
 
-final dummyAnnouncement = [
-  AnnouncementModel(
-      id: 1,
-      title: '공지 제목',
-      authorName: '관리자1',
-      createdAt: DateTime(2025, 6, 12)
-  ),
-  AnnouncementModel(
-      id: 2,
-      title: '공지 제목입니다.',
-      authorName: '관리자2',
-      createdAt: DateTime(2025, 3, 12)
-  ),
-  AnnouncementModel(
-      id: 3,
-      title: '공지 제목 공지제목',
-      authorName: '관리자3',
-      createdAt: DateTime(2024, 6, 12)
-  ),
-];
+final announcementApiServiceProvider = Provider<AnnouncementApiService>((ref) {
+  final dio = ref.read(dioClientProvider).dio;
+  return AnnouncementApiService(dio);
+});
 
-final AnnouncementProvider = StateNotifierProvider<AnnouncementNotifier, List<AnnouncementModel>> (
-    (ref) => AnnouncementNotifier()
-);
+final announcementProvider =
+    StateNotifierProvider<AnnouncementNotifier, List<AnnouncementModel>>((ref) {
+      final apiService = ref.read(announcementApiServiceProvider);
+      return AnnouncementNotifier(apiService);
+    });
 
 class AnnouncementNotifier extends StateNotifier<List<AnnouncementModel>> {
-  AnnouncementNotifier() : super(dummyAnnouncement);
+  final AnnouncementApiService apiService;
+
+  AnnouncementNotifier(this.apiService) : super([]);
+
+  Future<void> loadAnnouncementList() async {
+    try {
+      final announcements = await apiService.getNoticeList();
+      state = announcements;
+    } catch (e) {
+      throw Exception('공지사항 목록 조회에 실패했습니다.');
+    }
+  }
 }

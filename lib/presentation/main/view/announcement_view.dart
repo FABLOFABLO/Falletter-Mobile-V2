@@ -16,10 +16,19 @@ class AnnouncementView extends ConsumerStatefulWidget {
 
 class _AnnouncementViewState extends ConsumerState<AnnouncementView> {
   @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      ref.read(announcementProvider.notifier).loadAnnouncementList();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final metaTextStyle = FalletterTextStyle.body4.copyWith(
-        color: FalletterColor.gray500);
-    final notices = ref.watch(AnnouncementProvider);
+      color: FalletterColor.gray500,
+    );
+    final notices = ref.watch(announcementProvider);
     return Scaffold(
       body: ListView.builder(
         padding: EdgeInsets.zero,
@@ -36,17 +45,11 @@ class _AnnouncementViewState extends ConsumerState<AnnouncementView> {
                   SizedBox(height: 4),
                   Row(
                     children: [
-                      Text(
-                        notice.authorName,
-                        style: metaTextStyle,
-                      ),
+                      Text(notice.authorName, style: metaTextStyle),
                       SizedBox(width: 8),
-                      Text(
-                        timeCheck(notice.createdAt),
-                        style: metaTextStyle,
-                      )
+                      Text(timeCheck(notice.createdAt), style: metaTextStyle),
                     ],
-                  )
+                  ),
                 ],
               ),
             ),
