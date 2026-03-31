@@ -49,6 +49,9 @@ class ApiEndpoints {
   static const rouletteTimer = "/timer/roulette";
   static const brickTimer = "/timer/brick";
 
+  /// Notice
+  static const announcement = "/notice";
+
   /// Hint
   static const save = "/hint/save";
   static const hint = "/hint";

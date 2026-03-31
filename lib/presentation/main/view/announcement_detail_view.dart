@@ -17,9 +17,29 @@ class AnnouncementDetailView extends ConsumerStatefulWidget {
 
 class _AnnouncementDetailViewState extends ConsumerState<AnnouncementDetailView> {
   @override
+  void initState() {
+    Future.microtask(() {
+      ref.read(announcementDetailProvider.notifier).loadDetailAnnouncement(widget.id);
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final metaTextStyle = FalletterTextStyle.body3.copyWith(color: FalletterColor.gray200);
-    final notice = ref.watch(AnnouncementDetailProvider);
+    final notice = ref.watch(announcementDetailProvider);
+
+    if (notice == null) {
+      return Container(
+        color: FalletterColor.black,
+        child: Center(
+            child: CircularProgressIndicator(
+              color: FalletterColor.middleBlack,
+            )
+        ),
+      );
+    }
+
     return Scaffold(
       body: Column(
         children: [

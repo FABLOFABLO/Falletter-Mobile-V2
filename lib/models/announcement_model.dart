@@ -10,4 +10,13 @@ class AnnouncementModel {
     required this.authorName,
     required this.createdAt
   });
+
+  factory AnnouncementModel.fromJson(Map<String, dynamic> json) {
+    return AnnouncementModel(
+        id: json['id'],
+        title: json['title'],
+        authorName: json['authorName'],
+        createdAt: json['createdAt']
+    );
+  }
 }
