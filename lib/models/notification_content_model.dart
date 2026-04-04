@@ -16,19 +16,19 @@ class NotificationContentModel {
     required this.imageUrl,
     required this.relatedId,
     required this.createdAt,
-    required this.expiredAt
+    required this.expiredAt,
   });
 
   factory NotificationContentModel.fromJson(Map<String, dynamic> json) {
     return NotificationContentModel(
-        id: json['id'],
-        type: json['type'],
-        title: json['title'],
-        body: json['body'],
-        imageUrl: json['imageUrl'],
-        relatedId: json['relatedId'],
-        createdAt: DateTime.parse(json['createdAt']),
-        expiredAt: DateTime.parse(json['expiredAt'])
+      id: json['id'],
+      type: json['type'],
+      title: json['title'],
+      body: json['body'],
+      imageUrl: json['imageUrl'],
+      relatedId: json['relatedId'],
+      createdAt: DateTime.parse(json['createdAt']),
+      expiredAt: DateTime.parse(json['expiredAt']),
     );
   }
 }

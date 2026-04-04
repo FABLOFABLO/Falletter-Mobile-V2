@@ -8,10 +8,14 @@ final notificationApiServiceProvider = Provider<NotificationApiService>((ref) {
   return NotificationApiService(dio);
 });
 
-final notificationSettingProvider = StateNotifierProvider<NotificationSettingNotifier, NotificationSettingModel?>((ref) {
-  final apiService = ref.read(notificationApiServiceProvider);
-  return NotificationSettingNotifier(apiService);
-});
+final notificationSettingProvider =
+    StateNotifierProvider<
+      NotificationSettingNotifier,
+      NotificationSettingModel?
+    >((ref) {
+      final apiService = ref.read(notificationApiServiceProvider);
+      return NotificationSettingNotifier(apiService);
+    });
 
 class NotificationSettingNotifier
     extends StateNotifier<NotificationSettingModel?> {

@@ -14,18 +14,18 @@ class NotificationSettingModel {
     required this.brickEnabled,
     required this.letterEnabled,
     required this.letterSentEnabled,
-    required this.adminNoticeEnabled
+    required this.adminNoticeEnabled,
   });
 
   factory NotificationSettingModel.fromJson(Map<String, dynamic> json) {
     return NotificationSettingModel(
-        pushEnabled: json['pushEnabled'],
-        commentEnabled: json['commentEnabled'],
-        brickActivationEnabled: json['brickActivationEnabled'],
-        brickEnabled: json['brickEnabled'],
-        letterEnabled: json['letterEnabled'],
-        letterSentEnabled: json['letterSentEnabled'],
-        adminNoticeEnabled: json['adminNoticeEnabled']
+      pushEnabled: json['pushEnabled'],
+      commentEnabled: json['commentEnabled'],
+      brickActivationEnabled: json['brickActivationEnabled'],
+      brickEnabled: json['brickEnabled'],
+      letterEnabled: json['letterEnabled'],
+      letterSentEnabled: json['letterSentEnabled'],
+      adminNoticeEnabled: json['adminNoticeEnabled'],
     );
   }
 
@@ -54,12 +54,11 @@ class NotificationSettingModel {
       pushEnabled: pushEnabled ?? this.pushEnabled,
       commentEnabled: commentEnabled ?? this.commentEnabled,
       brickActivationEnabled:
-      brickActivationEnabled ?? this.brickActivationEnabled,
+          brickActivationEnabled ?? this.brickActivationEnabled,
       brickEnabled: brickEnabled ?? this.brickEnabled,
       letterEnabled: letterEnabled ?? this.letterEnabled,
       letterSentEnabled: letterSentEnabled ?? this.letterSentEnabled,
-      adminNoticeEnabled:
-      adminNoticeEnabled ?? this.adminNoticeEnabled,
+      adminNoticeEnabled: adminNoticeEnabled ?? this.adminNoticeEnabled,
     );
   }
 }

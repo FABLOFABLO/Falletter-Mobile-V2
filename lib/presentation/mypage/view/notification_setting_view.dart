@@ -24,11 +24,9 @@ class NotificationSettingView extends ConsumerWidget {
       Future.microtask(() {
         notifier.loadSetting();
       });
-      return Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
+      return Scaffold(body: Center(child: CircularProgressIndicator()));
     }
-    
+
     return Scaffold(
       appBar: CustomAppBar(icon: true, title: '알림'),
       body: SafeArea(
@@ -51,43 +49,43 @@ class NotificationSettingView extends ConsumerWidget {
             DetailNotification(
               title: '푸시 알림 받기',
               isEnabled: setting.pushEnabled,
-              onTap: notifier.togglePush
+              onTap: notifier.togglePush,
             ),
             SizedBox(height: NotificationSettingView.spaceHeight),
             DetailNotification(
               title: '댓글 알림 받기',
               isEnabled: setting.commentEnabled,
-              onTap: notifier.toggleComment
+              onTap: notifier.toggleComment,
             ),
             divider(),
             DetailNotification(
               title: '브릭 활성화 알림 받기',
               isEnabled: setting.brickActivationEnabled,
-              onTap: notifier.toggleBrickActivation
+              onTap: notifier.toggleBrickActivation,
             ),
             SizedBox(height: NotificationSettingView.spaceHeight),
             DetailNotification(
               title: '브릭 알림 받기',
               isEnabled: setting.brickEnabled,
-              onTap: notifier.toggleBrick
+              onTap: notifier.toggleBrick,
             ),
             divider(),
             DetailNotification(
               title: '레터 알림 받기',
               isEnabled: setting.letterEnabled,
-              onTap: notifier.toggleLetter
+              onTap: notifier.toggleLetter,
             ),
             SizedBox(height: NotificationSettingView.spaceHeight),
             DetailNotification(
               title: '레터 전송 완료 알림 받기',
               isEnabled: setting.letterSentEnabled,
-              onTap: notifier.toggleLetterSent
+              onTap: notifier.toggleLetterSent,
             ),
             divider(),
             DetailNotification(
               title: '관리자 공지 알림 받기',
               isEnabled: setting.adminNoticeEnabled,
-              onTap: notifier.toggleAdminNotice
+              onTap: notifier.toggleAdminNotice,
             ),
             const Spacer(),
             Padding(

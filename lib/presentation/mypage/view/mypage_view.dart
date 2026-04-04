@@ -21,11 +21,11 @@ class FalletterMypageView extends ConsumerStatefulWidget {
   const FalletterMypageView({super.key});
 
   @override
-  ConsumerState<FalletterMypageView> createState() => _FalletterMypageViewState();
+  ConsumerState<FalletterMypageView> createState() =>
+      _FalletterMypageViewState();
 }
 
 class _FalletterMypageViewState extends ConsumerState<FalletterMypageView> {
-
   static const SizedBox betweenHeight = SizedBox(height: 12);
   static const SizedBox titleHeight = SizedBox(height: 32);
   static const SizedBox betweenWidth = SizedBox(width: 12);
@@ -51,27 +51,22 @@ class _FalletterMypageViewState extends ConsumerState<FalletterMypageView> {
               error: (Object error, StackTrace stackTrace) {
                 return Center(child: Text('오류입니다 다시 시도해주세요.'));
               },
-              loading: () =>
-                  Center(
-                    child: ShaderMask(
-                      shaderCallback: (Rect bounds) {
-                        return themeColors.progressIndicator.createShader(
-                            bounds);
-                      },
-                      child: const CircularProgressIndicator(
-                        color: Colors.transparent,
-                      ),
-                    ),
+              loading: () => Center(
+                child: ShaderMask(
+                  shaderCallback: (Rect bounds) {
+                    return themeColors.progressIndicator.createShader(bounds);
+                  },
+                  child: const CircularProgressIndicator(
+                    color: Colors.transparent,
                   ),
+                ),
+              ),
               data: (UserInfoModel data) {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     titleHeight,
-                    MyContainer(
-                      name: data.name,
-                      image: data.profileImage,
-                    ),
+                    MyContainer(name: data.name, image: data.profileImage),
                     titleHeight,
                     Row(
                       children: [

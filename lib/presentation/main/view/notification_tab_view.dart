@@ -1,5 +1,6 @@
 import 'package:falletter_mobile_v2/core/components/button/content_card_button.dart';
-import 'package:falletter_mobile_v2/core/components/modal/letter_modal.dart' show LetterModal;
+import 'package:falletter_mobile_v2/core/components/modal/letter_modal.dart'
+    show LetterModal;
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
@@ -76,10 +77,7 @@ class _NotificationTabViewState extends ConsumerState<NotificationTabView> {
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 4),
-                    child: Text(
-                      notification.body,
-                      style: metaTextStyle,
-                    ),
+                    child: Text(notification.body, style: metaTextStyle),
                   ),
                   Row(
                     children: [
@@ -91,27 +89,28 @@ class _NotificationTabViewState extends ConsumerState<NotificationTabView> {
                       ),
                       SizedBox(width: 6),
                       if (notification.type == 'BLOCK')
-                      GestureDetector(
-                        onTap: () {
-                          showDialog(
+                        GestureDetector(
+                          onTap: () {
+                            showDialog(
                               context: context,
                               builder: (BuildContext context) {
                                 return LetterModal(
                                   dear: '서비스 정지 사유',
-                                  content: '귀하의 계정은 서비스 이용 중 타인에게 불쾌감이나 피해를 줄 수 있는 부적절한 언행이 확인되어, 운영 정책에 따라 일시적으로 이용이 7일 제한되었습니다.',
+                                  content:
+                                      '귀하의 계정은 서비스 이용 중 타인에게 불쾌감이나 피해를 줄 수 있는 부적절한 언행이 확인되어, 운영 정책에 따라 일시적으로 이용이 7일 제한되었습니다.',
                                   bottom: '',
                                 );
-                              }
-                          );
-                        },
-                        child: Text(
-                          '자세히 보기',
-                          style: metaTextStyle.copyWith(
-                            decoration: TextDecoration.underline,
-                            decorationColor: FalletterColor.gray500,
+                              },
+                            );
+                          },
+                          child: Text(
+                            '자세히 보기',
+                            style: metaTextStyle.copyWith(
+                              decoration: TextDecoration.underline,
+                              decorationColor: FalletterColor.gray500,
+                            ),
                           ),
                         ),
-                      ),
                     ],
                   ),
                 ],
@@ -132,7 +131,10 @@ class _NotificationTabViewState extends ConsumerState<NotificationTabView> {
                   context.go('${RoutePaths.mypage}/sendLetter');
                   break;
                 case 'ADMIN_NOTICE':
-                  context.go('/notification/detail', extra: notification.relatedId);
+                  context.go(
+                    '/notification/detail',
+                    extra: notification.relatedId,
+                  );
                   break;
               }
             },

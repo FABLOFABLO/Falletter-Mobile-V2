@@ -8,12 +8,16 @@ final notificationApiServiceProvider = Provider<NotificationApiService>((ref) {
   return NotificationApiService(dio);
 });
 
-final notificationProvider = StateNotifierProvider<NotificationNotifier, List<NotificationContentModel>>((ref) {
-  final apiService = ref.read(notificationApiServiceProvider);
-  return NotificationNotifier(apiService);
-});
+final notificationProvider =
+    StateNotifierProvider<NotificationNotifier, List<NotificationContentModel>>(
+      (ref) {
+        final apiService = ref.read(notificationApiServiceProvider);
+        return NotificationNotifier(apiService);
+      },
+    );
 
-class NotificationNotifier extends StateNotifier<List<NotificationContentModel>> {
+class NotificationNotifier
+    extends StateNotifier<List<NotificationContentModel>> {
   final NotificationApiService apiService;
 
   NotificationNotifier(this.apiService) : super([]);
@@ -22,7 +26,7 @@ class NotificationNotifier extends StateNotifier<List<NotificationContentModel>>
     try {
       final notifications = await apiService.getNotificationHistory();
       state = notifications;
-    } catch(e) {
+    } catch (e) {
       throw Exception('알림 조회에 실패했습니다.');
     }
   }

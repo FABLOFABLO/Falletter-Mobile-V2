@@ -16,7 +16,7 @@ class NotificationApiService {
         return NotificationSettingModel.fromJson(response.data);
       }
       throw Exception('알림 설정 조회 실패');
-    } catch(e) {
+    } catch (e) {
       throw Exception('알림 설정 조회 실패');
     }
   }
@@ -24,13 +24,13 @@ class NotificationApiService {
   Future<void> editNotificationSetting(NotificationSettingModel request) async {
     try {
       final response = await dio.patch(
-          ApiEndpoints.notificationSetting,
-        data: request.toJson()
+        ApiEndpoints.notificationSetting,
+        data: request.toJson(),
       );
 
       if (response.statusCode == 204) return;
       throw Exception('알림 설정 수정 실패');
-    } catch(e) {
+    } catch (e) {
       throw Exception('알림 설정 수정 실패');
     }
   }
@@ -41,10 +41,12 @@ class NotificationApiService {
 
       if (response.statusCode == 200) {
         final List<dynamic> data = response.data['content'] ?? [];
-        return data.map((json) => NotificationContentModel.fromJson(json)).toList();
+        return data
+            .map((json) => NotificationContentModel.fromJson(json))
+            .toList();
       }
       throw Exception('알림 조회 실패');
-    } catch(e) {
+    } catch (e) {
       throw Exception('알림 조회 실패');
     }
   }
