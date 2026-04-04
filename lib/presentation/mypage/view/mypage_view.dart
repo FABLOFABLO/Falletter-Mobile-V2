@@ -5,6 +5,7 @@ import 'package:falletter_mobile_v2/core/network/token_storage.dart';
 import 'package:falletter_mobile_v2/core/providers/auth_status_provider.dart';
 import 'package:falletter_mobile_v2/core/providers/item_count_provider.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
+import 'package:falletter_mobile_v2/core/router/route_paths.dart';
 import 'package:falletter_mobile_v2/core/theme/app_theme_color.dart';
 import 'package:falletter_mobile_v2/models/my_info_model.dart';
 import 'package:falletter_mobile_v2/presentation/mypage/provider/user_info_provider.dart';
@@ -111,7 +112,14 @@ class _FalletterMypageViewState extends ConsumerState<FalletterMypageView> {
                     MenuButton(
                       title: '테마 설정',
                       onTap: () {
-                        /// todo 테마 설정 페이지로 이동
+                        context.go('${RoutePaths.themeSelect}');
+                      },
+                    ),
+                    betweenHeight,
+                    MenuButton(
+                      title: '알림 설정',
+                      onTap: () {
+                        context.go('${RoutePaths.notificationSetting}');
                       },
                     ),
                     titleHeight,

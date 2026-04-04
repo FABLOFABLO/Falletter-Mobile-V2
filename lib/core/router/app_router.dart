@@ -8,8 +8,12 @@ import 'package:falletter_mobile_v2/presentation/main/view/notification_view.dar
 import 'package:falletter_mobile_v2/presentation/main/view/post_detail_view.dart';
 import 'package:falletter_mobile_v2/presentation/main/view/post_create_view.dart';
 import 'package:falletter_mobile_v2/presentation/main/view/post_edit_view.dart';
+import 'package:falletter_mobile_v2/presentation/mypage/view/brick_history_view.dart';
+import 'package:falletter_mobile_v2/presentation/mypage/view/get_letter_view.dart';
 import 'package:falletter_mobile_v2/presentation/mypage/view/mypage_view.dart';
 import 'package:falletter_mobile_v2/presentation/main/view/announcement_detail_view.dart';
+import 'package:falletter_mobile_v2/presentation/mypage/view/notification_setting_view.dart';
+import 'package:falletter_mobile_v2/presentation/mypage/view/send_letter_view.dart';
 import 'package:falletter_mobile_v2/presentation/mypage/view/theme_select_view.dart';
 import 'package:falletter_mobile_v2/presentation/notice/view/notice_view.dart';
 import 'package:falletter_mobile_v2/presentation/roulette/components/roulette.dart';
@@ -52,8 +56,8 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             builder: (_, __) => const SignUpCompleteView(),
           ),
           GoRoute(
-            path: 'schoolNumber',
-            builder: (_, __) => const SchoolNumberView()
+              path: 'schoolNumber',
+              builder: (_, __) => const SchoolNumberView()
           ),
           GoRoute(
               path: 'email',
@@ -131,7 +135,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
                         title: post.title,
                         content: post.content,
                       );
-                    },
+                    }
                   ),
                 ],
               ),
@@ -179,6 +183,33 @@ final goRouterProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: RoutePaths.mypage,
                 builder: (_, __) => const FalletterMypageView(),
+                routes: [
+                  GoRoute(
+                      path: 'sendLetter',
+                      parentNavigatorKey: _rootNavigatorKey,
+                      builder: (_, __) => const SendLetterView()
+                  ),
+                  GoRoute(
+                    path: 'getLetter',
+                    parentNavigatorKey: _rootNavigatorKey,
+                    builder: (_, __) => const GetLetterView()
+                  ),
+                  GoRoute(
+                      path: 'brickHistory',
+                      parentNavigatorKey: _rootNavigatorKey,
+                      builder: (_, __) => const BrickHistoryView()
+                  ),
+                  GoRoute(
+                      path: 'themeSelect',
+                      parentNavigatorKey: _rootNavigatorKey,
+                      builder: (_, __) => const ThemeSelectView()
+                  ),
+                  GoRoute(
+                      path: 'notificationSetting',
+                      parentNavigatorKey: _rootNavigatorKey,
+                      builder: (_, __) => const NotificationSettingView()
+                  ),
+                ]
               ),
             ],
           ),

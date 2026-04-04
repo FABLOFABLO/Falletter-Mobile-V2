@@ -2,10 +2,13 @@ import 'package:falletter_mobile_v2/core/components/app_bar/custom_app_bar.dart'
 import 'package:falletter_mobile_v2/core/components/button/elevated_button.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
+import 'package:falletter_mobile_v2/presentation/mypage/provider/notification_setting_provider.dart';
 import 'package:falletter_mobile_v2/presentation/mypage/widget/detail_notification.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
-class NotificationSettingView extends StatefulWidget {
+class NotificationSettingView extends ConsumerWidget {
   const NotificationSettingView({super.key});
 
   static double height = 10;
@@ -13,23 +16,19 @@ class NotificationSettingView extends StatefulWidget {
   static double spacing = 20;
 
   @override
-  State<NotificationSettingView> createState() =>
-      _NotificationSettingViewState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final setting = ref.watch(notificationSettingProvider);
+    final notifier = ref.read(notificationSettingProvider.notifier);
 
-class _NotificationSettingViewState extends State<NotificationSettingView> {
-  final Map<String, bool> notification = {
-    '푸시 알림 받기': true,
-    '댓글 알림 받기': true,
-    '브릭 활성화 알림 받기': true,
-    '브릭 알림 받기': true,
-    '레터 알림 받기': true,
-    '레터 전송 완료 알림 받기': true,
-    '관리자 공지 알림 받기': true,
-  };
-
-  @override
-  Widget build(BuildContext context) {
+    if (setting == null) {
+      Future.microtask(() {
+        notifier.loadSetting();
+      });
+      return Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+    
     return Scaffold(
       appBar: CustomAppBar(icon: true, title: '알림'),
       body: SafeArea(
@@ -51,80 +50,55 @@ class _NotificationSettingViewState extends State<NotificationSettingView> {
             SizedBox(height: NotificationSettingView.height),
             DetailNotification(
               title: '푸시 알림 받기',
-              isEnabled: notification['푸시 알림 받기']!,
-              onTap: (value) {
-                setState(() {
-                  notification['푸시 알림 받기'] = value;
-                });
-              },
+              isEnabled: setting.pushEnabled,
+              onTap: notifier.togglePush
             ),
             SizedBox(height: NotificationSettingView.spaceHeight),
             DetailNotification(
               title: '댓글 알림 받기',
-              isEnabled: notification['댓글 알림 받기']!,
-              onTap: (value) {
-                setState(() {
-                  notification['댓글 알림 받기'] = value;
-                });
-              },
+              isEnabled: setting.commentEnabled,
+              onTap: notifier.toggleComment
             ),
             divider(),
             DetailNotification(
               title: '브릭 활성화 알림 받기',
-              isEnabled: notification['브릭 활성화 알림 받기']!,
-              onTap: (value) {
-                setState(() {
-                  notification['브릭 활성화 알림 받기'] = value;
-                });
-              },
+              isEnabled: setting.brickActivationEnabled,
+              onTap: notifier.toggleBrickActivation
             ),
             SizedBox(height: NotificationSettingView.spaceHeight),
             DetailNotification(
               title: '브릭 알림 받기',
-              isEnabled: notification['브릭 알림 받기']!,
-              onTap: (value) {
-                setState(() {
-                  notification['브릭 알림 받기'] = value;
-                });
-              },
+              isEnabled: setting.brickEnabled,
+              onTap: notifier.toggleBrick
             ),
             divider(),
             DetailNotification(
               title: '레터 알림 받기',
-              isEnabled: notification['레터 알림 받기']!,
-              onTap: (value) {
-                setState(() {
-                  notification['레터 알림 받기'] = value;
-                });
-              },
+              isEnabled: setting.letterEnabled,
+              onTap: notifier.toggleLetter
             ),
             SizedBox(height: NotificationSettingView.spaceHeight),
             DetailNotification(
               title: '레터 전송 완료 알림 받기',
-              isEnabled: notification['레터 전송 완료 알림 받기']!,
-              onTap: (value) {
-                setState(() {
-                  notification['레터 전송 완료 알림 받기'] = value;
-                });
-              },
+              isEnabled: setting.letterSentEnabled,
+              onTap: notifier.toggleLetterSent
             ),
             divider(),
             DetailNotification(
               title: '관리자 공지 알림 받기',
-              isEnabled: notification['관리자 공지 알림 받기']!,
-              onTap: (value) {
-                setState(() {
-                  notification['관리자 공지 알림 받기'] = value;
-                });
-              },
+              isEnabled: setting.adminNoticeEnabled,
+              onTap: notifier.toggleAdminNotice
             ),
             const Spacer(),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
               child: CustomElevatedButton(
                 width: double.infinity,
                 child: Text('적용하기'),
-                onPressed: () {},
+                onPressed: () async {
+                  await notifier.editSetting();
+                  context.pop();
+                },
               ),
             ),
           ],
