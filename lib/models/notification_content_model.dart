@@ -27,8 +27,8 @@ class NotificationContentModel {
       body: json['body'],
       imageUrl: json['imageUrl'],
       relatedId: json['relatedId'],
-      createdAt: DateTime.parse(json['createdAt']),
-      expiredAt: DateTime.parse(json['expiredAt']),
+      createdAt: DateTime.parse(json['createdAt'] + 'Z').toLocal(),
+      expiredAt: DateTime.parse(json['expiredAt'] + 'Z').toLocal(),
     );
   }
 }

@@ -57,9 +57,13 @@ class ApiEndpoints {
   static const hint = "/hint";
   static const update = "/hint/update";
 
-  /// notification
+  /// Notification
   static const notificationSetting = '/notification/setting';
   static const notificationHistory = '/notification/history';
+
+  /// Suspend
+  static const suspend = '/suspend';
+  static const suspendAll = '/suspend/all';
 
   /// Admin
   static const letterUnPassed = "/admin/letter/unpassed";
