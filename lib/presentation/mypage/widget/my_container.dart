@@ -13,15 +13,26 @@ class MyContainer extends ConsumerWidget {
   final String name;
   final String image;
 
-  const MyContainer({
-    super.key,
-    required this.name,
-    required this.image,
-  });
+  const MyContainer({super.key, required this.name, required this.image});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeColor = ref.watch(themeColorsProvider);
+    final normalizedImage = image.trim();
+    final isBlockedDefaultImage = normalizedImage.contains(
+      '/falletter/profile/default.png',
+    );
+    final shouldUseFallback = normalizedImage.isEmpty || isBlockedDefaultImage;
+
+    Widget fallbackAvatar() => Container(
+      decoration: BoxDecoration(
+        gradient: themeColor.profile,
+        shape: BoxShape.circle,
+      ),
+      width: 52,
+      height: 52,
+    );
+
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       decoration: BoxDecoration(
@@ -31,20 +42,18 @@ class MyContainer extends ConsumerWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          if (image.isNotEmpty)
+          if (!shouldUseFallback)
             Image.network(
-              image,
+              normalizedImage,
+              width: 52,
+              height: 52,
+              fit: BoxFit.cover,
               errorBuilder: (context, e, st) {
-                return Container(
-                  decoration: BoxDecoration(
-                    gradient: themeColor.profile,
-                    shape: BoxShape.circle,
-                  ),
-                  width: 52,
-                  height: 52,
-                );
+                return fallbackAvatar();
               },
-            ),
+            )
+          else
+            fallbackAvatar(),
           const SizedBox(width: 20),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
