@@ -1,6 +1,9 @@
+import 'package:falletter_mobile_v2/core/utils/time_utils.dart';
+
 class NoticeItem {
   final int id;
   final String schoolNumber;
+  final String name;
   final String gender;
   final String question;
   final String emoji;
@@ -13,6 +16,7 @@ class NoticeItem {
   NoticeItem({
     required this.id,
     required this.schoolNumber,
+    required this.name,
     required this.gender,
     required this.question,
     required this.emoji,
@@ -26,17 +30,20 @@ class NoticeItem {
   factory NoticeItem.fromJson(Map<String, dynamic> json) {
     return NoticeItem(
       id: json['id'] ?? 0,
-      schoolNumber: json['school_number'] ?? '',
+      schoolNumber: json['schoolNumber'] ?? json['school_number'] ?? '',
+      name: json['name'] ?? '',
       gender: json['gender'] ?? '',
       question: json['question'] ?? '',
       emoji: json['emoji'] ?? '',
-      questionId: json['question_id'] ?? 0,
-      targetUserId: json['target_user_id'] ?? 0,
-      writerUserId: json['writer_user_id'] ?? 0,
+      questionId: json['questionId'] ?? json['question_id'] ?? 0,
+      targetUserId: json['targetUserId'] ?? json['target_user_id'] ?? 0,
+      writerUserId: json['writerUserId'] ?? json['writer_user_id'] ?? 0,
       createdAt: DateTime.parse(
-        json['created_at'] ?? DateTime.now().toIso8601String(),
+        json['createdAt'] ??
+            json['created_at'] ??
+            DateTime.now().toIso8601String(),
       ),
-      isRead: json['is_read'] ?? false,
+      isRead: json['isRead'] ?? json['is_read'] ?? false,
     );
   }
 
@@ -47,34 +54,29 @@ class NoticeItem {
   }
 
   String get timeAgo {
-    final now = DateTime.now();
-    final diff = now.difference(createdAt);
-
-    if (diff.inMinutes < 1) return '방금 전';
-    if (diff.inMinutes < 60) return '${diff.inMinutes}분전';
-    if (diff.inHours < 24) return '${diff.inHours}시간 전';
-    if (diff.inDays < 7) return '${diff.inDays}일 전';
-    return '${createdAt.month}/${createdAt.day}';
+    return timeCheck(createdAt);
   }
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'school_number': schoolNumber,
+      'schoolNumber': schoolNumber,
+      'name': name,
       'gender': gender,
       'question': question,
       'emoji': emoji,
-      'question_id': questionId,
-      'target_user_id': targetUserId,
-      'writer_user_id': writerUserId,
-      'created_at': createdAt.toIso8601String(),
-      'is_read': isRead,
+      'questionId': questionId,
+      'targetUserId': targetUserId,
+      'writerUserId': writerUserId,
+      'createdAt': createdAt.toIso8601String(),
+      'isRead': isRead,
     };
   }
 
   NoticeItem copyWith({
     int? id,
     String? schoolNumber,
+    String? name,
     String? gender,
     String? question,
     String? emoji,
@@ -87,6 +89,7 @@ class NoticeItem {
     return NoticeItem(
       id: id ?? this.id,
       schoolNumber: schoolNumber ?? this.schoolNumber,
+      name: name ?? this.name,
       gender: gender ?? this.gender,
       question: question ?? this.question,
       emoji: emoji ?? this.emoji,
@@ -99,9 +102,93 @@ class NoticeItem {
   }
 }
 
+class HintData {
+  final int id;
+  final String firstHint;
+  final String secondHint;
+  final String thirdHint;
+  final int userId;
+
+  HintData({
+    required this.id,
+    required this.firstHint,
+    required this.secondHint,
+    required this.thirdHint,
+    required this.userId,
+  });
+
+  factory HintData.fromJson(Map<String, dynamic> json) {
+    return HintData(
+      id: json['id'] ?? 0,
+      firstHint: json['firstHint'] ?? json['first_hint'] ?? '',
+      secondHint: json['secondHint'] ?? json['second_hint'] ?? '',
+      thirdHint: json['thirdHint'] ?? json['third_hint'] ?? '',
+      userId: json['userId'] ?? json['user_id'] ?? 0,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'firstHint': firstHint,
+      'secondHint': secondHint,
+      'thirdHint': thirdHint,
+      'userId': userId,
+    };
+  }
+
+  String? hintAt(int index) {
+    switch (index) {
+      case 0:
+        return firstHint.isNotEmpty ? firstHint : null;
+      case 1:
+        return secondHint.isNotEmpty ? secondHint : null;
+      case 2:
+        return thirdHint.isNotEmpty ? thirdHint : null;
+      default:
+        return null;
+    }
+  }
+
+  int get unlockedCount {
+    int count = 0;
+    if (firstHint.isNotEmpty) count++;
+    if (secondHint.isNotEmpty) count++;
+    if (thirdHint.isNotEmpty) count++;
+    return count;
+  }
+
+  List<int> get unlockedHints {
+    final List<int> unlocked = [];
+    if (firstHint.isNotEmpty) unlocked.add(0);
+    if (secondHint.isNotEmpty) unlocked.add(1);
+    if (thirdHint.isNotEmpty) unlocked.add(2);
+    return unlocked;
+  }
+
+  bool get allUnlocked => unlockedCount >= 3;
+
+  HintData copyWith({
+    int? id,
+    String? firstHint,
+    String? secondHint,
+    String? thirdHint,
+    int? userId,
+  }) {
+    return HintData(
+      id: id ?? this.id,
+      firstHint: firstHint ?? this.firstHint,
+      secondHint: secondHint ?? this.secondHint,
+      thirdHint: thirdHint ?? this.thirdHint,
+      userId: userId ?? this.userId,
+    );
+  }
+}
+
 class NoticeDetail {
   final int id;
   final String schoolNumber;
+  final String name;
   final String gender;
   final String question;
   final String emoji;
@@ -109,15 +196,12 @@ class NoticeDetail {
   final int targetUserId;
   final int writerUserId;
   final DateTime createdAt;
-
-  final String? firstHint;
-  final String? secondHint;
-  final String? thirdHint;
-  final List<int> unlockedHints;
+  final HintData? hintData;
 
   NoticeDetail({
     required this.id,
     required this.schoolNumber,
+    required this.name,
     required this.gender,
     required this.question,
     required this.emoji,
@@ -125,35 +209,46 @@ class NoticeDetail {
     required this.targetUserId,
     required this.writerUserId,
     required this.createdAt,
-    this.firstHint,
-    this.secondHint,
-    this.thirdHint,
-    this.unlockedHints = const [],
+    this.hintData,
   });
 
   factory NoticeDetail.fromJson(Map<String, dynamic> json) {
-    final hintData = json['hint'] as Map<String, dynamic>?;
+    HintData? hint;
+    if (json['hint'] != null) {
+      hint = HintData.fromJson(json['hint']);
+    }
 
     return NoticeDetail(
       id: json['id'] ?? 0,
-      schoolNumber: json['school_number'] ?? '',
+      schoolNumber: json['schoolNumber'] ?? json['school_number'] ?? '',
+      name: json['name'] ?? '',
       gender: json['gender'] ?? '',
       question: json['question'] ?? '',
       emoji: json['emoji'] ?? '',
-      questionId: json['question_id'] ?? 0,
-      targetUserId: json['target_user_id'] ?? 0,
-      writerUserId: json['writer_user_id'] ?? 0,
+      questionId: json['questionId'] ?? json['question_id'] ?? 0,
+      targetUserId: json['targetUserId'] ?? json['target_user_id'] ?? 0,
+      writerUserId: json['writerUserId'] ?? json['writer_user_id'] ?? 0,
       createdAt: DateTime.parse(
-        json['created_at'] ?? DateTime.now().toIso8601String(),
+        json['createdAt'] ??
+            json['created_at'] ??
+            DateTime.now().toIso8601String(),
       ),
-      firstHint: hintData?['first_hint'] ?? json['first_hint'],
-      secondHint: hintData?['second_hint'] ?? json['second_hint'],
-      thirdHint: hintData?['third_hint'] ?? json['third_hint'],
-      unlockedHints:
-          (json['unlocked_hints'] as List<dynamic>?)
-              ?.map((e) => e as int)
-              .toList() ??
-          [],
+      hintData: hint,
+    );
+  }
+
+  factory NoticeDetail.fromNoticeItem(NoticeItem item) {
+    return NoticeDetail(
+      id: item.id,
+      schoolNumber: item.schoolNumber,
+      name: item.name,
+      gender: item.gender,
+      question: item.question,
+      emoji: item.emoji,
+      questionId: item.questionId,
+      targetUserId: item.targetUserId,
+      writerUserId: item.writerUserId,
+      createdAt: item.createdAt,
     );
   }
 
@@ -165,40 +260,32 @@ class NoticeDetail {
 
   int get totalHints => 3;
 
-  String? hintAt(int index) {
-    switch (index) {
-      case 0:
-        return firstHint;
-      case 1:
-        return secondHint;
-      case 2:
-        return thirdHint;
-      default:
-        return null;
-    }
-  }
+  List<int> get unlockedHints => hintData?.unlockedHints ?? [];
+
+  bool get allUnlocked => hintData?.allUnlocked ?? false;
+
+  String? hintAt(int index) => hintData?.hintAt(index);
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'school_number': schoolNumber,
+      'schoolNumber': schoolNumber,
+      'name': name,
       'gender': gender,
       'question': question,
       'emoji': emoji,
-      'question_id': questionId,
-      'target_user_id': targetUserId,
-      'writer_user_id': writerUserId,
-      'created_at': createdAt.toIso8601String(),
-      'first_hint': firstHint,
-      'second_hint': secondHint,
-      'third_hint': thirdHint,
-      'unlocked_hints': unlockedHints,
+      'questionId': questionId,
+      'targetUserId': targetUserId,
+      'writerUserId': writerUserId,
+      'createdAt': createdAt.toIso8601String(),
+      'hint': hintData?.toJson(),
     };
   }
 
   NoticeDetail copyWith({
     int? id,
     String? schoolNumber,
+    String? name,
     String? gender,
     String? question,
     String? emoji,
@@ -206,14 +293,12 @@ class NoticeDetail {
     int? targetUserId,
     int? writerUserId,
     DateTime? createdAt,
-    String? firstHint,
-    String? secondHint,
-    String? thirdHint,
-    List<int>? unlockedHints,
+    HintData? hintData,
   }) {
     return NoticeDetail(
       id: id ?? this.id,
       schoolNumber: schoolNumber ?? this.schoolNumber,
+      name: name ?? this.name,
       gender: gender ?? this.gender,
       question: question ?? this.question,
       emoji: emoji ?? this.emoji,
@@ -221,10 +306,7 @@ class NoticeDetail {
       targetUserId: targetUserId ?? this.targetUserId,
       writerUserId: writerUserId ?? this.writerUserId,
       createdAt: createdAt ?? this.createdAt,
-      firstHint: firstHint ?? this.firstHint,
-      secondHint: secondHint ?? this.secondHint,
-      thirdHint: thirdHint ?? this.thirdHint,
-      unlockedHints: unlockedHints ?? this.unlockedHints,
+      hintData: hintData ?? this.hintData,
     );
   }
 }

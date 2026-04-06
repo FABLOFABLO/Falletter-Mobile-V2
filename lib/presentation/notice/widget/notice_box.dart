@@ -45,7 +45,7 @@ class NoticeBox extends StatelessWidget {
               style: FalletterTextStyle.subTitle2.copyWith(color: titleColor),
             ),
             const SizedBox(height: size),
-            Text(subtitle, style: text.copyWith(color: titleColor)),
+            Text(subtitle, style: text),
             const SizedBox(height: size),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

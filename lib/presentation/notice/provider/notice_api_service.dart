@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:falletter_mobile_v2/core/network/api_endpoints.dart';
 import 'package:falletter_mobile_v2/models/notice_models.dart';
+import 'package:flutter/foundation.dart';
 
 class NoticeApiService {
   final Dio _dio;
@@ -9,7 +10,7 @@ class NoticeApiService {
 
   Future<List<NoticeItem>> getNoticeList() async {
     try {
-      final response = await _dio.get(ApiEndpoints.notice);
+      final response = await _dio.get(ApiEndpoints.chosen);
 
       if (response.statusCode == 200) {
         final List<dynamic> data = response.data is List
@@ -24,43 +25,134 @@ class NoticeApiService {
     }
   }
 
-  Future<NoticeDetail> getNoticeDetail(String noticeId) async {
+  Future<int> saveHint({
+    required int answerId,
+    required String firstHint,
+    String secondHint = '',
+    String thirdHint = '',
+  }) async {
+    final requestBody = {
+      'answerId': answerId,
+      'firstHint': firstHint,
+      'secondHint': secondHint,
+      'thirdHint': thirdHint,
+    };
     try {
-      final response = await _dio.get('${ApiEndpoints.notice}/$noticeId');
+      final response = await _dio.post(ApiEndpoints.save, data: requestBody);
+
+      int hintId = 0;
+      if (response.data != null) {
+        if (response.data is Map) {
+          hintId = response.data['id'] ?? response.data['hintId'] ?? 0;
+        }
+      }
+      return hintId;
+    } catch (e) {
+      if (e is DioException) {
+        final statusCode = e.response?.statusCode;
+        final responseData = e.response?.data;
+
+        if (statusCode == 400) {
+          throw Exception(responseData['message'] ?? '잘못된 요청입니다');
+        } else if (statusCode == 401) {
+          throw Exception('인증이 필요합니다');
+        } else if (statusCode == 403) {
+          throw Exception('권한이 없습니다');
+        } else if (statusCode == 404) {
+          throw Exception('답변을 찾을 수 없습니다');
+        }
+      }
+      throw Exception('힌트 저장 실패: $e');
+    }
+  }
+
+  Future<HintData> getHint({required int answerId}) async {
+    final url = '${ApiEndpoints.hint}/$answerId';
+    try {
+      final response = await _dio.get(url);
 
       if (response.statusCode == 200) {
-        return NoticeDetail.fromJson(response.data);
+        return HintData.fromJson(response.data);
       }
 
-      throw Exception('Failed to load notice detail');
+      throw Exception('Failed to load hint');
     } catch (e) {
-      throw Exception('Failed to load notice detail: $e');
+      if (e is DioException) {
+        final statusCode = e.response?.statusCode;
+        final responseData = e.response?.data;
+
+        if (statusCode == 400) {
+          throw Exception(responseData['message'] ?? '잘못된 요청입니다');
+        } else if (statusCode == 401) {
+          throw Exception('인증이 필요합니다');
+        } else if (statusCode == 403) {
+          throw Exception('권한이 없습니다');
+        } else if (statusCode == 404) {
+          throw Exception('힌트를 찾을 수 없습니다');
+        }
+      }
+      throw Exception('힌트 조회 실패: $e');
     }
   }
 
-  Future<void> unlockHint({
-    required String noticeId,
-    required int hintIndex,
+  Future<void> updateHint({
+    required int answerId,
+    int? hintId,
+    required String firstHint,
+    required String secondHint,
+    required String thirdHint,
   }) async {
+    final requestBody = {
+      'answerId': answerId,
+      if (hintId != null && hintId > 0) 'hintId': hintId,
+      'firstHint': firstHint,
+      'secondHint': secondHint,
+      'thirdHint': thirdHint,
+    };
     try {
-      await _dio.patch(
-        '${ApiEndpoints.notice}/$noticeId/hint',
-        data: {'hint_index': hintIndex},
-      );
+      final response = await _dio.patch(ApiEndpoints.update, data: requestBody);
     } catch (e) {
-      if (e is DioException && e.response?.statusCode == 400) {
-        final message = e.response?.data['message'] ?? '브릭이 부족합니다';
-        throw Exception(message);
+      if (e is DioException) {
+        final statusCode = e.response?.statusCode;
+        final responseData = e.response?.data;
+        if (statusCode == 400) {
+          throw Exception(responseData['message'] ?? '잘못된 요청입니다');
+        } else if (statusCode == 401) {
+          throw Exception('인증이 필요합니다');
+        } else if (statusCode == 403) {
+          throw Exception('권한이 없습니다');
+        } else if (statusCode == 404) {
+          throw Exception('힌트를 찾을 수 없습니다');
+        }
       }
-      throw Exception('Failed to unlock hint: $e');
+      throw Exception('힌트 업데이트 실패: $e');
     }
   }
 
-  Future<void> markAsRead(String noticeId) async {
+  Future<void> saveBrickHistory({
+    required String title,
+    required String description,
+    required int amount,
+    required String type,
+    required int questionId,
+    required int targetUserId,
+    required int writerUserId,
+  }) async {
+    final requestBody = {
+      'title': title,
+      'description': description,
+      'amount': amount,
+      'type': type,
+      'questionId': questionId,
+      'targetUserId': targetUserId,
+      'writerUserId': writerUserId,
+    };
+
     try {
-      await _dio.patch('${ApiEndpoints.notice}/$noticeId/read');
-    } catch (e) {
-      print('Failed to mark notice as read: $e');
-    }
+      final response = await _dio.post(
+        ApiEndpoints.brickSave,
+        data: requestBody,
+      );
+    } catch (e) {}
   }
 }

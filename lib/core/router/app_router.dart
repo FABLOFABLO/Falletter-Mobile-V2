@@ -1,5 +1,6 @@
 import 'package:falletter_mobile_v2/core/components/bottom_navigatoin_bar/custon_bottom_nav_bar.dart';
 import 'package:falletter_mobile_v2/core/router/route_paths.dart';
+import 'package:falletter_mobile_v2/models/notice_models.dart';
 import 'package:falletter_mobile_v2/models/post_detail_model.dart';
 import 'package:falletter_mobile_v2/presentation/answer/view/answer_view.dart';
 import 'package:falletter_mobile_v2/presentation/letter/view/letter_view.dart';
@@ -12,6 +13,7 @@ import 'package:falletter_mobile_v2/presentation/mypage/view/mypage_view.dart';
 import 'package:falletter_mobile_v2/presentation/main/view/announcement_detail_view.dart';
 import 'package:falletter_mobile_v2/presentation/mypage/view/theme_select_view.dart';
 import 'package:falletter_mobile_v2/presentation/notice/view/notice_view.dart';
+import 'package:falletter_mobile_v2/presentation/notice/view/notice_detail_view.dart';
 import 'package:falletter_mobile_v2/presentation/roulette/components/roulette.dart';
 import 'package:falletter_mobile_v2/presentation/roulette/roulette_reward_view.dart';
 import 'package:falletter_mobile_v2/presentation/roulette/roulette_view.dart';
@@ -35,10 +37,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
     navigatorKey: _rootNavigatorKey,
     initialLocation: '/splash',
     routes: [
-      GoRoute(
-        path: '/splash',
-        builder: (_, __) => const SplashView(),
-      ),
+      GoRoute(path: '/splash', builder: (_, __) => const SplashView()),
       GoRoute(
         path: '/signup/gender',
         builder: (_, __) => const SetGenderView(),
@@ -53,40 +52,29 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(
             path: 'schoolNumber',
-            builder: (_, __) => const SchoolNumberView()
+            builder: (_, __) => const SchoolNumberView(),
           ),
+          GoRoute(path: 'email', builder: (_, __) => const EmailView()),
           GoRoute(
-              path: 'email',
-              builder: (_, __) => const EmailView()
+            path: 'verifyCode',
+            builder: (_, __) => const VerifyCodeView(),
           ),
-          GoRoute(
-              path: 'verifyCode',
-              builder: (_, __) => const VerifyCodeView()
-          ),
-          GoRoute(
-              path: 'password',
-              builder: (_, __) => const PasswordView()
-          ),
+          GoRoute(path: 'password', builder: (_, __) => const PasswordView()),
         ],
       ),
+      GoRoute(path: '/signin', builder: (_, __) => const SigninView()),
+      GoRoute(path: '/roulette', builder: (_, __) => const RouletteView()),
       GoRoute(
-        path: '/signin',
-        builder: (_, __) => const SigninView(),
-      ),
-      GoRoute(
-        path: '/roulette',
-        builder: (_, __) => const RouletteView(),
-      ),
-      GoRoute(
-          path: '/reward',
-          pageBuilder: (context, state) {
-            final reward = state.extra as Reward;
-            return CustomTransitionPage(
-              opaque: false,
-              child: RouletteRewardView(type: reward.type, amount: reward.amount,),
-              transitionsBuilder: (context, anim1, anim2, child) => FadeTransition(opacity: anim1, child: child),
-            );
-          }
+        path: '/reward',
+        pageBuilder: (context, state) {
+          final reward = state.extra as Reward;
+          return CustomTransitionPage(
+            opaque: false,
+            child: RouletteRewardView(type: reward.type, amount: reward.amount),
+            transitionsBuilder: (context, anim1, anim2, child) =>
+                FadeTransition(opacity: anim1, child: child),
+          );
+        },
       ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
@@ -171,6 +159,17 @@ final goRouterProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: RoutePaths.notice,
                 builder: (_, __) => const FalletterNoticeView(),
+                routes: [
+                  GoRoute(
+                    path: 'detail',
+                    parentNavigatorKey: _rootNavigatorKey,
+                    builder: (context, state) {
+                      return FalletterNoticeDetailView(
+                        notice: state.extra as NoticeItem,
+                      );
+                    },
+                  ),
+                ],
               ),
             ],
           ),
