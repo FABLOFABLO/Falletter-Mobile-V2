@@ -94,84 +94,85 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
                             ),
                           ],
                         ),
-                        IconButton(
-                          icon: Icon(
-                            Symbols.more_horiz,
-                            color: FalletterColor.white,
+                        if (myInfo.value?.id != null && myInfo.value?.id == post.authorId)
+                          IconButton(
+                            icon: Icon(
+                              Symbols.more_horiz,
+                              color: FalletterColor.white,
+                            ),
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) => Dialog(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  backgroundColor: FalletterColor.middleBlack,
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      ListTile(
+                                        title: Center(
+                                          child: Padding(
+                                            padding: EdgeInsets.only(top: 10),
+                                            child: Text(
+                                              '삭제',
+                                              style: FalletterTextStyle.button.copyWith(
+                                                    color: FalletterColor.error,
+                                                  ),
+                                            ),
+                                          ),
+                                        ),
+                                        onTap: () {
+                                          Navigator.pop(context);
+                                          showDialog(
+                                            context: context,
+                                            builder: (context) => Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: 30,
+                                              ),
+                                              child: DefaultModal(
+                                                title: '게시물 삭제',
+                                                description: '게시물이 영구 삭제됩니다.\n정말 삭제하시겠어요?',
+                                                leftButton: '취소',
+                                                rightButton: '삭제',
+                                                onLeftPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                onRightPressed: () {
+                                                  ref.read(postsDetailProvider.notifier).deletePost(widget.postId);
+                                                  context.go('${RoutePaths.main}');
+                                                },
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                      Divider(color: FalletterColor.gray900),
+                                      ListTile(
+                                        title: Center(
+                                          child: Padding(
+                                            padding: EdgeInsets.only(bottom: 10),
+                                            child: Text(
+                                              '수정',
+                                              style: FalletterTextStyle.button
+                                                  .copyWith(
+                                                    color: FalletterColor.gray50,
+                                                  ),
+                                            ),
+                                          ),
+                                        ),
+                                        onTap: () {
+                                          Navigator.pop(context);
+                                          context.push('${RoutePaths.main}/edit', extra: post);
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
                           ),
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (context) => Dialog(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                backgroundColor: FalletterColor.middleBlack,
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    ListTile(
-                                      title: Center(
-                                        child: Padding(
-                                          padding: EdgeInsets.only(top: 10),
-                                          child: Text(
-                                            '삭제',
-                                            style: FalletterTextStyle.button.copyWith(
-                                                  color: FalletterColor.error,
-                                                ),
-                                          ),
-                                        ),
-                                      ),
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                        showDialog(
-                                          context: context,
-                                          builder: (context) => Padding(
-                                            padding: EdgeInsets.symmetric(
-                                              horizontal: 30,
-                                            ),
-                                            child: DefaultModal(
-                                              title: '게시물 삭제',
-                                              description: '게시물이 영구 삭제됩니다.\n정말 삭제하시겠어요?',
-                                              leftButton: '취소',
-                                              rightButton: '삭제',
-                                              onLeftPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                              onRightPressed: () {
-                                                ref.read(postsDetailProvider.notifier).deletePost(widget.postId);
-                                                context.go('${RoutePaths.main}');
-                                              },
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                    Divider(color: FalletterColor.gray900),
-                                    ListTile(
-                                      title: Center(
-                                        child: Padding(
-                                          padding: EdgeInsets.only(bottom: 10),
-                                          child: Text(
-                                            '수정',
-                                            style: FalletterTextStyle.button
-                                                .copyWith(
-                                                  color: FalletterColor.gray50,
-                                                ),
-                                          ),
-                                        ),
-                                      ),
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                        context.push('${RoutePaths.main}/edit', extra: post);
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        ),
                       ],
                     ),
                     Text(post.title, style: FalletterTextStyle.subTitle2),

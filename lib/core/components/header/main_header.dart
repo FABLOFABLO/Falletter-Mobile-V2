@@ -3,6 +3,7 @@ import 'package:falletter_mobile_v2/core/providers/roulette_timer_provider.dart'
 import 'package:falletter_mobile_v2/core/router/route_paths.dart';
 import 'package:falletter_mobile_v2/core/theme/app_theme_color.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
+import 'package:falletter_mobile_v2/presentation/notice/provider/notice_provider.dart';
 import 'package:falletter_mobile_v2/presentation/roulette/roulette_timer_view.dart';
 import 'package:falletter_mobile_v2/presentation/roulette/roulette_view.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +28,8 @@ class MainHeader extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedTheme = ref.watch(themeProvider);
     final themeColors = appThemeColors[selectedTheme]!;
+    final noticeState = ref.watch(noticeListProvider);
+    final hasUnreadNotices = noticeState.notices.any((notice) => !notice.isRead);
 
     return SafeArea(
       bottom: false,
@@ -64,7 +67,21 @@ class MainHeader extends ConsumerWidget {
             ),
             const SizedBox(width: 10),
             GestureDetector(
-              child: SvgPicture.asset(themeColors.noticeSvg, width: width, height: height,),
+              child: Stack(
+                alignment: Alignment.topRight,
+                children: [
+                  SvgPicture.asset(themeColors.noticeSvg, width: width, height: height,),
+                  if (hasUnreadNotices)
+                    Container(
+                      width: 8,
+                      height: 8,
+                      decoration: BoxDecoration(
+                        color: FalletterColor.error,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                ],
+              ),
               onTap: () {
                 if (GoRouterState.of(context).uri.toString() != '/notification') {
                   context.push('/notification');

@@ -6,6 +6,7 @@ import 'package:falletter_mobile_v2/core/components/text_form_field/text_form_fi
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/components/button/content_card_button.dart';
+import 'package:falletter_mobile_v2/core/providers/bottom_nav_provider.dart';
 import 'package:falletter_mobile_v2/core/providers/comments_provider.dart';
 import 'package:falletter_mobile_v2/core/providers/posts_provider.dart';
 import 'package:falletter_mobile_v2/core/router/route_paths.dart';
@@ -22,18 +23,42 @@ class FalletterMainView extends ConsumerStatefulWidget {
 }
 
 class _FalletterMainViewState extends ConsumerState<FalletterMainView> {
+  late ScrollController _scrollController;
 
   @override
   void initState() {
     super.initState();
+    _scrollController = ScrollController();
     Future.microtask(() {
       ref.read(postsProvider.notifier).loadPosts();
     });
   }
 
   @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void resetScroll() {
+    if (_scrollController.hasClients) {
+      _scrollController.animateTo(
+        0,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final posts = ref.watch(postsProvider);
+
+    ref.listen(bottomNavIndexProvider, (previous, current) {
+      if (current == 0) {
+        Future.microtask(() => resetScroll());
+      }
+    });
 
     return Scaffold(
       body: Column(
@@ -41,6 +66,7 @@ class _FalletterMainViewState extends ConsumerState<FalletterMainView> {
           const MainHeader(),
           Expanded(
             child: ListView.builder(
+              controller: _scrollController,
               padding: EdgeInsets.zero,
               itemCount: posts.length,
               itemBuilder: (BuildContext context, int index) {

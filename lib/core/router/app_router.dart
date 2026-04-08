@@ -1,4 +1,5 @@
 import 'package:falletter_mobile_v2/core/components/bottom_navigatoin_bar/custon_bottom_nav_bar.dart';
+import 'package:falletter_mobile_v2/core/providers/bottom_nav_provider.dart';
 import 'package:falletter_mobile_v2/core/router/route_paths.dart';
 import 'package:falletter_mobile_v2/models/notice_models.dart';
 import 'package:falletter_mobile_v2/models/post_detail_model.dart';

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
+import 'package:falletter_mobile_v2/core/providers/bottom_nav_provider.dart';
 import 'package:falletter_mobile_v2/presentation/notice/provider/notice_provider.dart';
 import 'package:falletter_mobile_v2/presentation/notice/widget/notice_box.dart';
 import 'package:flutter/material.dart';
@@ -20,15 +21,15 @@ class FalletterNoticeView extends ConsumerStatefulWidget {
 class _FalletterNoticeViewState extends ConsumerState<FalletterNoticeView> {
   final Set<int> _readNoticeIds = {};
   Timer? _autoRefreshTimer;
+  late ScrollController _scrollController;
 
   @override
   void initState() {
     super.initState();
-    // 초기 데이터 로드
+    _scrollController = ScrollController();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(noticeListProvider.notifier).loadNotices();
     });
-    // 1시간마다 자동 새로고침
     _autoRefreshTimer = Timer.periodic(
       const Duration(hours: 1),
       (_) => _refreshNotices(),
@@ -38,7 +39,18 @@ class _FalletterNoticeViewState extends ConsumerState<FalletterNoticeView> {
   @override
   void dispose() {
     _autoRefreshTimer?.cancel();
+    _scrollController.dispose();
     super.dispose();
+  }
+
+  void resetScroll() {
+    if (_scrollController.hasClients) {
+      _scrollController.animateTo(
+        0,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
+    }
   }
 
   Future<void> _refreshNotices() async {
@@ -49,6 +61,12 @@ class _FalletterNoticeViewState extends ConsumerState<FalletterNoticeView> {
   Widget build(BuildContext context) {
     final brickCount = ref.watch(brickCountProvider);
     final noticeState = ref.watch(noticeListProvider);
+
+    ref.listen(bottomNavIndexProvider, (previous, current) {
+      if (current == 3) {
+        Future.microtask(() => resetScroll());
+      }
+    });
 
     return Scaffold(
       backgroundColor: FalletterColor.black,
@@ -105,6 +123,7 @@ class _FalletterNoticeViewState extends ConsumerState<FalletterNoticeView> {
     }
 
     return ListView.builder(
+      controller: _scrollController,
       physics: const AlwaysScrollableScrollPhysics(),
       itemCount: noticeState.notices.length,
       itemBuilder: (context, index) {

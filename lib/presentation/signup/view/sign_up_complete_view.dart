@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
+import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 class SignUpCompleteView extends ConsumerStatefulWidget {
   const SignUpCompleteView({super.key});
@@ -41,7 +42,8 @@ class _SignUpCompleteViewState extends ConsumerState<SignUpCompleteView>
       appBar: CustomAppBar(icon: false),
       body: Stack(
         children: [
-          /// 배경에 홈 페이지 넣기
+          Container(color: Colors.black.withValues(alpha: 0.8)),
+
           Lottie.asset(
             themeColors.signupLottie,
             controller: _animationController,
