@@ -1,6 +1,5 @@
 import 'package:falletter_mobile_v2/core/components/button/elevated_button.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
-import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:flutter/material.dart';
 
@@ -25,9 +24,9 @@ class DefaultModal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      backgroundColor: context.cardBg,
+      backgroundColor: FalletterColor.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      insetPadding: EdgeInsets.symmetric(horizontal: 20),
+      insetPadding: const EdgeInsets.symmetric(horizontal: 20),
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -37,13 +36,14 @@ class DefaultModal extends StatelessWidget {
             Text(
               title,
               style: FalletterTextStyle.subTitle2.copyWith(
-                color: context.textColor,
+                color: FalletterColor.black,
               ),
             ),
+            const SizedBox(height: 6),
             Text(
               description,
               style: FalletterTextStyle.body3.copyWith(
-                color: context.middleColor,
+                color: FalletterColor.gray700,
               ),
             ),
             const SizedBox(height: 20),
@@ -55,16 +55,18 @@ class DefaultModal extends StatelessWidget {
                     gradient: const LinearGradient(
                       colors: [FalletterColor.gray200, FalletterColor.gray200],
                     ),
+                    textColor: FalletterColor.gray700,
                     child: Text(leftButton),
                   ),
                 ),
-                const SizedBox(width: 20),
+                const SizedBox(width: 12),
                 Expanded(
                   child: CustomElevatedButton(
                     onPressed: onRightPressed,
                     gradient: const LinearGradient(
                       colors: [FalletterColor.error, FalletterColor.error],
                     ),
+                    textColor: FalletterColor.white,
                     child: Text(rightButton),
                   ),
                 ),
