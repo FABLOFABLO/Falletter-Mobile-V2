@@ -1,4 +1,4 @@
-import 'package:falletter_mobile_v2/core/constants/color.dart';
+import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_mode_provoder.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
 import 'package:falletter_mobile_v2/core/theme/app_theme_color.dart';
@@ -17,8 +17,7 @@ class ThemeToggleButton extends ConsumerWidget {
     final themeMode = ref.watch(themeModeProvider);
     final isDark = themeMode == ThemeMode.dark;
 
-    final backgroundColor =
-    isDark ? FalletterColor.darkTheme : FalletterColor.lightTheme;
+    final backgroundColor = context.cardBg;
 
     final circleGradient = themeColors.toggleCircleColor;
 
@@ -28,8 +27,7 @@ class ThemeToggleButton extends ConsumerWidget {
 
     return GestureDetector(
       onTap: () {
-        ref.read(themeModeProvider.notifier).state =
-        isDark ? ThemeMode.light : ThemeMode.dark;
+        ref.read(themeModeProvider.notifier).toggleThemeMode();
       },
       child: AnimatedContainer(
         width: 48,

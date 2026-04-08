@@ -2,6 +2,7 @@ import 'package:falletter_mobile_v2/core/components/button/content_card_button.d
 import 'package:falletter_mobile_v2/core/components/modal/default_modal.dart';
 import 'package:falletter_mobile_v2/core/components/modal/letter_modal.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
+import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -16,9 +17,7 @@ class BlockCard extends StatefulWidget {
 }
 
 class _BlockCardState extends State<BlockCard> {
-  final metaTextStyle = FalletterTextStyle.body4.copyWith(
-    color: FalletterColor.gray400,
-  );
+  final metaTextStyle = FalletterTextStyle.body4;
 
   @override
   Widget build(BuildContext context) {
@@ -40,20 +39,21 @@ class _BlockCardState extends State<BlockCard> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 4),
-              child: RichText(
-                text: TextSpan(
+              child: Text.rich(
+                TextSpan(
                   children: [
                     TextSpan(
                       text: '정책 위반으로 인해 계정 이용이 ',
-                      style: metaTextStyle,
+                      style: metaTextStyle.copyWith(color: context.textColor),
                     ),
                     TextSpan(
                       text: '${widget.days}일 ',
                       style: metaTextStyle.copyWith(
                         fontWeight: FontWeight.w700,
+                        color: context.textColor,
                       ),
                     ),
-                    TextSpan(text: '동안 제한됩니다.', style: metaTextStyle),
+                    TextSpan(text: '동안 제한됩니다.', style: metaTextStyle.copyWith(color: context.textColor)),
                   ],
                 ),
               ),
@@ -63,9 +63,7 @@ class _BlockCardState extends State<BlockCard> {
                 Text(
                   // TODO: 연동할 때 api 자세히 질문하고 상태관리로 바꾸기
                   '45분 전',
-                  style: metaTextStyle.copyWith(
-                    color: FalletterColor.gray500,
-                  ),
+                  style: metaTextStyle,
                 ),
                 SizedBox(width: 6),
                 GestureDetector(

@@ -1,6 +1,6 @@
 import 'package:falletter_mobile_v2/core/constants/color.dart';
+import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/providers/roulette_timer_provider.dart';
-import 'package:falletter_mobile_v2/core/router/route_paths.dart';
 import 'package:falletter_mobile_v2/core/theme/app_theme_color.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
 import 'package:falletter_mobile_v2/presentation/notice/provider/notice_provider.dart';
@@ -42,7 +42,7 @@ class MainHeader extends ConsumerWidget {
                 onTap: () {
                   context.pop();
                 },
-                  child: Icon(Symbols.close, color: FalletterColor.white, size: 18)
+                  child: Icon(Symbols.close, color: context.textColor, size: 18)
               ),
             Spacer(),
             GestureDetector(

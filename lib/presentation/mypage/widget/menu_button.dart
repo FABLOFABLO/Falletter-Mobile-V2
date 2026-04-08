@@ -1,4 +1,6 @@
 import 'package:falletter_mobile_v2/core/constants/color.dart';
+import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
+import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -23,7 +25,7 @@ class MenuButton extends ConsumerWidget {
         padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: FalletterColor.middleBlack,
+          color: context.cardBg,
         ),
         width: double.infinity,
         child: Text(
@@ -31,7 +33,7 @@ class MenuButton extends ConsumerWidget {
           style: FalletterTextStyle.button.copyWith(
             color: redText == true
                 ? FalletterColor.error
-                : FalletterColor.white,
+                : context.textColor,
           ),
         ),
       ),

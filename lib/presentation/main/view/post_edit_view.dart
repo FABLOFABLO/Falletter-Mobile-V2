@@ -2,6 +2,7 @@ import 'package:falletter_mobile_v2/core/components/app_bar/custom_app_bar.dart'
 import 'package:falletter_mobile_v2/core/components/button/elevated_button.dart';
 import 'package:falletter_mobile_v2/core/components/text_form_field/text_form_field.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
+import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/providers/posts_detail_provider.dart';
 import 'package:flutter/material.dart';
@@ -72,13 +73,13 @@ class _PostEditViewState extends ConsumerState<PostEditView> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('제목을 입력해주세요', style: FalletterTextStyle.subTitle1.copyWith(color: FalletterColor.gray500)),
+                      Text('제목을 입력해주세요', style: FalletterTextStyle.subTitle1),
                       SizedBox(height: 10),
                       AbsorbPointer(
                         child: CustomTextFormField(
                           controller: _titleController,
                           readOnly: true,
-                          style: FalletterTextStyle.placeholder.copyWith(color: FalletterColor.gray700),
+                          style: FalletterTextStyle.placeholder,
                         ),
                       ),
                       SizedBox(height: 32),
@@ -89,13 +90,11 @@ class _PostEditViewState extends ConsumerState<PostEditView> {
                             '내용을 입력해주세요',
                             style: FalletterTextStyle.subTitle1,
                           ),
-                          RichText(
-                              text: TextSpan(
+                          Text.rich(
+                              TextSpan(
                                   children: [
-                                    TextSpan(text: '${_contentController.text.length}', style: FalletterTextStyle.body2),
-                                    TextSpan(text: '/$maxLength', style: FalletterTextStyle.body2.copyWith(
-                                        color: FalletterColor.gray500
-                                    ))
+                                    TextSpan(text: '${_contentController.text.length}', style: FalletterTextStyle.body2.copyWith(color: context.textColor)),
+                                    TextSpan(text: '/$maxLength', style: FalletterTextStyle.body2.copyWith(color: FalletterColor.gray500))
                                   ]
                               )
                           )

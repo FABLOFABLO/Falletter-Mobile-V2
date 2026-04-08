@@ -1,7 +1,6 @@
 import 'package:falletter_mobile_v2/core/components/app_bar/custom_app_bar.dart';
 import 'package:falletter_mobile_v2/core/components/button/content_card_button.dart';
 import 'package:falletter_mobile_v2/core/components/modal/letter_modal.dart';
-import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/utils/date_time.dart';
 import 'package:falletter_mobile_v2/presentation/mypage/provider/get_letter_provider.dart';
@@ -60,9 +59,7 @@ class GetLetterView extends ConsumerWidget {
                         children: [
                           Text(
                             getLetterFormatDateTime(getLetters.createdAt),
-                            style: FalletterTextStyle.body4.copyWith(
-                              color: FalletterColor.gray500,
-                            ),
+                            style: FalletterTextStyle.body4,
                           ),
                           const SizedBox(height: 4),
                           Row(

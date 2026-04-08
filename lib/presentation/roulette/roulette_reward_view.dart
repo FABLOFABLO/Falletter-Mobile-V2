@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:falletter_mobile_v2/core/components/gradient_text.dart';
-import 'package:falletter_mobile_v2/core/constants/color.dart';
+import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/providers/roulette_provider.dart';
 import 'package:falletter_mobile_v2/core/providers/roulette_timer_provider.dart';
@@ -67,7 +67,7 @@ class _RouletteRewardViewState extends ConsumerState<RouletteRewardView> {
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
                 child: Container(
-                  color: FalletterColor.black.withAlpha(204),
+                  color: context.bgColor.withAlpha(204),
                 ),
               ),
             ),
@@ -86,14 +86,12 @@ class _RouletteRewardViewState extends ConsumerState<RouletteRewardView> {
                           width: 60,
                           height: 60,
                           decoration: BoxDecoration(
-                              color: FalletterColor.gray100,
+                              color: context.cardBg,
                               borderRadius: BorderRadius.circular(100)
                           ),
                           child: Center(
                               child: Text('X${widget.amount}',
-                                  style: FalletterTextStyle.title2.copyWith(
-                                      color: FalletterColor.gray900
-                                  )
+                                  style: FalletterTextStyle.title2,
                               )
                           ),
                         ),
@@ -106,7 +104,7 @@ class _RouletteRewardViewState extends ConsumerState<RouletteRewardView> {
                           children: [
                             Text('출석체크 보상',
                                 style: FalletterTextStyle.title3.copyWith(
-                                    color: FalletterColor.white)
+                                    color: context.textColor)
                             ),
                             GradientText(
                                 text: titleText,
@@ -122,9 +120,7 @@ class _RouletteRewardViewState extends ConsumerState<RouletteRewardView> {
                                   context.go('${RoutePaths.main}');
                                   },
                                 child: Text('닫기',
-                                    style: FalletterTextStyle.subTitle2.copyWith(
-                                        color: FalletterColor.gray600
-                                    )
+                                    style: FalletterTextStyle.subTitle2,
                                 ),
                               ),
                             )

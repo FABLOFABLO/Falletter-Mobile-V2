@@ -3,6 +3,7 @@ import 'package:falletter_mobile_v2/core/components/button/elevated_button.dart'
 import 'package:falletter_mobile_v2/core/components/icon/field_icon.dart';
 import 'package:falletter_mobile_v2/core/components/text_form_field/text_form_field.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
+import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/router/route_paths.dart';
 import 'package:falletter_mobile_v2/presentation/signup/provider/signup_provider.dart';
@@ -77,7 +78,7 @@ class _EmailViewState extends ConsumerState<EmailView> {
                                   style: TextStyle(color: FalletterColor.error),
                                 ),
                                 duration: Duration(seconds: 2),
-                                backgroundColor: FalletterColor.middleBlack,
+                                backgroundColor: context.cardBg,
                               )
                           );
                         }

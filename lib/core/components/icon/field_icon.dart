@@ -9,7 +9,6 @@ class FieldIcon {
       icon: const Icon(
         Symbols.visibility,
         fill: 1,
-        color: FalletterColor.gray800,
       ),
       onPressed: onPressed,
     );
@@ -31,7 +30,7 @@ class FieldIcon {
       padding: const EdgeInsets.all(12),
       child: Text(
         '@dsm.hs.kr',
-        style: FalletterTextStyle.body2.copyWith(color: FalletterColor.gray700),
+        style: FalletterTextStyle.body2,
       ),
     );
   }

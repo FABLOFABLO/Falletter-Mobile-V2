@@ -13,6 +13,9 @@ import 'package:falletter_mobile_v2/presentation/main/view/post_edit_view.dart';
 import 'package:falletter_mobile_v2/presentation/mypage/view/mypage_view.dart';
 import 'package:falletter_mobile_v2/presentation/main/view/announcement_detail_view.dart';
 import 'package:falletter_mobile_v2/presentation/mypage/view/theme_select_view.dart';
+import 'package:falletter_mobile_v2/presentation/mypage/view/send_letter_view.dart';
+import 'package:falletter_mobile_v2/presentation/mypage/view/get_letter_view.dart';
+import 'package:falletter_mobile_v2/presentation/mypage/view/brick_history_view.dart';
 import 'package:falletter_mobile_v2/presentation/notice/view/notice_view.dart';
 import 'package:falletter_mobile_v2/presentation/notice/view/notice_detail_view.dart';
 import 'package:falletter_mobile_v2/presentation/roulette/components/roulette.dart';
@@ -179,6 +182,28 @@ final goRouterProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: RoutePaths.mypage,
                 builder: (_, __) => const FalletterMypageView(),
+                routes: [
+                  GoRoute(
+                    path: 'theme',
+                    parentNavigatorKey: _rootNavigatorKey,
+                    builder: (_, __) => const ThemeSelectView(),
+                  ),
+                  GoRoute(
+                    path: 'send-letter',
+                    parentNavigatorKey: _rootNavigatorKey,
+                    builder: (_, __) => const SendLetterView(),
+                  ),
+                  GoRoute(
+                    path: 'get-letter',
+                    parentNavigatorKey: _rootNavigatorKey,
+                    builder: (_, __) => const GetLetterView(),
+                  ),
+                  GoRoute(
+                    path: 'brick-history',
+                    parentNavigatorKey: _rootNavigatorKey,
+                    builder: (_, __) => const BrickHistoryView(),
+                  ),
+                ],
               ),
             ],
           ),

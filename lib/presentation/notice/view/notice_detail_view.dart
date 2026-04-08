@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
+import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/components/app_bar/custom_app_bar.dart';
 import 'package:falletter_mobile_v2/core/components/button/answer_button.dart';
 import 'package:falletter_mobile_v2/core/components/button/elevated_button.dart';
@@ -156,7 +157,7 @@ class _FalletterNoticeDetailViewState
     final detailAsync = ref.watch(noticeDetailProvider(_noticeId));
 
     return Scaffold(
-      backgroundColor: FalletterColor.black,
+      backgroundColor: context.bgColor,
       appBar: CustomAppBar(
         icon: true,
         appBarAction: AppBarAction.brickCount,
@@ -164,11 +165,11 @@ class _FalletterNoticeDetailViewState
       ),
       body: RefreshIndicator(
         onRefresh: _onRefresh,
-        backgroundColor: FalletterColor.middleBlack,
-        color: FalletterColor.white,
+        backgroundColor: context.middleColor,
+        color: context.textColor,
         child: detailAsync.when(
-          loading: () => const Center(
-            child: CircularProgressIndicator(color: FalletterColor.white),
+          loading: () => Center(
+            child: CircularProgressIndicator(color: context.textColor),
           ),
           error: (error, _) => Center(
             child: Text('알림을 불러올 수 없습니다.', style: FalletterTextStyle.body2),
@@ -234,9 +235,7 @@ class _FalletterNoticeDetailViewState
                 const SizedBox(height: 4),
                 Text(
                   "선택한 사람의 이름에 들어가는 초성입니다",
-                  style: FalletterTextStyle.body2.copyWith(
-                    color: FalletterColor.gray400,
-                  ),
+                  style: FalletterTextStyle.body2,
                 ),
                 const SizedBox(height: 40),
                 _buildHintCircles(hintData),
@@ -244,9 +243,7 @@ class _FalletterNoticeDetailViewState
                 if (!allUnlocked) ...[
                   Text(
                     "더 궁금하다면?",
-                    style: FalletterTextStyle.subTitle2.copyWith(
-                      color: FalletterColor.gray200,
-                    ),
+                    style: FalletterTextStyle.subTitle2,
                   ),
                   const SizedBox(height: 16),
                   _buildBottomButton(detail),
@@ -289,8 +286,8 @@ class _FalletterNoticeDetailViewState
     return Container(
       width: 160,
       height: 160,
-      decoration: const BoxDecoration(
-        color: FalletterColor.middleBlack,
+      decoration: BoxDecoration(
+        color: context.middleColor,
         shape: BoxShape.circle,
       ),
       alignment: Alignment.center,
@@ -356,11 +353,14 @@ class _FalletterNoticeDetailViewState
   Widget _buildHintCircles(HintData hintData) {
     final unlockedHints = hintData.unlockedHints;
     final unlockedCount = unlockedHints.length;
+    final allUnlocked = hintData.allUnlocked;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(unlockedCount, (index) {
         final isLatest = index == unlockedCount - 1;
+        // 모두 열었으면 전부 gradient, 아니면 최신 힌트만 gradient
+        final useGradient = allUnlocked || isLatest;
         final double circleSize = unlockedCount == 1 ? 130 : 100;
         final hintText = hintData.hintAt(unlockedHints[index]) ?? '?';
 
@@ -369,7 +369,7 @@ class _FalletterNoticeDetailViewState
           child: _hintCircle(
             text: hintText,
             size: circleSize,
-            isLatest: isLatest,
+            useGradient: useGradient,
           ),
         );
       }),
@@ -379,7 +379,7 @@ class _FalletterNoticeDetailViewState
   Widget _hintCircle({
     required String text,
     required double size,
-    required bool isLatest,
+    required bool useGradient,
   }) {
     final selectedTheme = ref.watch(themeProvider);
     final themeColors = appThemeColors[selectedTheme]!;
@@ -389,17 +389,17 @@ class _FalletterNoticeDetailViewState
       height: size,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: FalletterColor.middleBlack,
+        color: context.cardBg,
       ),
       alignment: Alignment.center,
-      child: isLatest
+      child: useGradient
           ? ShaderMask(
               shaderCallback: (bounds) =>
                   themeColors.button.createShader(bounds),
               child: Text(
                 text,
                 style: FalletterTextStyle.title1.copyWith(
-                  color: FalletterColor.white,
+                  color: Colors.white,
                   fontSize: 80,
                   height: 1,
                 ),

@@ -1,6 +1,6 @@
 import 'package:falletter_mobile_v2/core/components/app_bar/custom_app_bar.dart';
 import 'package:falletter_mobile_v2/core/components/button/elevated_button.dart';
-import 'package:falletter_mobile_v2/core/constants/color.dart';
+import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/presentation/mypage/widget/detail_notification.dart';
 import 'package:flutter/material.dart';
@@ -137,7 +137,7 @@ class _NotificationSettingViewState extends State<NotificationSettingView> {
     return Column(
       children: [
         SizedBox(height: NotificationSettingView.spacing),
-        Divider(thickness: 4, color: FalletterColor.middleBlack),
+        Divider(thickness: 4, color: context.cardBg),
         SizedBox(height: NotificationSettingView.spaceHeight),
       ],
     );

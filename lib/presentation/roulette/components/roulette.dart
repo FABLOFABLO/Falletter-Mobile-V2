@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
+import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/providers/roulette_provider.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
@@ -158,7 +159,7 @@ class _RouletteState extends ConsumerState<Roulette> with SingleTickerProviderSt
               child: Text(
                 'GO',
                 style: FalletterTextStyle.title1.copyWith(
-                  color: FalletterColor.black,
+                  color: context.bgColor,
                 ),
               ),
             ),

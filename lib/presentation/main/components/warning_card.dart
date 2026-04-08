@@ -1,5 +1,4 @@
 import 'package:falletter_mobile_v2/core/components/button/content_card_button.dart';
-import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -31,10 +30,10 @@ class _WarningCardState extends State<WarningCard> {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 4),
               child: Text('추가 위반 시 계정 이용이 제한될 수 있으니 주의해 주세요.',
-                  style: metaTextStyle.copyWith(color: FalletterColor.gray400)),
+                  style: metaTextStyle),
             ),
             // TODO: 연동할 때 상태관리로 수정
-            Text('45분 전', style: metaTextStyle.copyWith(color: FalletterColor.gray500))
+            Text('45분 전', style: metaTextStyle)
           ],
         ),
       ),

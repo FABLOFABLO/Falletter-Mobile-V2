@@ -1,4 +1,5 @@
 import 'package:falletter_mobile_v2/core/constants/color.dart';
+import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:flutter/material.dart';
 
@@ -21,12 +22,10 @@ class NoticeBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final titleColor = isClicked
-        ? FalletterColor.gray400
-        : FalletterColor.white;
+        ? FalletterColor.gray600
+        : context.textColor;
     const double size = 4;
-    final text = FalletterTextStyle.body4.copyWith(
-      color: FalletterColor.gray400,
-    );
+    final text = FalletterTextStyle.body4.copyWith(color: FalletterColor.gray400);
 
     return GestureDetector(
       onTap: onTap,
@@ -34,7 +33,7 @@ class NoticeBox extends StatelessWidget {
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: FalletterColor.middleBlack,
+          color: context.cardBg,
           borderRadius: BorderRadius.circular(16),
         ),
         child: Column(
@@ -51,7 +50,7 @@ class NoticeBox extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(time, style: text),
-                Text('자세히 보기', style: text.copyWith(color: titleColor)),
+                Text('자세히 보기', style: text),
               ],
             ),
           ],

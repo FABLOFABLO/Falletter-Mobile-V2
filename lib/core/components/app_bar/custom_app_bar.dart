@@ -1,4 +1,5 @@
 import 'package:falletter_mobile_v2/core/constants/color.dart';
+import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
 import 'package:falletter_mobile_v2/core/theme/app_theme_color.dart';
@@ -34,7 +35,7 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
       toolbarHeight: 40,
       centerTitle: true,
       scrolledUnderElevation: 0,
-      backgroundColor: FalletterColor.black,
+      backgroundColor: context.bgColor,
       leading: Padding(
         padding: const EdgeInsets.symmetric(horizontal: paddingWidth),
         child: GestureDetector(
@@ -43,7 +44,7 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
               ? Icon(
                   Symbols.keyboard_arrow_left,
                   size: 24,
-                  color: FalletterColor.white,
+                  color: context.textColor,
                 )
               : null,
         ),
@@ -77,14 +78,14 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
                     Text('$count개', style: FalletterTextStyle.body1),
                   ],
                 ),
-                AppBarAction.orderStep => RichText(
-                  text: TextSpan(
+                AppBarAction.orderStep => Text.rich(
+                  TextSpan(
                     children: [
-                      TextSpan(text: '$count', style: FalletterTextStyle.body1),
+                      TextSpan(text: '$count', style: FalletterTextStyle.body1.copyWith(color: context.textColor)),
                       TextSpan(
                         text: '/5',
                         style: FalletterTextStyle.body1.copyWith(
-                          color: FalletterColor.gray700,
+                          color: FalletterColor.gray500,
                         ),
                       ),
                     ],

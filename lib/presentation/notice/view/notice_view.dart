@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:falletter_mobile_v2/core/constants/color.dart';
+import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/providers/bottom_nav_provider.dart';
 import 'package:falletter_mobile_v2/presentation/notice/provider/notice_provider.dart';
@@ -69,7 +69,7 @@ class _FalletterNoticeViewState extends ConsumerState<FalletterNoticeView> {
     });
 
     return Scaffold(
-      backgroundColor: FalletterColor.black,
+      backgroundColor: context.bgColor,
       body: SafeArea(
         child: Column(
           children: [
@@ -81,8 +81,7 @@ class _FalletterNoticeViewState extends ConsumerState<FalletterNoticeView> {
             Expanded(
               child: RefreshIndicator(
                 onRefresh: _refreshNotices,
-                backgroundColor: FalletterColor.middleBlack,
-                color: FalletterColor.white,
+                backgroundColor: context.middleColor,
                 child: _buildBody(noticeState),
               ),
             ),
@@ -95,7 +94,7 @@ class _FalletterNoticeViewState extends ConsumerState<FalletterNoticeView> {
   Widget _buildBody(NoticeListState noticeState) {
     if (noticeState.isLoading && noticeState.notices.isEmpty) {
       return const Center(
-        child: CircularProgressIndicator(color: FalletterColor.white),
+        child: CircularProgressIndicator(),
       );
     }
 
@@ -114,7 +113,6 @@ class _FalletterNoticeViewState extends ConsumerState<FalletterNoticeView> {
             child: const Center(
               child: Text(
                 '받은 알림이 없습니다',
-                style: TextStyle(color: FalletterColor.gray400),
               ),
             ),
           ),

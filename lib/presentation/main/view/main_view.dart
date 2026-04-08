@@ -3,7 +3,6 @@ import 'package:falletter_mobile_v2/core/components/button/delete_button.dart';
 import 'package:falletter_mobile_v2/core/components/button/floating_button.dart';
 import 'package:falletter_mobile_v2/core/components/header/main_header.dart';
 import 'package:falletter_mobile_v2/core/components/text_form_field/text_form_field.dart';
-import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/components/button/content_card_button.dart';
 import 'package:falletter_mobile_v2/core/providers/bottom_nav_provider.dart';
@@ -89,9 +88,7 @@ class _FalletterMainViewState extends ConsumerState<FalletterMainView> {
                           padding: EdgeInsets.symmetric(vertical: 3),
                           child: Text(
                             post.content,
-                            style: FalletterTextStyle.body4.copyWith(
-                              color: FalletterColor.gray400,
-                            ),
+                            style: FalletterTextStyle.body4,
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
@@ -99,24 +96,18 @@ class _FalletterMainViewState extends ConsumerState<FalletterMainView> {
                           children: [
                             Text(
                               post.anonymousNickname,
-                              style: FalletterTextStyle.body4.copyWith(
-                                color: FalletterColor.gray500,
-                              ),
+                              style: FalletterTextStyle.body4,
                             ),
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: 10),
                               child: Text(
                                 timeCheck(post.createdAt),
-                                style: FalletterTextStyle.body4.copyWith(
-                                  color: FalletterColor.gray500,
-                                ),
+                                style: FalletterTextStyle.body4,
                               ),
                             ),
                             Text(
                               '댓글 ${post.commentCount}개',
-                              style: FalletterTextStyle.body4.copyWith(
-                                color: FalletterColor.white,
-                              ),
+                              style: FalletterTextStyle.body4,
                             ),
                           ],
                         ),

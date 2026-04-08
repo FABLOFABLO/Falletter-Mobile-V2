@@ -1,6 +1,6 @@
 import 'package:falletter_mobile_v2/core/components/button/elevated_button.dart';
 import 'package:falletter_mobile_v2/core/components/gradient_text.dart';
-import 'package:falletter_mobile_v2/core/constants/color.dart';
+import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
 import 'package:falletter_mobile_v2/core/theme/app_theme_color.dart';
@@ -45,9 +45,7 @@ class _SplashViewState extends ConsumerState<SplashView> {
                       children: [
                         Text(
                           '아직 계정이 없으신가요?  ',
-                          style: FalletterTextStyle.body3.copyWith(
-                            color: FalletterColor.gray400,
-                          ),
+                          style: FalletterTextStyle.body3,
                         ),
                         GestureDetector(
                           onTap: () {
@@ -60,7 +58,7 @@ class _SplashViewState extends ConsumerState<SplashView> {
                   ),
                   CustomElevatedButton(
                     onPressed: () {context.push('/signin');},
-                    gradient: LinearGradient(colors: [FalletterColor.middleBlack, FalletterColor.middleBlack]),
+                    gradient: LinearGradient(colors: [context.cardBg, context.cardBg]),
                     child: GradientText(
                       text: '로그인하기',
                       gradient: themeColors.text,
@@ -76,13 +74,11 @@ class _SplashViewState extends ConsumerState<SplashView> {
         error: (error, stack) => Center(
           child: Text(
             '에러 발생\n$error',
-            style: FalletterTextStyle.label.copyWith(
-              color: FalletterColor.white,
-            ),
+            style: FalletterTextStyle.label,
           ),
         ),
         loading: () => const Center(
-          child: CircularProgressIndicator(color: FalletterColor.white),
+          child: CircularProgressIndicator(),
         ),
       ),
     );

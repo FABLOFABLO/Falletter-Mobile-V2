@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:falletter_mobile_v2/core/constants/color.dart';
+import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/providers/answer_provider.dart';
 import 'package:falletter_mobile_v2/core/providers/answer_timer_provider.dart';
 import 'package:falletter_mobile_v2/core/providers/roulette_timer_provider.dart';
@@ -43,11 +43,9 @@ class _FalletterAnswerViewState extends ConsumerState<FalletterAnswerView> {
 
     if (timer == null) {
       return Container(
-        color: FalletterColor.black,
-        child: Center(
-            child: CircularProgressIndicator(
-              color: FalletterColor.middleBlack,
-            )
+        color: context.bgColor,
+        child: const Center(
+            child: CircularProgressIndicator()
         ),
       );
     }

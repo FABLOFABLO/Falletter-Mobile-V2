@@ -1,4 +1,4 @@
-import 'package:falletter_mobile_v2/core/constants/color.dart';
+import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
 import 'package:falletter_mobile_v2/core/theme/app_theme_color.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +25,7 @@ class CustomTabBar extends ConsumerWidget {
         overlayColor: MaterialStateProperty.all(Colors.transparent),
         labelColor: themeColors.primaryColor,
         indicatorColor: themeColors.primaryColor,
-        unselectedLabelColor: FalletterColor.white,
+        unselectedLabelColor: context.textColor,
         isScrollable: true,
         tabAlignment: TabAlignment.start,
         indicatorSize: TabBarIndicatorSize.tab,

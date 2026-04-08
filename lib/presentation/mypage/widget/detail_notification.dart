@@ -27,7 +27,6 @@ class DetailNotification extends StatelessWidget {
             title,
             style: FalletterTextStyle.body2.copyWith(
               fontSize: 15,
-              color: FalletterColor.gray400,
             ),
           ),
           SizedBox(

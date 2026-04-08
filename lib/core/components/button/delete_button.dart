@@ -1,4 +1,5 @@
 import 'package:falletter_mobile_v2/core/constants/color.dart';
+import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 
@@ -48,12 +49,12 @@ class _DeleteButtonState extends State<DeleteButton> {
         width: widget.size,
         height: widget.size,
         decoration: BoxDecoration(
-          color: _isPressed ? FalletterColor.error : FalletterColor.middleBlack,
+          color: _isPressed ? FalletterColor.error : context.cardBg,
           shape: BoxShape.circle,
         ),
         child: Icon(
           Symbols.delete,
-          color: _isPressed ? FalletterColor.white : FalletterColor.gray400,
+          color: _isPressed ? context.textColor : null,
         ),
       ),
     );

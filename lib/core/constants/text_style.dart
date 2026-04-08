@@ -72,6 +72,5 @@ abstract final class FalletterTextStyle {
 }
 
 const TextStyle defaultTextStyle = TextStyle(
-  color: FalletterColor.white,
   fontFamily: 'WantedSans',
 );

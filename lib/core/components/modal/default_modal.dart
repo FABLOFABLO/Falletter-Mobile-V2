@@ -1,5 +1,6 @@
 import 'package:falletter_mobile_v2/core/components/button/elevated_button.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
+import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:flutter/material.dart';
 
@@ -24,7 +25,7 @@ class DefaultModal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      backgroundColor: FalletterColor.white,
+      backgroundColor: context.cardBg,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       insetPadding: EdgeInsets.symmetric(horizontal: 20),
       child: Padding(
@@ -36,13 +37,13 @@ class DefaultModal extends StatelessWidget {
             Text(
               title,
               style: FalletterTextStyle.subTitle2.copyWith(
-                color: FalletterColor.gray900,
+                color: context.textColor,
               ),
             ),
             Text(
               description,
               style: FalletterTextStyle.body3.copyWith(
-                color: FalletterColor.gray800,
+                color: context.middleColor,
               ),
             ),
             const SizedBox(height: 20),

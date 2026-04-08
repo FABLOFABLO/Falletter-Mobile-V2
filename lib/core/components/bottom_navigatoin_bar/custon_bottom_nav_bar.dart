@@ -1,6 +1,7 @@
 import 'package:falletter_mobile_v2/core/components/bottom_navigatoin_bar/bottom_navigation_item.dart';
-import 'package:falletter_mobile_v2/core/theme/app_theme_color.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
+import 'package:falletter_mobile_v2/core/theme/app_theme_color.dart';
+import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
 import 'package:falletter_mobile_v2/core/providers/bottom_nav_provider.dart';
 import 'package:falletter_mobile_v2/presentation/notice/provider/notice_provider.dart';
@@ -37,8 +38,8 @@ class CustomBottomNavigationBar extends ConsumerWidget {
 
     return Container(
       padding: EdgeInsets.symmetric(vertical: 10),
-      decoration: const BoxDecoration(
-        color: FalletterColor.black,
+      decoration: BoxDecoration(
+        color: context.bgColor,
         border: Border(
           top: BorderSide(
             color: FalletterColor.gray900,

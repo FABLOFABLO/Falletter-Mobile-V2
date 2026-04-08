@@ -1,7 +1,6 @@
 import 'package:falletter_mobile_v2/core/components/app_bar/custom_app_bar.dart';
 import 'package:falletter_mobile_v2/core/components/button/content_card_button.dart';
 import 'package:falletter_mobile_v2/core/components/modal/letter_modal.dart';
-import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/presentation/mypage/provider/send_letter_provider.dart';
 import 'package:flutter/material.dart';
@@ -64,9 +63,7 @@ class SendLetterView extends ConsumerWidget {
                             Expanded(
                               child: Text(
                                 letters.content,
-                                style: FalletterTextStyle.body3.copyWith(
-                                  color: FalletterColor.gray400,
-                                ),
+                                style: FalletterTextStyle.body3,
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                               ),

@@ -1,4 +1,4 @@
-import 'package:falletter_mobile_v2/core/constants/color.dart';
+import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_colors.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +18,7 @@ class ItemContainer extends ConsumerWidget {
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 13),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: FalletterColor.middleBlack,
+          color: context.cardBg,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -28,7 +28,7 @@ class ItemContainer extends ConsumerWidget {
             Text(
               '$count개',
               style: FalletterTextStyle.body1.copyWith(
-                color: FalletterColor.white,
+                
               ),
             ),
           ],

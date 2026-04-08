@@ -3,6 +3,7 @@ import 'package:falletter_mobile_v2/core/components/button/elevated_button.dart'
 import 'package:falletter_mobile_v2/core/components/button/send_button.dart';
 import 'package:falletter_mobile_v2/core/components/text_form_field/text_form_field.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
+import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/providers/posts_provider.dart';
 import 'package:falletter_mobile_v2/core/router/route_paths.dart';
@@ -77,13 +78,11 @@ class _PostCreateViewState extends ConsumerState<PostCreateView> {
                             '내용을 입력해주세요',
                             style: FalletterTextStyle.subTitle1,
                           ),
-                          RichText(
-                              text: TextSpan(
+                          Text.rich(
+                              TextSpan(
                                 children: [
-                                  TextSpan(text: '${_contentController.text.length}', style: FalletterTextStyle.body2),
-                                  TextSpan(text: '/$maxLength', style: FalletterTextStyle.body2.copyWith(
-                                    color: FalletterColor.gray500
-                                  ))
+                                  TextSpan(text: '${_contentController.text.length}', style: FalletterTextStyle.body2.copyWith(color: context.textColor)),
+                                  TextSpan(text: '/$maxLength', style: FalletterTextStyle.body2.copyWith(color: FalletterColor.gray500))
                                 ]
                               )
                           )

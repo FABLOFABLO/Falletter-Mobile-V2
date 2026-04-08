@@ -1,4 +1,3 @@
-import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
 import 'package:falletter_mobile_v2/core/theme/app_theme_color.dart';
@@ -23,6 +22,7 @@ class AnswerCardButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedTheme = ref.watch(themeProvider);
     final themeColors = appThemeColors[selectedTheme]!;
+    final cardColor = Theme.of(context).cardColor;
 
     return GestureDetector(
       onTap: onTap,
@@ -32,14 +32,12 @@ class AnswerCardButton extends ConsumerWidget {
             width: width ?? double.infinity,
             height: 80,
             decoration: BoxDecoration(
-              color: FalletterColor.middleBlack,
+              color: cardColor,
               gradient: (isSelected) ? themeColors.primaryGradient : null,
               borderRadius: BorderRadius.circular(10),
             ),
             child: Center(
-              child: Text(name, style: FalletterTextStyle.title3.copyWith(
-                  color: (isSelected) ? FalletterColor.black : null
-              ),),
+              child: Text(name, style: FalletterTextStyle.title3,),
             )
         ),
       ),
