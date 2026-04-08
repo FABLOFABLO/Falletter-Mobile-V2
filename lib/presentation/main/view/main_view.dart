@@ -1,12 +1,8 @@
-import 'package:falletter_mobile_v2/core/components/bottom_navigatoin_bar/custon_bottom_nav_bar.dart';
-import 'package:falletter_mobile_v2/core/components/button/delete_button.dart';
 import 'package:falletter_mobile_v2/core/components/button/floating_button.dart';
 import 'package:falletter_mobile_v2/core/components/header/main_header.dart';
-import 'package:falletter_mobile_v2/core/components/text_form_field/text_form_field.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/components/button/content_card_button.dart';
 import 'package:falletter_mobile_v2/core/providers/bottom_nav_provider.dart';
-import 'package:falletter_mobile_v2/core/providers/comments_provider.dart';
 import 'package:falletter_mobile_v2/core/providers/posts_provider.dart';
 import 'package:falletter_mobile_v2/core/router/route_paths.dart';
 import 'package:falletter_mobile_v2/core/utils/time_utils.dart';

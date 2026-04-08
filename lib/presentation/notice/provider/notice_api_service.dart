@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:falletter_mobile_v2/core/network/api_endpoints.dart';
 import 'package:falletter_mobile_v2/models/notice_models.dart';
-import 'package:flutter/foundation.dart';
 
 class NoticeApiService {
   final Dio _dio;

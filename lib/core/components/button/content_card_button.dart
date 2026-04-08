@@ -24,7 +24,7 @@ class ContentCardButton extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         child: Container(
           width: width ?? double.infinity,
-          height: height ?? null,
+          height: height,
           decoration: BoxDecoration(
             color: cardColor,
             borderRadius: BorderRadius.circular(10),

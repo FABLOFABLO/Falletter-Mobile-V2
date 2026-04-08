@@ -20,7 +20,6 @@ class RouletteState {
 class RouletteManager extends StateNotifier<RouletteState> {
   RouletteManager() : super(RouletteState(angle: 0));
 
-  @override
   RouletteState build() => RouletteState(angle: 0);
 
   void applyReward(RewardType type, int amount) {

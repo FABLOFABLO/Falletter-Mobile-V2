@@ -50,7 +50,7 @@ class NoticeItem {
   String get gradeGenderLabel {
     final grade = schoolNumber.isNotEmpty ? schoolNumber[0] : '?';
     final genderLabel = gender == 'FEMALE' ? '여학생' : '남학생';
-    return '${grade}학년 ${genderLabel}의 선택';
+    return '$grade학년 $genderLabel의 선택';
   }
 
   String get timeAgo {
@@ -255,7 +255,7 @@ class NoticeDetail {
   String get gradeGenderLabel {
     final grade = schoolNumber.isNotEmpty ? schoolNumber[0] : '?';
     final genderLabel = gender == 'FEMALE' ? '여학생' : '남학생';
-    return '${grade}학년 ${genderLabel}의 선택';
+    return '$grade학년 $genderLabel의 선택';
   }
 
   int get totalHints => 3;

@@ -6,7 +6,6 @@ import 'package:falletter_mobile_v2/core/theme/app_theme_color.dart';
 import 'package:falletter_mobile_v2/core/utils/time_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 
 class BrickHistory extends ConsumerWidget {
   final String title;

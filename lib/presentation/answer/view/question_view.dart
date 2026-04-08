@@ -106,7 +106,7 @@ class _QuestionViewState extends ConsumerState<QuestionView> {
                       borderRadius: BorderRadius.circular(100)
                   ),
                   child: Center(
-                      child: Text('${quiz.question.emoji}',
+                      child: Text(quiz.question.emoji,
                           style: TextStyle(fontSize: 100)
                       )
                   ),
@@ -115,7 +115,7 @@ class _QuestionViewState extends ConsumerState<QuestionView> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 30),
-              child: Center(child: Text('${quiz.question.question}', style: FalletterTextStyle.title2, textAlign: TextAlign.center)),
+              child: Center(child: Text(quiz.question.question, style: FalletterTextStyle.title2, textAlign: TextAlign.center)),
             ),
             Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),

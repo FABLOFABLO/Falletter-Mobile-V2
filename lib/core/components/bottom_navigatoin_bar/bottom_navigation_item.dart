@@ -1,6 +1,5 @@
 import 'package:falletter_mobile_v2/core/components/gradient_icon.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
-import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:flutter/material.dart';
 

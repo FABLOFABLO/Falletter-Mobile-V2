@@ -43,7 +43,7 @@ class _AnswerSelectedCardState extends ConsumerState<AnswerSelectedCard> {
           ),
         ),
         onTap: () {
-          context.go('${RoutePaths.notice}');
+          context.go(RoutePaths.notice);
         }
     );
   }

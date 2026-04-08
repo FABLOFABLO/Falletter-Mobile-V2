@@ -4,7 +4,6 @@ import 'package:falletter_mobile_v2/core/theme/app_theme_color.dart';
 import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
 import 'package:falletter_mobile_v2/core/providers/bottom_nav_provider.dart';
-import 'package:falletter_mobile_v2/presentation/notice/provider/notice_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -33,8 +32,6 @@ class CustomBottomNavigationBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedTheme = ref.watch(themeProvider);
     final themeColors = appThemeColors[selectedTheme]!;
-    final noticeState = ref.watch(noticeListProvider);
-    final hasUnreadNotices = noticeState.notices.any((notice) => !notice.isRead);
 
     return Container(
       padding: EdgeInsets.symmetric(vertical: 10),

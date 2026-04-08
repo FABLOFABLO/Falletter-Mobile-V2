@@ -139,7 +139,7 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
                                                 },
                                                 onRightPressed: () {
                                                   ref.read(postsDetailProvider.notifier).deletePost(widget.postId);
-                                                  context.go('${RoutePaths.main}');
+                                                  context.go(RoutePaths.main);
                                                 },
                                               ),
                                             ),

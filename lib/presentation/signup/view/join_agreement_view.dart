@@ -70,7 +70,7 @@ class JoinAgreementView extends ConsumerWidget {
                   final success = await ref.read(signUpProvider.notifier).signup(request);
                   if (success) {
                     await ref.read(signInProvider.notifier).signIn(
-                        email: "${state.email!.trim()}",
+                        email: state.email!.trim(),
                         password: state.password!
                     );
                     context.go(RoutePaths.signupComplete);

@@ -59,7 +59,6 @@ class UserApiService {
     try {
       final response = await dio.get(ApiEndpoints.student);
       if (response.statusCode == 200) {
-        print(response.data);
         final List<dynamic> data = response.data is List ? response.data : [];
         return data.map((json) => StudentModel.fromJson(json)).toList();
       }

@@ -40,14 +40,14 @@ class RouletteTimerNotifier extends StateNotifier<TimerModel?> {
   }
 }
 
-final rouletteCountdownProvider = StateNotifierProvider<rouletteCountdownNotifier, int>(
-        (ref) => rouletteCountdownNotifier()
+final rouletteCountdownProvider = StateNotifierProvider<RouletteCountdownNotifier, int>(
+        (ref) => RouletteCountdownNotifier()
 );
 
-class rouletteCountdownNotifier extends StateNotifier<int> {
+class RouletteCountdownNotifier extends StateNotifier<int> {
   Timer? _timer;
 
-  rouletteCountdownNotifier() : super(0);
+  RouletteCountdownNotifier() : super(0);
 
   void startTimer(int remainingSeconds) {
     state = remainingSeconds;

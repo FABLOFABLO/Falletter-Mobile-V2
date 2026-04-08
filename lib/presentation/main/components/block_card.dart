@@ -1,11 +1,9 @@
 import 'package:falletter_mobile_v2/core/components/button/content_card_button.dart';
-import 'package:falletter_mobile_v2/core/components/modal/default_modal.dart';
 import 'package:falletter_mobile_v2/core/components/modal/letter_modal.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class BlockCard extends StatefulWidget {
   final int days;

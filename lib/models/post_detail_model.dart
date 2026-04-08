@@ -33,7 +33,7 @@ class PostDetailModel {
     isDeleted: json["isDeleted"],
     createdAt: DateTime.parse(json["createdAt"] + 'Z').toLocal(),
     updatedAt: DateTime.parse(json["updatedAt"] + 'Z').toLocal(),
-    comment: (json["comment"] as List ?? []).map((x) => Comment.fromJson(x)).toList(),
+    comment: (json["comment"] as List).map((x) => Comment.fromJson(x)).toList(),
   );
 }
 

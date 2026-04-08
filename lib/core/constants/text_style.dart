@@ -1,4 +1,3 @@
-import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:flutter/material.dart';
 
 abstract final class FalletterTextStyle {

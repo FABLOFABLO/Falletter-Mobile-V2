@@ -1,6 +1,4 @@
 import 'dart:ui';
-
-import 'package:flutter/foundation.dart';
 import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/components/app_bar/custom_app_bar.dart';
 import 'package:falletter_mobile_v2/core/components/button/answer_button.dart';
@@ -112,7 +110,7 @@ class _FalletterNoticeDetailViewState
 
     final bool? result = await showDialog<bool>(
       context: context,
-      barrierColor: Colors.black.withOpacity(0.85),
+      barrierColor: Colors.black.withValues(alpha: 0.85),
       builder: (context) => HintUnlockDialog(requiredBricks: nextCost),
     );
 
@@ -179,7 +177,7 @@ class _FalletterNoticeDetailViewState
             final hasHints = hintData != null && hintData.unlockedCount > 0;
 
             return hasHints
-                ? _buildHintBody(detail, hintData!)
+                ? _buildHintBody(detail, hintData)
                 : _buildInitialDetailBody(detail);
           },
         ),

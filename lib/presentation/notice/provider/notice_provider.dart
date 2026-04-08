@@ -1,8 +1,6 @@
 import 'dart:async';
-
 import 'package:falletter_mobile_v2/core/network/dio.dart';
 import 'package:falletter_mobile_v2/models/notice_models.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'notice_api_service.dart';
 

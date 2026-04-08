@@ -33,7 +33,7 @@ final lightTheme = ThemeData(
   ),
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
     backgroundColor: FalletterColor.whiteBg,
-    selectedItemColor: const Color(0xFF0CDFE6),
+    selectedItemColor: Color(0xFF0CDFE6),
     unselectedItemColor: FalletterColor.gray600,
   ),
   inputDecorationTheme: InputDecorationTheme(

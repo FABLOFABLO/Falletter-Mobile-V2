@@ -22,7 +22,7 @@ class CustomTabBar extends ConsumerWidget {
       padding: const EdgeInsets.only(bottom: 10),
       child: TabBar(
         padding: const EdgeInsets.only(left: 20),
-        overlayColor: MaterialStateProperty.all(Colors.transparent),
+        overlayColor: WidgetStateProperty.all(Colors.transparent),
         labelColor: themeColors.primaryColor,
         indicatorColor: themeColors.primaryColor,
         unselectedLabelColor: context.textColor,
