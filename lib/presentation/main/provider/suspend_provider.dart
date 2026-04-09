@@ -4,7 +4,7 @@ import 'package:falletter_mobile_v2/presentation/main/provider/suspend_api_servi
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final suspendApiServiceProvider = Provider<SuspendApiService>((ref) {
-  final dio = ref.read(dioClientProvider).dio;
+  final dio = ref.watch(dioClientProvider).dio;
   return SuspendApiService(dio);
 });
 

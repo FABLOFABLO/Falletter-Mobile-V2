@@ -1,12 +1,8 @@
 import 'package:falletter_mobile_v2/core/network/dio.dart';
 import 'package:falletter_mobile_v2/models/suspend_reason_model.dart';
 import 'package:falletter_mobile_v2/presentation/main/provider/suspend_api_service.dart';
+import 'package:falletter_mobile_v2/presentation/main/provider/suspend_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-final suspendApiServiceProvider = Provider<SuspendApiService>((ref) {
-  final dio = ref.read(dioClientProvider).dio;
-  return SuspendApiService(dio);
-});
 
 final suspendReasonProvider =
     StateNotifierProvider<SuspendReasonNotifier, SuspendReasonModel?>((ref) {

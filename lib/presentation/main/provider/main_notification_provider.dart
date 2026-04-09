@@ -4,16 +4,12 @@ import 'package:falletter_mobile_v2/models/main_notification_model.dart';
 import 'package:falletter_mobile_v2/models/notification_content_model.dart';
 import 'package:falletter_mobile_v2/models/suspend_model.dart';
 import 'package:falletter_mobile_v2/presentation/main/provider/suspend_api_service.dart';
+import 'package:falletter_mobile_v2/presentation/main/provider/suspend_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final notificationApiServiceProvider = Provider<NotificationApiService>((ref) {
   final dio = ref.read(dioClientProvider).dio;
   return NotificationApiService(dio);
-});
-
-final suspendApiServiceProvider = Provider<SuspendApiService>((ref) {
-  final dio = ref.read(dioClientProvider).dio;
-  return SuspendApiService(dio);
 });
 
 final mainNotificationProvider =
