@@ -49,43 +49,43 @@ class NotificationSettingView extends ConsumerWidget {
             DetailNotification(
               title: '푸시 알림 받기',
               isEnabled: setting.pushEnabled,
-              onTap: notifier.togglePush,
+              onTap: (value) => notifier.toggle(NotificationSettingType.push, value)
             ),
             SizedBox(height: NotificationSettingView.spaceHeight),
             DetailNotification(
               title: '댓글 알림 받기',
               isEnabled: setting.commentEnabled,
-              onTap: notifier.toggleComment,
+              onTap: (value) => notifier.toggle(NotificationSettingType.comment, value)
             ),
             divider(),
             DetailNotification(
               title: '브릭 활성화 알림 받기',
               isEnabled: setting.brickActivationEnabled,
-              onTap: notifier.toggleBrickActivation,
+              onTap: (value) => notifier.toggle(NotificationSettingType.brickActivation, value)
             ),
             SizedBox(height: NotificationSettingView.spaceHeight),
             DetailNotification(
               title: '브릭 알림 받기',
               isEnabled: setting.brickEnabled,
-              onTap: notifier.toggleBrick,
+              onTap: (value) => notifier.toggle(NotificationSettingType.brick, value),
             ),
             divider(),
             DetailNotification(
               title: '레터 알림 받기',
               isEnabled: setting.letterEnabled,
-              onTap: notifier.toggleLetter,
+              onTap: (value) => notifier.toggle(NotificationSettingType.letter, value),
             ),
             SizedBox(height: NotificationSettingView.spaceHeight),
             DetailNotification(
               title: '레터 전송 완료 알림 받기',
               isEnabled: setting.letterSentEnabled,
-              onTap: notifier.toggleLetterSent,
+              onTap: (value) => notifier.toggle(NotificationSettingType.letterSent, value),
             ),
             divider(),
             DetailNotification(
               title: '관리자 공지 알림 받기',
               isEnabled: setting.adminNoticeEnabled,
-              onTap: notifier.toggleAdminNotice,
+              onTap: (value) => notifier.toggle(NotificationSettingType.adminNotice, value),
             ),
             const Spacer(),
             Padding(

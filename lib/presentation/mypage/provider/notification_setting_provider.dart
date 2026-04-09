@@ -3,6 +3,16 @@ import 'package:falletter_mobile_v2/core/providers/notification_api_service.dart
 import 'package:falletter_mobile_v2/models/notification_setting_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+enum NotificationSettingType {
+  push,
+  comment,
+  brickActivation,
+  brick,
+  letter,
+  letterSent,
+  adminNotice,
+}
+
 final notificationApiServiceProvider = Provider<NotificationApiService>((ref) {
   final dio = ref.read(dioClientProvider).dio;
   return NotificationApiService(dio);
@@ -32,39 +42,32 @@ class NotificationSettingNotifier
     }
   }
 
-  void togglePush(bool value) {
+  void toggle(NotificationSettingType type, bool value) {
     if (state == null) return;
-    state = state!.copyWith(pushEnabled: value);
-  }
 
-  void toggleComment(bool value) {
-    if (state == null) return;
-    state = state!.copyWith(commentEnabled: value);
-  }
-
-  void toggleBrickActivation(bool value) {
-    if (state == null) return;
-    state = state!.copyWith(brickActivationEnabled: value);
-  }
-
-  void toggleBrick(bool value) {
-    if (state == null) return;
-    state = state!.copyWith(brickEnabled: value);
-  }
-
-  void toggleLetter(bool value) {
-    if (state == null) return;
-    state = state!.copyWith(letterEnabled: value);
-  }
-
-  void toggleLetterSent(bool value) {
-    if (state == null) return;
-    state = state!.copyWith(letterSentEnabled: value);
-  }
-
-  void toggleAdminNotice(bool value) {
-    if (state == null) return;
-    state = state!.copyWith(adminNoticeEnabled: value);
+    switch(type) {
+      case NotificationSettingType.push:
+        state = state!.copyWith(pushEnabled: value);
+        break;
+      case NotificationSettingType.comment:
+        state = state!.copyWith(commentEnabled: value);
+        break;
+      case NotificationSettingType.brickActivation:
+        state = state!.copyWith(brickActivationEnabled: value);
+        break;
+      case NotificationSettingType.brick:
+        state = state!.copyWith(brickEnabled: value);
+        break;
+      case NotificationSettingType.letter:
+        state = state!.copyWith(letterEnabled: value);
+        break;
+      case NotificationSettingType.letterSent:
+        state = state!.copyWith(letterSentEnabled: value);
+        break;
+      case NotificationSettingType.adminNotice:
+        state = state!.copyWith(adminNoticeEnabled: value);
+        break;
+    }
   }
 
   Future<void> editSetting() async {
