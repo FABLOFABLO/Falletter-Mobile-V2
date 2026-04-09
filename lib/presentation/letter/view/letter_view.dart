@@ -4,9 +4,11 @@ import 'package:falletter_mobile_v2/core/components/text_form_field/text_form_fi
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
+import 'package:falletter_mobile_v2/models/letter_model.dart';
 import 'package:falletter_mobile_v2/presentation/letter/provider/letter_provider.dart';
 import 'package:falletter_mobile_v2/presentation/letter/widget/send_letter_modal.dart';
 import 'package:falletter_mobile_v2/presentation/letter/widget/type_ahead.dart';
+import 'package:falletter_mobile_v2/presentation/mypage/provider/send_letter_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -21,6 +23,8 @@ class FalletterLetterView extends ConsumerStatefulWidget {
 class _FalletterLetterViewState extends ConsumerState<FalletterLetterView> {
   static final double titleHeight = 16;
   String? name;
+  int? receptionId;
+  bool isSending = false;
   final TextEditingController _peopleController = TextEditingController();
   final TextEditingController _contentController = TextEditingController();
 
@@ -72,9 +76,10 @@ class _FalletterLetterViewState extends ConsumerState<FalletterLetterView> {
                         TypeAhead(
                           controller: _peopleController,
                           onChanged: _enabled,
-                          onSelected: (selectName) {
+                          onSelected: (student) {
                             setState(() {
-                              name = selectName;
+                              receptionId = student.id;
+                              name = '${student.schoolNumber} ${student.name}';
                             });
                             _enabled();
                           },
@@ -124,22 +129,41 @@ class _FalletterLetterViewState extends ConsumerState<FalletterLetterView> {
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 child: CustomElevatedButton(
                   width: double.infinity,
-                  onPressed: isNextStep
+                  onPressed: (isNextStep && receptionId != null && !isSending)
                       ? () async {
-                          await showDialog(
-                            barrierDismissible: false,
-                            context: context,
-                            builder: (_) => SendLetterModal(
-                              sendName: _peopleController.text,
-                            ),
-                          );
-                          ref.read(letterProvider.notifier).decrease();
-                          _peopleController.clear();
-                          _contentController.clear();
-                        setState(() {
-                          name = null;
-                        });
-                          _enabled();
+                          setState(() {
+                            isSending = true;
+                          });
+
+                          try {
+                            final request = LetterModel(
+                                content: _contentController.text,
+                                receptionId: receptionId!
+                            );
+                            await ref.read(sendLetterProvider.notifier).sendLetter(request);
+                            await showDialog(
+                              barrierDismissible: false,
+                              context: context,
+                              builder: (_) => SendLetterModal(
+                                sendName: _peopleController.text,
+                              ),
+                            );
+                            ref.read(letterProvider.notifier).decrease();
+                            _peopleController.clear();
+                            _contentController.clear();
+                            setState(() {
+                              name = null;
+                            });
+                            _enabled();
+                          } catch(e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('전송 중 오류가 발생했습니다.'), backgroundColor: FalletterColor.middleBlack,),
+                            );
+                          } finally {
+                            setState(() {
+                              isSending = false;
+                            });
+                          }
                         }
                       : null,
                   child: Text('레터 전송하기'),

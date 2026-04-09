@@ -7,12 +7,12 @@ class LetterModel {
   factory LetterModel.fromJson(Map<String, dynamic> json) {
     return LetterModel(
       content: json['content'],
-      receptionId: json['reception_id'],
+      receptionId: json['receptionId'],
     );
   }
 
-  Map<String,dynamic> toJson()=>{
-    'content':content,
-    'reception_id': receptionId,
+  Map<String, dynamic> toJson() => {
+    'content': content,
+    'receptionId': receptionId,
   };
 }

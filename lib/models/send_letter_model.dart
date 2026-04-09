@@ -21,11 +21,11 @@ class SendLetterModel {
     return SendLetterModel(
       id: json['id'],
       content: json['content'],
-      receptionId: json['reception_id'],
-      senderId: json['sender_id'],
-      isDelivered: json['is_delivered'],
-      isPassed: json['is_passed'],
-      createdAt: DateTime.parse(json['created_at']),
+      receptionId: json['receptionId'],
+      senderId: json['senderId'],
+      isDelivered: json['isDelivered'],
+      isPassed: json['isPassed'],
+      createdAt: DateTime.parse(json['createdAt'] + 'Z').toLocal(),
     );
   }
 
@@ -33,10 +33,10 @@ class SendLetterModel {
     return {
       'id': id,
       'content': content,
-      'reception_id': receptionId,
-      'is_delivered': isDelivered,
-      'is_passed': isPassed,
-      'created_at': createdAt,
+      'receptionId': receptionId,
+      'isDelivered': isDelivered,
+      'isPassed': isPassed,
+      'createdAt': createdAt,
     };
   }
 }

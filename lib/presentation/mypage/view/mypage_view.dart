@@ -1,5 +1,7 @@
 import 'package:falletter_mobile_v2/core/components/modal/default_modal.dart';
+import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
+import 'package:falletter_mobile_v2/core/network/token_storage.dart';
 import 'package:falletter_mobile_v2/core/providers/auth_status_provider.dart';
 import 'package:falletter_mobile_v2/core/providers/item_count_provider.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
@@ -12,21 +14,24 @@ import 'package:falletter_mobile_v2/presentation/mypage/widget/menu_button.dart'
 import 'package:falletter_mobile_v2/presentation/mypage/widget/my_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
 
 class FalletterMypageView extends ConsumerStatefulWidget {
   const FalletterMypageView({super.key});
 
   @override
-  ConsumerState<FalletterMypageView> createState() =>
-      _FalletterMypageViewState();
+  ConsumerState<FalletterMypageView> createState() => _FalletterMypageViewState();
 }
 
 class _FalletterMypageViewState extends ConsumerState<FalletterMypageView> {
+
   static const SizedBox betweenHeight = SizedBox(height: 12);
   static const SizedBox titleHeight = SizedBox(height: 32);
   static const SizedBox betweenWidth = SizedBox(width: 12);
-  static final style = FalletterTextStyle.button;
+  static final style = FalletterTextStyle.button.copyWith(
+    color: FalletterColor.gray400,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -54,14 +59,15 @@ class _FalletterMypageViewState extends ConsumerState<FalletterMypageView> {
                   child: const CircularProgressIndicator(
                     color: Colors.transparent,
                   ),
-                ),
-              ),
               data: (UserInfoModel data) {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     titleHeight,
-                    MyContainer(name: data.name, image: data.profileImage),
+                    MyContainer(
+                      name: data.name,
+                      image: data.profileImage,
+                    ),
                     titleHeight,
                     Row(
                       children: [

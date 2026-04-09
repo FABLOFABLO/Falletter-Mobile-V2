@@ -1,4 +1,5 @@
 import 'package:falletter_mobile_v2/core/components/button/content_card_button.dart';
+import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/utils/time_utils.dart';
 import 'package:flutter/material.dart';
