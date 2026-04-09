@@ -1,6 +1,6 @@
 import 'package:falletter_mobile_v2/core/components/app_bar/custom_app_bar.dart';
 import 'package:falletter_mobile_v2/core/components/button/content_card_button.dart';
-import 'package:falletter_mobile_v2/core/constants/color.dart';
+import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/providers/announcement_detail_provider.dart';
 import 'package:falletter_mobile_v2/core/utils/time_utils.dart';
@@ -31,16 +31,14 @@ class _AnnouncementDetailViewState
 
   @override
   Widget build(BuildContext context) {
-    final metaTextStyle = FalletterTextStyle.body3.copyWith(
-      color: FalletterColor.gray200,
-    );
+    final metaTextStyle = FalletterTextStyle.body3;
     final notice = ref.watch(announcementDetailProvider);
 
     if (notice == null) {
       return Container(
-        color: FalletterColor.black,
+        color: context.bgColor,
         child: Center(
-          child: CircularProgressIndicator(color: FalletterColor.middleBlack),
+          child: CircularProgressIndicator(color: context.cardBg),
         ),
       );
     }
@@ -72,9 +70,7 @@ class _AnnouncementDetailViewState
                     ),
                     Text(
                       notice.content,
-                      style: metaTextStyle.copyWith(
-                        color: FalletterColor.gray400,
-                      ),
+                      style: metaTextStyle,
                     ),
                   ],
                 ),

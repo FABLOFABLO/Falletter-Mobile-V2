@@ -1,5 +1,6 @@
 import 'package:falletter_mobile_v2/core/components/button/elevated_button.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
+import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
 import 'package:falletter_mobile_v2/core/theme/app_theme_color.dart';
@@ -32,11 +33,11 @@ class AnswerButton extends ConsumerWidget {
     final gradient = isSelected
         ? themeColors.answerButton
         : FalletterGradient.horizontal([
-            FalletterColor.middleBlack,
-            FalletterColor.middleBlack,
+            context.cardBg,
+            context.cardBg,
           ]);
     final hasBorder = showBorder;
-    final textColor = isSelected ? FalletterColor.black : FalletterColor.white;
+    final textColor = isSelected ? context.bgColor : null;
 
     return Container(
       height: height,
@@ -50,7 +51,7 @@ class AnswerButton extends ConsumerWidget {
         textColor: textColor,
         child: Text(
           label,
-          style: FalletterTextStyle.title3.copyWith(color: textColor),
+          style: textColor != null ? FalletterTextStyle.title3.copyWith(color: textColor) : FalletterTextStyle.title3,
         ),
       ),
     );

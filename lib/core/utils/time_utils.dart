@@ -2,7 +2,6 @@ import 'package:intl/intl.dart';
 
 String timeCheck(DateTime date) {
   final diff = DateTime.now().difference(date);
-  print(DateTime.now());
 
   if (diff.inMinutes < 1) return '방금 전';
   if (diff.inMinutes < 60) return '${diff.inMinutes}분 전';

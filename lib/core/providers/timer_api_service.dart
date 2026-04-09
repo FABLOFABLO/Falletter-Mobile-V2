@@ -16,7 +16,6 @@ class TimerApiService {
       }
       throw Exception('룰렛 타이머 조회 실패');
     } catch(e) {
-      print('룰렛 타이머 조회 실패: $e');
       rethrow;
     }
   }

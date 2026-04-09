@@ -1,5 +1,3 @@
-import 'package:falletter_mobile_v2/core/constants/color.dart';
-import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:flutter/material.dart';
 
 class ContentCardButton extends StatelessWidget {
@@ -18,15 +16,17 @@ class ContentCardButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cardColor = Theme.of(context).cardColor;
+
     return GestureDetector(
       onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         child: Container(
           width: width ?? double.infinity,
-          height: height ?? null,
+          height: height,
           decoration: BoxDecoration(
-            color: FalletterColor.middleBlack,
+            color: cardColor,
             borderRadius: BorderRadius.circular(10),
           ),
           child: child

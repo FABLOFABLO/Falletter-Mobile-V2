@@ -2,6 +2,7 @@ import 'package:falletter_mobile_v2/core/components/app_bar/custom_app_bar.dart'
 import 'package:falletter_mobile_v2/core/components/button/elevated_button.dart';
 import 'package:falletter_mobile_v2/core/components/text_form_field/text_form_field.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
+import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
 import 'package:falletter_mobile_v2/core/router/route_paths.dart';
@@ -121,7 +122,7 @@ class _VerifyCodeViewState extends ConsumerState<VerifyCodeView> {
               const SizedBox(height: 8),
               Text(
                 '입력한 이메일로 전송했어요!',
-                style: baseStyle.copyWith(color: FalletterColor.gray400),
+                style: baseStyle,
               ),
               const SizedBox(height: 36),
               Row(
@@ -168,7 +169,7 @@ class _VerifyCodeViewState extends ConsumerState<VerifyCodeView> {
                       child: Text(
                         '인증번호 확인',
                         style: FalletterTextStyle.placeholder.copyWith(
-                          color: FalletterColor.black,
+                          color: context.bgColor,
                         ),
                       ),
                     ),
@@ -201,7 +202,7 @@ class _VerifyCodeViewState extends ConsumerState<VerifyCodeView> {
                       '재전송',
                       style: baseStyle.copyWith(
                         decoration: TextDecoration.underline,
-                        decorationColor: FalletterColor.white,
+                        decorationColor: context.bgColor,
                       ),
                     ),
                   ),

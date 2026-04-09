@@ -1,7 +1,9 @@
-import 'package:flutter/painting.dart';
+import 'package:flutter/material.dart';
 
 abstract final class FalletterColor {
   static const Color white = Color(0xFFFFFFFF);
+  static const Color whiteBg = Color(0xFFF4F4F4);
+  static const Color middleWhite = Color(0xFFECECEC);
   static const Color black = Color(0xFF141414);
   static const Color middleBlack = Color(0xFF1C1C1C);
   static const Color error = Color(0xFFFF7A7A);
@@ -30,6 +32,25 @@ abstract final class FalletterColor {
     Color(0xFFEC89FF),
     Color(0xFFB640FF),
   ];
+
+  // 동적 색상 함수들
+  static Color getCardBackground(BuildContext context) {
+    return Theme.of(context).cardColor;
+  }
+
+  static Color getTextColor(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return isDark ? white : black;
+  }
+
+  static Color getBackgroundColor(BuildContext context) {
+    return Theme.of(context).scaffoldBackgroundColor;
+  }
+
+  static Color getMiddleColor(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return isDark ? middleBlack : middleWhite;
+  }
 }
 
 abstract final class FalletterGradient {

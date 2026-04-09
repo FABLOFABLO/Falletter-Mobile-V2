@@ -1,4 +1,4 @@
-import 'package:falletter_mobile_v2/core/constants/color.dart';
+import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
 import 'package:falletter_mobile_v2/core/theme/app_theme_color.dart';
@@ -41,7 +41,7 @@ class SelectableButton extends ConsumerWidget {
         padding: isSelected ? const EdgeInsets.all(3) : EdgeInsets.zero,
         child: Container(
           decoration: BoxDecoration(
-            color: FalletterColor.middleBlack,
+            color: context.cardBg,
             borderRadius: BorderRadius.circular(8),
           ),
           child: Column(
@@ -51,7 +51,7 @@ class SelectableButton extends ConsumerWidget {
                 child: SizedBox(
                   width: 100,
                   height: 100,
-                  child: _buildIcon(),
+                  child: _buildIcon(context),
                 ),
               ),
               Padding(
@@ -70,7 +70,7 @@ class SelectableButton extends ConsumerWidget {
     );
   }
 
-  Widget _buildIcon() {
+  Widget _buildIcon(BuildContext context) {
     if (iconWidget != null) {
       return iconWidget!;
     }
@@ -80,7 +80,7 @@ class SelectableButton extends ConsumerWidget {
         shaderCallback: (bounds) => iconGradient!.createShader(bounds),
         child: Icon(
             icon,
-            color: FalletterColor.white,
+            color: Colors.white,
             size: 100,
             fill: 1,
         ),

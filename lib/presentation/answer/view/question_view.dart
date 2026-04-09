@@ -1,4 +1,4 @@
-import 'package:falletter_mobile_v2/core/constants/color.dart';
+import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/providers/answer_provider.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
@@ -66,7 +66,7 @@ class _QuestionViewState extends ConsumerState<QuestionView> {
                         Container(
                           height: 15,
                           decoration: BoxDecoration(
-                            color: FalletterColor.middleBlack,
+                            color: context.cardBg,
                             borderRadius: BorderRadius.circular(20),
                           ),
                         ),
@@ -84,11 +84,11 @@ class _QuestionViewState extends ConsumerState<QuestionView> {
                     ),
                   ),
                   SizedBox(width: 8),
-                  RichText(
-                      text: TextSpan(
+                  Text.rich(
+                      TextSpan(
                           children: [
-                            TextSpan(text: '${currentIndex + 1}', style: buttonTextStyle),
-                            TextSpan(text: '/$total', style: buttonTextStyle.copyWith(color: FalletterColor.gray600))
+                            TextSpan(text: '${currentIndex + 1}', style: buttonTextStyle.copyWith(color: context.textColor)),
+                            TextSpan(text: '/$total', style: buttonTextStyle.copyWith(color: context.middleColor))
                           ]
                       )
                   )
@@ -102,11 +102,11 @@ class _QuestionViewState extends ConsumerState<QuestionView> {
                   width: 160,
                   height: 160,
                   decoration: BoxDecoration(
-                      color: FalletterColor.middleBlack,
+                      color: context.cardBg,
                       borderRadius: BorderRadius.circular(100)
                   ),
                   child: Center(
-                      child: Text('${quiz.question.emoji}',
+                      child: Text(quiz.question.emoji,
                           style: TextStyle(fontSize: 100)
                       )
                   ),
@@ -115,7 +115,7 @@ class _QuestionViewState extends ConsumerState<QuestionView> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 30),
-              child: Center(child: Text('${quiz.question.question}', style: FalletterTextStyle.title2)),
+              child: Center(child: Text(quiz.question.question, style: FalletterTextStyle.title2, textAlign: TextAlign.center)),
             ),
             Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -156,13 +156,10 @@ class _QuestionViewState extends ConsumerState<QuestionView> {
                   children: [
                     Text(
                         '건너뛰기',
-                        style: FalletterTextStyle.body3.copyWith(
-                            color: FalletterColor.gray300
-                        )
+                        style: FalletterTextStyle.body3
                     ),
-                    Icon(
+                    const Icon(
                         Symbols.double_arrow,
-                        color: FalletterColor.gray300,
                         size: 12
                     )
                   ],

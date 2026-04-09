@@ -1,6 +1,7 @@
 import 'package:falletter_mobile_v2/core/components/button/content_card_button.dart';
 import 'package:falletter_mobile_v2/core/components/modal/letter_modal.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
+import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/utils/time_utils.dart';
 import 'package:falletter_mobile_v2/presentation/main/provider/suspend_reason_provider.dart';
@@ -34,17 +35,18 @@ class BlockCard extends ConsumerWidget {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 4),
-              child: RichText(
-                text: TextSpan(
+              child: Text.rich(
+                TextSpan(
                   children: [
                     TextSpan(text: '정책 위반으로 인해 계정 이용이 ', style: metaTextStyle),
                     TextSpan(
                       text: '${notification.days}일 ',
                       style: metaTextStyle.copyWith(
                         fontWeight: FontWeight.w700,
+                        color: context.textColor,
                       ),
                     ),
-                    TextSpan(text: '동안 제한됩니다.', style: metaTextStyle),
+                    TextSpan(text: '동안 제한됩니다.', style: metaTextStyle.copyWith(color: context.textColor)),
                   ],
                 ),
               ),

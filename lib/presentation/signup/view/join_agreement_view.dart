@@ -1,6 +1,7 @@
 import 'package:falletter_mobile_v2/core/components/app_bar/custom_app_bar.dart';
 import 'package:falletter_mobile_v2/core/components/button/elevated_button.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
+import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/router/route_paths.dart';
 import 'package:falletter_mobile_v2/models/signup_model.dart';
@@ -39,9 +40,7 @@ class JoinAgreementView extends ConsumerWidget {
               const SizedBox(height: 8),
               Text(
                 '서비스 이용을 위해 약관에 동의해주세요',
-                style: FalletterTextStyle.button.copyWith(
-                  color: FalletterColor.gray400,
-                ),
+                style: FalletterTextStyle.button,
               ),
               const SizedBox(height: 34),
               CheckButton(
@@ -71,7 +70,7 @@ class JoinAgreementView extends ConsumerWidget {
                   final success = await ref.read(signUpProvider.notifier).signup(request);
                   if (success) {
                     await ref.read(signInProvider.notifier).signIn(
-                        email: "${state.email!.trim()}",
+                        email: state.email!.trim(),
                         password: state.password!
                     );
                     context.go(RoutePaths.signupComplete);
@@ -83,7 +82,7 @@ class JoinAgreementView extends ConsumerWidget {
                           style: TextStyle(color: FalletterColor.error),
                         ),
                         duration: Duration(seconds: 2),
-                        backgroundColor: FalletterColor.middleBlack,
+                        backgroundColor: context.cardBg,
                       )
                     );
                   }

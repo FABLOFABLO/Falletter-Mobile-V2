@@ -1,5 +1,6 @@
 import 'package:falletter_mobile_v2/core/components/button/elevated_button.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
+import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
 import 'package:falletter_mobile_v2/core/theme/app_theme_color.dart';
@@ -34,9 +35,7 @@ class HintUnlockDialog extends ConsumerWidget {
             const SizedBox(height: 24),
             Text(
               "브릭 $requiredBricks개가 차감됩니다.",
-              style: FalletterTextStyle.body2.copyWith(
-                color: FalletterColor.gray400,
-              ),
+              style: FalletterTextStyle.body2,
             ),
             const SizedBox(height: 40),
             Row(
@@ -47,7 +46,7 @@ class HintUnlockDialog extends ConsumerWidget {
                       FalletterColor.gray200,
                       FalletterColor.gray200,
                     ]),
-                    textColor: FalletterColor.middleBlack,
+                    textColor: context.textColor,
                     onPressed: () => Navigator.pop(context, false),
                     child: const Text("취소"),
                   ),
@@ -80,15 +79,12 @@ class HintUnlockDialog extends ConsumerWidget {
             width: 60,
             height: 60,
             decoration: const BoxDecoration(
-              color: FalletterColor.gray100,
               shape: BoxShape.circle,
             ),
             alignment: Alignment.center,
             child: Text(
               "-$requiredBricks",
-              style: FalletterTextStyle.title2.copyWith(
-                color: FalletterColor.gray900,
-              ),
+              style: FalletterTextStyle.title2,
             ),
           ),
         ),

@@ -1,5 +1,4 @@
 import 'package:falletter_mobile_v2/core/components/button/content_card_button.dart';
-import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
 import 'package:falletter_mobile_v2/core/theme/app_theme_color.dart';
@@ -39,12 +38,12 @@ class _AnswerSelectedCardState extends ConsumerState<AnswerSelectedCard> {
               ),
               SizedBox(height: 15),
               // TODO: 연동 때 상태관리로 변경
-              Text('45분 전', style: FalletterTextStyle.body4.copyWith(color: FalletterColor.gray500))
+              Text('45분 전', style: FalletterTextStyle.body4)
             ],
           ),
         ),
         onTap: () {
-          context.go('${RoutePaths.notice}');
+          context.go(RoutePaths.notice);
         }
     );
   }

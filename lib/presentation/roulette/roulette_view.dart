@@ -1,10 +1,8 @@
 import 'dart:ui';
-
 import 'package:falletter_mobile_v2/core/components/gradient_text.dart';
-import 'package:falletter_mobile_v2/core/constants/color.dart';
+import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/providers/roulette_provider.dart';
-import 'package:falletter_mobile_v2/core/providers/roulette_timer_provider.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
 import 'package:falletter_mobile_v2/core/theme/app_theme_color.dart';
 import 'package:falletter_mobile_v2/presentation/roulette/components/roulette.dart';
@@ -29,7 +27,7 @@ class RouletteView extends ConsumerWidget {
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
               child: Container(
-                color: FalletterColor.black.withAlpha(204),
+                color: context.bgColor.withAlpha(204),
               ),
             ),
           ),
@@ -58,9 +56,7 @@ class RouletteView extends ConsumerWidget {
                         context.pop();
                       },
                       child: Text('닫기',
-                          style: FalletterTextStyle.subTitle2.copyWith(
-                              color: FalletterColor.gray600
-                          )
+                          style: FalletterTextStyle.subTitle2
                       ),
                     ),
                   ),

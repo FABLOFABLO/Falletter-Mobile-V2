@@ -1,8 +1,8 @@
 import 'dart:async';
-
-import 'package:falletter_mobile_v2/core/constants/color.dart';
+import 'package:falletter_mobile_v2/core/providers/theme/theme_mode_provoder.dart';
 import 'package:falletter_mobile_v2/core/router/app_router.dart';
 import 'package:falletter_mobile_v2/core/theme/falletter_theme.dart';
+import 'package:falletter_mobile_v2/core/theme/theme_mode.dart';
 import 'package:falletter_mobile_v2/core/push/fcm_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -48,12 +48,16 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(goRouterProvider);
+    final themeMode = ref.watch(themeModeProvider);
 
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       routerConfig: router,
-      theme: ThemeData(
-        scaffoldBackgroundColor: FalletterColor.black,
+      themeMode: themeMode,
+      theme: lightTheme.copyWith(
+        textSelectionTheme: textSelectionTheme,
+      ),
+      darkTheme: darkTheme.copyWith(
         inputDecorationTheme: inputDecorationTheme,
         textSelectionTheme: textSelectionTheme,
       ),

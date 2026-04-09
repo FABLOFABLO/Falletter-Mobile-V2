@@ -1,4 +1,5 @@
 import 'package:falletter_mobile_v2/core/constants/color.dart';
+import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/presentation/signup/view/detail_agree_view/agree_service_view.dart';
 import 'package:falletter_mobile_v2/presentation/signup/view/detail_agree_view/community_service_view.dart';
@@ -35,9 +36,7 @@ class _CheckButtonState extends ConsumerState<CheckButton> {
 
   Widget _listCheckText() {
     final style = FalletterTextStyle.agreeService;
-    final blueStyle = FalletterTextStyle.button.copyWith(
-      color: FalletterColor.blueGradient[0],
-    );
+    final blueStyle = FalletterTextStyle.button;
     Map<Agree, Widget> labels = {
       Agree.all: Text('약관 전체 동의', style: FalletterTextStyle.body1),
       Agree.use: Text.rich(
@@ -104,7 +103,7 @@ class _CheckButtonState extends ConsumerState<CheckButton> {
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 22),
-        color: FalletterColor.black,
+        color: context.bgColor,
         child: Row(
           children: [
             Container(
@@ -113,7 +112,7 @@ class _CheckButtonState extends ConsumerState<CheckButton> {
                 color: checked ? FalletterColor.blueGradient[0] : FalletterColor.gray400,
               ),
               child: checked
-                  ? Icon(Symbols.check, size: 20, color: FalletterColor.white)
+                  ? const Icon(Symbols.check, size: 20)
                   : const SizedBox(height: 20, width: 20),
             ),
             const SizedBox(width: 12),
@@ -126,9 +125,8 @@ class _CheckButtonState extends ConsumerState<CheckButton> {
                     context,
                   ).push(MaterialPageRoute(builder: navigator));
                 },
-                child: Icon(
+                child: const Icon(
                   Symbols.arrow_forward_ios,
-                  color: FalletterColor.gray400,
                 ),
               ),
           ],

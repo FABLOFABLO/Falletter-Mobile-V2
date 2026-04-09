@@ -1,12 +1,11 @@
 import 'package:falletter_mobile_v2/core/components/app_bar/custom_app_bar.dart';
 import 'package:falletter_mobile_v2/core/components/button/elevated_button.dart';
-import 'package:falletter_mobile_v2/core/components/button/send_button.dart';
 import 'package:falletter_mobile_v2/core/components/text_form_field/text_form_field.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
+import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/providers/posts_provider.dart';
 import 'package:falletter_mobile_v2/core/router/route_paths.dart';
-import 'package:falletter_mobile_v2/presentation/main/view/post_detail_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -77,13 +76,11 @@ class _PostCreateViewState extends ConsumerState<PostCreateView> {
                             '내용을 입력해주세요',
                             style: FalletterTextStyle.subTitle1,
                           ),
-                          RichText(
-                              text: TextSpan(
+                          Text.rich(
+                              TextSpan(
                                 children: [
-                                  TextSpan(text: '${_contentController.text.length}', style: FalletterTextStyle.body2),
-                                  TextSpan(text: '/$maxLength', style: FalletterTextStyle.body2.copyWith(
-                                    color: FalletterColor.gray500
-                                  ))
+                                  TextSpan(text: '${_contentController.text.length}', style: FalletterTextStyle.body2.copyWith(color: context.textColor)),
+                                  TextSpan(text: '/$maxLength', style: FalletterTextStyle.body2.copyWith(color: FalletterColor.gray500))
                                 ]
                               )
                           )
@@ -104,7 +101,6 @@ class _PostCreateViewState extends ConsumerState<PostCreateView> {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20).copyWith(bottom: 30),
               child: CustomElevatedButton(
-                child: Text('글 등록하기'),
                 width: double.infinity,
                 onPressed: isEnabled
                     ? () async {
@@ -115,6 +111,7 @@ class _PostCreateViewState extends ConsumerState<PostCreateView> {
                   context.pushReplacement('${RoutePaths.main}/detail', extra: postId);
                 }
                     : null,
+                child: Text('글 등록하기'),
               ),
             ),
           ],

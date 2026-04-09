@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:dio/dio.dart';
 import 'package:falletter_mobile_v2/core/network/dio.dart';
 import 'package:falletter_mobile_v2/core/providers/auth_api_service.dart';
 import 'package:falletter_mobile_v2/core/providers/user_api_service.dart';

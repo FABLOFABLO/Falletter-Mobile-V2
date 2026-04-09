@@ -1,8 +1,7 @@
-import 'package:falletter_mobile_v2/core/constants/color.dart';
+import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
 import 'package:falletter_mobile_v2/core/theme/app_theme_color.dart';
-import 'package:falletter_mobile_v2/presentation/main/view/main_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_symbols_icons/symbols.dart';
@@ -26,7 +25,7 @@ class LetterModal extends ConsumerWidget {
 
     final closeButtonSize = MediaQuery.of(context).size.width * 0.13;
     const height = SizedBox(height: 12);
-    const divider = Divider(color: FalletterColor.gray100, height: 1);
+    final divider = Divider(color: context.middleColor, height: 1);
 
     return Dialog(
       backgroundColor: Colors.transparent,
@@ -44,7 +43,7 @@ class LetterModal extends ConsumerWidget {
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
-                  color: FalletterColor.white,
+                  color: context.cardBg,
                 ),
                 padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                 child: Column(
@@ -55,20 +54,18 @@ class LetterModal extends ConsumerWidget {
                       child: Text(
                         dear,
                         style: FalletterTextStyle.body3.copyWith(
-                          color: FalletterColor.gray800,
+                          color: context.middleColor,
                         ),
                       ),
                     ),
                     height,
                     divider,
                     height,
-                    Container(
-                      child: Center(
-                        child: Text(
-                          content,
-                          style: FalletterTextStyle.body3.copyWith(
-                            color: FalletterColor.middleBlack,
-                          ),
+                    Center(
+                      child: Text(
+                        content,
+                        style: FalletterTextStyle.body3.copyWith(
+                          color: context.textColor,
                         ),
                       ),
                     ),
@@ -79,7 +76,7 @@ class LetterModal extends ConsumerWidget {
                       child: Text(
                         bottom,
                         style: FalletterTextStyle.body3.copyWith(
-                          color: FalletterColor.gray800,
+                          color: context.middleColor,
                         ),
                       ),
                     ),
@@ -99,11 +96,11 @@ class LetterModal extends ConsumerWidget {
                 height: closeButtonSize,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: FalletterColor.gray900,
+                  color: context.bgColor,
                 ),
-                child: const Icon(
+                child: Icon(
                   Symbols.close,
-                  color: FalletterColor.gray100,
+                  color: context.textColor,
                   size: 30,
                 ),
               ),

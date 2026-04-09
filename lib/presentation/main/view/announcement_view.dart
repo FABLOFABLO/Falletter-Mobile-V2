@@ -1,5 +1,4 @@
 import 'package:falletter_mobile_v2/core/components/button/content_card_button.dart';
-import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/providers/announcement_provider.dart';
 import 'package:falletter_mobile_v2/core/utils/time_utils.dart';
@@ -25,9 +24,7 @@ class _AnnouncementViewState extends ConsumerState<AnnouncementView> {
 
   @override
   Widget build(BuildContext context) {
-    final metaTextStyle = FalletterTextStyle.body4.copyWith(
-      color: FalletterColor.gray500,
-    );
+    final metaTextStyle = FalletterTextStyle.body4;
     final notices = ref.watch(announcementProvider);
     return Scaffold(
       body: ListView.builder(

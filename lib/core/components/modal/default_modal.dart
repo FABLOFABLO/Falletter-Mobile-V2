@@ -26,7 +26,7 @@ class DefaultModal extends StatelessWidget {
     return Dialog(
       backgroundColor: FalletterColor.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      insetPadding: EdgeInsets.symmetric(horizontal: 20),
+      insetPadding: const EdgeInsets.symmetric(horizontal: 20),
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -36,13 +36,14 @@ class DefaultModal extends StatelessWidget {
             Text(
               title,
               style: FalletterTextStyle.subTitle2.copyWith(
-                color: FalletterColor.gray900,
+                color: FalletterColor.black,
               ),
             ),
+            const SizedBox(height: 6),
             Text(
               description,
               style: FalletterTextStyle.body3.copyWith(
-                color: FalletterColor.gray800,
+                color: FalletterColor.gray700,
               ),
             ),
             const SizedBox(height: 20),
@@ -54,16 +55,18 @@ class DefaultModal extends StatelessWidget {
                     gradient: const LinearGradient(
                       colors: [FalletterColor.gray200, FalletterColor.gray200],
                     ),
+                    textColor: FalletterColor.gray700,
                     child: Text(leftButton),
                   ),
                 ),
-                const SizedBox(width: 20),
+                const SizedBox(width: 12),
                 Expanded(
                   child: CustomElevatedButton(
                     onPressed: onRightPressed,
                     gradient: const LinearGradient(
                       colors: [FalletterColor.error, FalletterColor.error],
                     ),
+                    textColor: FalletterColor.white,
                     child: Text(rightButton),
                   ),
                 ),

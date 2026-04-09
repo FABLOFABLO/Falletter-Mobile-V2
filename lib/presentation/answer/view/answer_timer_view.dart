@@ -1,14 +1,12 @@
 import 'dart:async';
 import 'package:falletter_mobile_v2/core/components/progress/circle_progress.dart';
-import 'package:falletter_mobile_v2/core/constants/color.dart';
+import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
-import 'package:falletter_mobile_v2/core/providers/answer_provider.dart';
 import 'package:falletter_mobile_v2/core/providers/answer_timer_provider.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
 import 'package:falletter_mobile_v2/core/theme/app_theme_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 class AnswerTimerView extends ConsumerStatefulWidget {
 
@@ -52,9 +50,7 @@ class _AnswerTimerViewState extends ConsumerState<AnswerTimerView> {
           Padding(
             padding: const EdgeInsets.only(bottom: 20),
             child: Text('다음 질문까지 남은 시간',
-                style: FalletterTextStyle.button.copyWith(
-                  color: FalletterColor.gray200,
-                )
+                style: FalletterTextStyle.button
             ),
           ),
           Stack(
@@ -64,7 +60,7 @@ class _AnswerTimerViewState extends ConsumerState<AnswerTimerView> {
                 width: 200,
                 height: 200,
                 decoration: BoxDecoration(
-                  color: FalletterColor.middleBlack,
+                  color: context.cardBg,
                   shape: BoxShape.circle,
                 ),
               ),
@@ -79,16 +75,14 @@ class _AnswerTimerViewState extends ConsumerState<AnswerTimerView> {
               Container(
                 width: 190,
                 height: 190,
-                decoration: const BoxDecoration(
-                  color: FalletterColor.middleBlack,
+                decoration: BoxDecoration(
+                  color: context.cardBg,
                   shape: BoxShape.circle,
                 ),
                 alignment: Alignment.center,
                 child: Text(
                   '$hours:$minutes',
-                  style: FalletterTextStyle.title1.copyWith(
-                    color: FalletterColor.gray50,
-                  ),
+                  style: FalletterTextStyle.title1,
                 ),
               ),
             ],

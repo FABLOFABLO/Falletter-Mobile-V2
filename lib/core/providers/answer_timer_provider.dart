@@ -3,7 +3,6 @@ import 'package:falletter_mobile_v2/core/network/dio.dart';
 import 'package:falletter_mobile_v2/core/providers/timer_api_service.dart';
 import 'package:falletter_mobile_v2/models/timer_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'answer_provider.dart';
 
 final answerTimerApiServiceProvider = Provider<TimerApiService>((ref) {
   final dio = ref.read(dioClientProvider).dio;

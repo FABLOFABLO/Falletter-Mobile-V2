@@ -4,6 +4,7 @@ import 'package:falletter_mobile_v2/core/components/button/send_button.dart';
 import 'package:falletter_mobile_v2/core/components/modal/default_modal.dart';
 import 'package:falletter_mobile_v2/core/components/text_form_field/text_form_field.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
+import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/router/route_paths.dart';
 import 'package:falletter_mobile_v2/core/utils/time_utils.dart';
@@ -25,8 +26,8 @@ class PostDetailView extends ConsumerStatefulWidget {
 
 class _PostDetailViewState extends ConsumerState<PostDetailView> {
   final TextEditingController _commentController = TextEditingController();
-  final baseInfoStyle = FalletterTextStyle.body3.copyWith(color: FalletterColor.gray200);
-  final commentInfoStyle = FalletterTextStyle.body4.copyWith(color: FalletterColor.gray200);
+  final baseInfoStyle = FalletterTextStyle.body3;
+  final commentInfoStyle = FalletterTextStyle.body4;
 
   @override
   void initState() {
@@ -56,11 +57,9 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
 
     if (post == null) {
       return Container(
-        color: FalletterColor.black,
-        child: Center(
-            child: CircularProgressIndicator(
-              color: FalletterColor.middleBlack,
-            )
+        color: context.bgColor,
+        child: const Center(
+            child: CircularProgressIndicator()
         ),
       );
     }
@@ -94,84 +93,81 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
                             ),
                           ],
                         ),
-                        IconButton(
-                          icon: Icon(
-                            Symbols.more_horiz,
-                            color: FalletterColor.white,
+                        if (myInfo.value?.id != null && myInfo.value?.id == post.authorId)
+                          IconButton(
+                            icon: const Icon(
+                              Symbols.more_horiz,
+                            ),
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) => Dialog(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  backgroundColor: context.cardBg,
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      ListTile(
+                                        title: Center(
+                                          child: Padding(
+                                            padding: EdgeInsets.only(top: 10),
+                                            child: Text(
+                                              '삭제',
+                                              style: FalletterTextStyle.button.copyWith(
+                                                    color: FalletterColor.error,
+                                                  ),
+                                            ),
+                                          ),
+                                        ),
+                                        onTap: () {
+                                          Navigator.pop(context);
+                                          showDialog(
+                                            context: context,
+                                            builder: (context) => Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: 30,
+                                              ),
+                                              child: DefaultModal(
+                                                title: '게시물 삭제',
+                                                description: '게시물이 영구 삭제됩니다.\n정말 삭제하시겠어요?',
+                                                leftButton: '취소',
+                                                rightButton: '삭제',
+                                                onLeftPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                onRightPressed: () {
+                                                  ref.read(postsDetailProvider.notifier).deletePost(widget.postId);
+                                                  context.go(RoutePaths.main);
+                                                },
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                      Divider(color: context.middleColor),
+                                      ListTile(
+                                        title: Center(
+                                          child: Padding(
+                                            padding: EdgeInsets.only(bottom: 10),
+                                            child: Text(
+                                              '수정',
+                                              style: FalletterTextStyle.button,
+                                            ),
+                                          ),
+                                        ),
+                                        onTap: () {
+                                          Navigator.pop(context);
+                                          context.push('${RoutePaths.main}/edit', extra: post);
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
                           ),
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (context) => Dialog(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                backgroundColor: FalletterColor.middleBlack,
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    ListTile(
-                                      title: Center(
-                                        child: Padding(
-                                          padding: EdgeInsets.only(top: 10),
-                                          child: Text(
-                                            '삭제',
-                                            style: FalletterTextStyle.button.copyWith(
-                                                  color: FalletterColor.error,
-                                                ),
-                                          ),
-                                        ),
-                                      ),
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                        showDialog(
-                                          context: context,
-                                          builder: (context) => Padding(
-                                            padding: EdgeInsets.symmetric(
-                                              horizontal: 30,
-                                            ),
-                                            child: DefaultModal(
-                                              title: '게시물 삭제',
-                                              description: '게시물이 영구 삭제됩니다.\n정말 삭제하시겠어요?',
-                                              leftButton: '취소',
-                                              rightButton: '삭제',
-                                              onLeftPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                              onRightPressed: () {
-                                                ref.read(postsDetailProvider.notifier).deletePost(widget.postId);
-                                                context.go('${RoutePaths.main}');
-                                              },
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                    Divider(color: FalletterColor.gray900),
-                                    ListTile(
-                                      title: Center(
-                                        child: Padding(
-                                          padding: EdgeInsets.only(bottom: 10),
-                                          child: Text(
-                                            '수정',
-                                            style: FalletterTextStyle.button
-                                                .copyWith(
-                                                  color: FalletterColor.gray50,
-                                                ),
-                                          ),
-                                        ),
-                                      ),
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                        context.push('${RoutePaths.main}/edit', extra: post);
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        ),
                       ],
                     ),
                     Text(post.title, style: FalletterTextStyle.subTitle2),
@@ -179,7 +175,7 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
                       padding: EdgeInsets.symmetric(vertical: 15),
                       child: Text(
                         post.content,
-                        style: baseInfoStyle.copyWith(color: FalletterColor.gray400)
+                        style: baseInfoStyle
                       ),
                     ),
                   ],
@@ -220,7 +216,7 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
                                 SizedBox(height: 10),
                                 Text(
                                   comment.comment,
-                                  style: baseInfoStyle.copyWith(color: FalletterColor.gray50)
+                                  style: baseInfoStyle
                                 ),
                               ],
                             ),
@@ -233,9 +229,8 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
                                     post.id
                                 );
                               },
-                              icon: Icon(
+                              icon: const Icon(
                                 Symbols.delete,
-                                color: FalletterColor.gray400,
                               ),
                             ),
                         ],

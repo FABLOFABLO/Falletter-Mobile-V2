@@ -1,5 +1,6 @@
 import 'package:falletter_mobile_v2/core/components/text_form_field/text_form_field.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
+import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/providers/student_provider.dart';
 import 'package:falletter_mobile_v2/presentation/letter/provider/letter_provider.dart';
@@ -60,7 +61,7 @@ class TypeAhead extends ConsumerWidget {
       },
       decorationBuilder: (context, child) {
         return Container(
-          decoration: BoxDecoration(color: FalletterColor.middleBlack),
+          decoration: BoxDecoration(color: context.cardBg),
           child: child,
         );
       },
@@ -72,9 +73,9 @@ class TypeAhead extends ConsumerWidget {
           return ListTile(
             visualDensity: VisualDensity.compact,
             dense: true,
-            title: RichText(
-              text: TextSpan(
-                style: baseStyle.copyWith(color: FalletterColor.gray400),
+            title: Text.rich(
+              TextSpan(
+                style: baseStyle.copyWith(color: context.middleColor),
                 children: [
                   TextSpan(text: value.substring(0, stressText)),
                   TextSpan(
@@ -82,7 +83,7 @@ class TypeAhead extends ConsumerWidget {
                       stressText,
                       stressText + inputText.length,
                     ),
-                    style: baseStyle.copyWith(color: FalletterColor.white),
+                    style: baseStyle.copyWith(color: context.textColor),
                   ),
                   TextSpan(
                     text: value.substring(stressText + inputText.length),

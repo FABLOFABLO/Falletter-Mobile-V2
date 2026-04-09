@@ -2,6 +2,7 @@ import 'package:falletter_mobile_v2/core/components/app_bar/custom_app_bar.dart'
 import 'package:falletter_mobile_v2/core/components/button/elevated_button.dart';
 import 'package:falletter_mobile_v2/core/components/text_form_field/text_form_field.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
+import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/presentation/letter/provider/letter_provider.dart';
 import 'package:falletter_mobile_v2/presentation/letter/widget/send_letter_modal.dart';
@@ -44,9 +45,7 @@ class _FalletterLetterViewState extends ConsumerState<FalletterLetterView> {
   Widget build(BuildContext context) {
     final count = ref.watch(letterProvider).count;
     final isNextStep = ref.watch(letterProvider).valid;
-    final style = FalletterTextStyle.subTitle1.copyWith(
-      color: count > 0 ? FalletterColor.white : FalletterColor.gray400,
-    );
+    final style = FalletterTextStyle.subTitle1;
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
@@ -85,19 +84,17 @@ class _FalletterLetterViewState extends ConsumerState<FalletterLetterView> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text('레터를 작성해주세요', style: style),
-                            RichText(
+                            Text.rich(
                               textAlign: TextAlign.end,
-                              text: TextSpan(
+                              TextSpan(
                                 children: [
                                   TextSpan(
                                     text: '${_contentController.text.length}',
-                                    style: FalletterTextStyle.body2,
+                                    style: FalletterTextStyle.body2.copyWith(color: context.textColor),
                                   ),
                                   TextSpan(
                                     text: '/200',
-                                    style: FalletterTextStyle.body2.copyWith(
-                                      color: FalletterColor.gray400,
-                                    ),
+                                    style: FalletterTextStyle.body2.copyWith(color: FalletterColor.gray500),
                                   ),
                                 ],
                               ),

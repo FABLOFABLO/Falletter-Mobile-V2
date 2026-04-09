@@ -99,8 +99,7 @@ class _SigninViewState extends ConsumerState<SigninView> {
                   ),
                 ),
                 smallSpacing,
-                Text(errorMessage, style: FalletterTextStyle.body2
-                    .copyWith(color: FalletterColor.error)
+                Text(errorMessage, style: FalletterTextStyle.body2.copyWith(color: FalletterColor.error)
                 ),
                 const Spacer(),
                 Row(
@@ -108,7 +107,7 @@ class _SigninViewState extends ConsumerState<SigninView> {
                   children: [
                     Text(
                       '아직 계정이 없으신가요?',
-                      style: baseStyle.copyWith(color: FalletterColor.gray400),
+                      style: baseStyle,
                     ),
                     smallSpacing,
                     GestureDetector(
