@@ -59,6 +59,8 @@ class _FalletterMypageViewState extends ConsumerState<FalletterMypageView> {
                   child: const CircularProgressIndicator(
                     color: Colors.transparent,
                   ),
+                ),
+              ),
               data: (UserInfoModel data) {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
