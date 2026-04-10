@@ -59,7 +59,13 @@ class QuizNotifier extends Notifier<QuizItem?> {
   Future<void> init() async {
     questions = await ref.read(questionListProvider.future);
     students = await ref.read(allNamesProvider.future);
-    user = await ref.read(userInfoProvider.future);
+    await ref.read(userInfoProvider.notifier).getUserInfo();
+    final userAsync = ref.read(userInfoProvider);
+    user = userAsync.when(
+      data: (data) => data,
+      loading: () => throw Exception('로딩 중'),
+      error: (e, st) => throw e,
+    );
     questions.shuffle();
     students.shuffle();
     _setQuiz(0);

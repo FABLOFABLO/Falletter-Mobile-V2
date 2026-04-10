@@ -1,20 +1,34 @@
 import 'package:falletter_mobile_v2/core/components/app_bar/custom_app_bar.dart';
 import 'package:falletter_mobile_v2/core/components/button/content_card_button.dart';
 import 'package:falletter_mobile_v2/core/components/modal/letter_modal.dart';
+import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/utils/date_time.dart';
 import 'package:falletter_mobile_v2/presentation/mypage/provider/get_letter_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class GetLetterView extends ConsumerWidget {
+class GetLetterView extends ConsumerStatefulWidget {
   const GetLetterView({super.key});
 
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() => _GetLetterViewState();
+}
+
+class _GetLetterViewState extends ConsumerState<GetLetterView> {
   static final double spacing = 20;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final letter = ref.watch(getLetterProvider);
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      ref.read(getLetterProvider.notifier).getLetterList();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final letters = ref.watch(getLetterProvider);
     return Scaffold(
       appBar: CustomAppBar(icon: true),
       body: SafeArea(
@@ -30,10 +44,9 @@ class GetLetterView extends ConsumerWidget {
             Expanded(
               child: ListView.builder(
                 padding: EdgeInsets.zero,
-                itemCount: letter.length,
+                itemCount: letters.length,
                 itemBuilder: (BuildContext context, int idx) {
-                  final getLetters = letter[idx];
-                  final student = getLetters.get;
+                  final letter = letters[idx];
                   return ContentCardButton(
                     width: double.infinity,
                     height: null,
@@ -42,8 +55,8 @@ class GetLetterView extends ConsumerWidget {
                         context: context,
                         builder: (_) {
                           return LetterModal(
-                            dear: '${student?.schoolNumber}${student?.name}에게',
-                            content: getLetters.content,
+                            dear: 'dear',
+                            content: letter.content,
                             bottom: '누군가 보냄',
                           );
                         },
@@ -57,18 +70,20 @@ class GetLetterView extends ConsumerWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            getLetterFormatDateTime(getLetters.createdAt),
-                            style: FalletterTextStyle.body4,
-                          ),
                           const SizedBox(height: 4),
                           Row(
                             children: [
                               Text(
-                                '${student?.schoolNumber}${student?.name}에게',
+                                getLetterFormatDateTime(letter.createdAt),
                                 style: FalletterTextStyle.subTitle2,
                               ),
                             ],
+                          ),
+                          Text(
+                            letter.content,
+                            style: FalletterTextStyle.body4.copyWith(
+                              color: FalletterColor.gray500,
+                            ),
                           ),
                         ],
                       ),

@@ -3,7 +3,9 @@ import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/providers/student_provider.dart';
+import 'package:falletter_mobile_v2/models/student_model.dart';
 import 'package:falletter_mobile_v2/presentation/letter/provider/letter_provider.dart';
+import 'package:falletter_mobile_v2/presentation/mypage/provider/user_info_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
@@ -11,7 +13,7 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 class TypeAhead extends ConsumerWidget {
   final TextEditingController controller;
   final void Function() onChanged;
-  final Function(String) onSelected;
+  final Function(StudentModel) onSelected;
 
   const TypeAhead({
     super.key,
@@ -22,15 +24,17 @@ class TypeAhead extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final students = ref.watch(studentProvider);
+    final userAsync = ref.watch(userInfoProvider);
     final count = ref.watch(letterProvider).count;
     final scrollController = ScrollController();
-    return TypeAheadField<String>(
+    return TypeAheadField<StudentModel>(
       controller: controller,
       constraints: BoxConstraints(maxHeight: 140),
       builder: (context, controller, focusNode) {
         return CustomTextFormField(
           onChanged: (value) {
-           onChanged;
+           onChanged();
           },
           maxLength: 10,
           maxLines: 1,
@@ -66,8 +70,9 @@ class TypeAhead extends ConsumerWidget {
         );
       },
       itemBuilder: (BuildContext context, value) {
+        final text = '${value.schoolNumber} ${value.name}';
         final inputText = controller.text;
-        final stressText = value.indexOf(inputText);
+        final stressText = text.indexOf(inputText);
         final baseStyle = FalletterTextStyle.body3;
         if (stressText >= 0) {
           return ListTile(
@@ -77,16 +82,16 @@ class TypeAhead extends ConsumerWidget {
               TextSpan(
                 style: baseStyle.copyWith(color: context.middleColor),
                 children: [
-                  TextSpan(text: value.substring(0, stressText)),
+                  TextSpan(text: text.substring(0, stressText)),
                   TextSpan(
-                    text: value.substring(
+                    text: text.substring(
                       stressText,
                       stressText + inputText.length,
                     ),
                     style: baseStyle.copyWith(color: context.textColor),
                   ),
                   TextSpan(
-                    text: value.substring(stressText + inputText.length),
+                    text: text.substring(stressText + inputText.length),
                   ),
                 ],
               ),
@@ -97,22 +102,23 @@ class TypeAhead extends ConsumerWidget {
       },
       hideOnEmpty: true,
       onSelected: (value) {
-        controller.text = value;
+        controller.text = '${value.schoolNumber} ${value.name}';
         onSelected(value);
       },
-      suggestionsCallback: (student) async {
-        if (student.isEmpty) {
-          return <String>[];
+      suggestionsCallback: (input) async {
+        if (input.isEmpty) {
+          return <StudentModel>[];
         }
-        final students = ref.read(studentProvider);
-        return students
-            .where(
-              (students) =>
-                  students.name.contains(student) ||
-                  students.schoolNumber.contains(student),
-            )
-            .map((e) => '${e.schoolNumber} ${e.name}')
-            .toList();
+        return userAsync.when(
+          data: (user) {
+            return students.where((s) =>
+            s.id != user.id &&
+                (s.name.contains(input) || s.schoolNumber.contains(input)),
+            ).toList();
+          },
+          loading: () => [],
+          error: (_, __) => [],
+        );
       },
     );
   }

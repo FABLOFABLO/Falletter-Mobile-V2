@@ -1,19 +1,34 @@
+import 'dart:developer' as develop;
+import 'package:falletter_mobile_v2/core/network/dio.dart';
+import 'package:falletter_mobile_v2/core/providers/user_api_service.dart';
 import 'package:falletter_mobile_v2/models/student_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class StudentNotifier extends StateNotifier<List<StudentModel>> {
-  StudentNotifier() : super(dummy);
-}
+final userApiService = Provider<UserApiService>((ref) {
+  final dio = ref.watch(dioClientProvider).dio;
+  return UserApiService(dio);
+});
 
-final studentProvider =
-    StateNotifierProvider<StudentNotifier, List<StudentModel>>(
-      (ref) => StudentNotifier(),
-    );
-/// 연동할때 FutureProvider로 바꾸기
-final dummy = [
-  StudentModel(id: 1, schoolNumber: '1216', name: '최승우'),
-  StudentModel(id: 2, schoolNumber: '1411', name: '이승현'),
-  StudentModel(id: 3, schoolNumber: '3310', name: '유지우'),
-  StudentModel(id: 4, schoolNumber: '1212', name: '이지아'),
-];
+final studentProvider = StateNotifierProvider<StudentNotifier, List<StudentModel>>((ref) {
+  final apiService = ref.watch(userApiService);
+  return StudentNotifier(apiService);
+});
+
+class StudentNotifier extends StateNotifier<List<StudentModel>> {
+  final UserApiService apiService;
+
+  StudentNotifier(this.apiService) : super([]) {
+    loadStudents();
+  }
+
+  Future<void> loadStudents() async {
+    try {
+      final students = await apiService.getAllStudent();
+      state = students;
+    } catch(e) {
+      develop.log('error: $e');
+      throw Exception('학생 목록 조회 실패');
+    }
+  }
+}
 

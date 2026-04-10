@@ -1,5 +1,3 @@
-import 'package:falletter_mobile_v2/models/student_model.dart';
-
 class GetLetterModel {
   final int id;
   final String content;
@@ -8,7 +6,6 @@ class GetLetterModel {
   final int receptionId;
   final int senderId;
   final DateTime createdAt;
-  final StudentModel? get;
 
   GetLetterModel({
     required this.id,
@@ -18,18 +15,17 @@ class GetLetterModel {
     required this.receptionId,
     required this.senderId,
     required this.createdAt,
-    this.get,
   });
 
   factory GetLetterModel.fromJson(Map<String, dynamic> json) {
     return GetLetterModel(
       id: json['id'],
       content: json['content'],
-      isDelivered: json['is_delivered'],
-      isPassed: json['is_passed'],
-      receptionId: json['reception_id'],
-      senderId: json['sender_id'],
-      createdAt: DateTime.parse(json['create_at']),
+      isDelivered: json['isDelivered'],
+      isPassed: json['isPassed'],
+      receptionId: json['receptionId'],
+      senderId: json['senderId'],
+      createdAt: DateTime.parse(json['createdAt']),
     );
   }
 
@@ -37,11 +33,11 @@ class GetLetterModel {
     return {
       'id': id,
       'content': content,
-      'is_delivered': isDelivered,
-      'is_passed': isPassed,
-      'reception_id': receptionId,
-      'sender_id': senderId,
-      'created_at': createdAt,
+      'isDelivered': isDelivered,
+      'isPassed': isPassed,
+      'receptionId': receptionId,
+      'senderId': senderId,
+      'createdAt': createdAt,
     };
   }
 }

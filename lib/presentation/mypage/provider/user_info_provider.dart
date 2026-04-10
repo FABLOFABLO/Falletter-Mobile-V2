@@ -8,7 +8,25 @@ final userInfoApiService = Provider<UserApiService>((ref) {
   return UserApiService(dio);
 });
 
-final userInfoProvider = FutureProvider<UserInfoModel>((ref) async {
-  final apiService = ref.read(userInfoApiService);
-  return await apiService.getUserInfo();
+final userInfoProvider = StateNotifierProvider<UserInfoNotifier, AsyncValue<UserInfoModel>>((ref) {
+  final apiService = ref.watch(userInfoApiService);
+  return UserInfoNotifier(apiService);
 });
+
+class UserInfoNotifier extends StateNotifier<AsyncValue<UserInfoModel>> {
+  final UserApiService apiService;
+
+  UserInfoNotifier(this.apiService) : super(AsyncLoading()) {
+    getUserInfo();
+  }
+
+  Future<void> getUserInfo() async {
+    try {
+      final info = await apiService.getUserInfo();
+      state = AsyncData(info);
+    } catch(e, st) {
+      state = AsyncError(e, st);
+      throw Exception('내 정보 조회 실패');
+    }
+  }
+}

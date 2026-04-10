@@ -57,7 +57,7 @@ class NotificationSettingView extends ConsumerWidget {
               isEnabled: setting.commentEnabled,
               onTap: (value) => notifier.toggle(NotificationSettingType.comment, value)
             ),
-            divider(),
+            divider(context),
             DetailNotification(
               title: '브릭 활성화 알림 받기',
               isEnabled: setting.brickActivationEnabled,
@@ -69,7 +69,7 @@ class NotificationSettingView extends ConsumerWidget {
               isEnabled: setting.brickEnabled,
               onTap: (value) => notifier.toggle(NotificationSettingType.brick, value),
             ),
-            divider(),
+            divider(context),
             DetailNotification(
               title: '레터 알림 받기',
               isEnabled: setting.letterEnabled,
@@ -81,7 +81,7 @@ class NotificationSettingView extends ConsumerWidget {
               isEnabled: setting.letterSentEnabled,
               onTap: (value) => notifier.toggle(NotificationSettingType.letterSent, value),
             ),
-            divider(),
+            divider(context),
             DetailNotification(
               title: '관리자 공지 알림 받기',
               isEnabled: setting.adminNoticeEnabled,
@@ -105,7 +105,7 @@ class NotificationSettingView extends ConsumerWidget {
     );
   }
 
-  Widget divider() {
+  Widget divider(BuildContext context) {
     return Column(
       children: [
         SizedBox(height: NotificationSettingView.spacing),

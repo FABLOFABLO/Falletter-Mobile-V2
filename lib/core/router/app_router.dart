@@ -16,9 +16,6 @@ import 'package:falletter_mobile_v2/presentation/main/view/announcement_detail_v
 import 'package:falletter_mobile_v2/presentation/mypage/view/notification_setting_view.dart';
 import 'package:falletter_mobile_v2/presentation/mypage/view/send_letter_view.dart';
 import 'package:falletter_mobile_v2/presentation/mypage/view/theme_select_view.dart';
-import 'package:falletter_mobile_v2/presentation/mypage/view/send_letter_view.dart';
-import 'package:falletter_mobile_v2/presentation/mypage/view/get_letter_view.dart';
-import 'package:falletter_mobile_v2/presentation/mypage/view/brick_history_view.dart';
 import 'package:falletter_mobile_v2/presentation/notice/view/notice_view.dart';
 import 'package:falletter_mobile_v2/presentation/notice/view/notice_detail_view.dart';
 import 'package:falletter_mobile_v2/presentation/roulette/components/roulette.dart';
@@ -44,7 +41,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
     navigatorKey: _rootNavigatorKey,
     initialLocation: '/splash',
     routes: [
-      GoRoute(path: '/splash', builder: (_, __) => const SplashView()),
+      GoRoute(
+        path: '/splash',
+        builder: (_, __) => const SplashView(),
+      ),
       GoRoute(
         path: '/signup/gender',
         builder: (_, __) => const SetGenderView(),
@@ -59,29 +59,40 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(
             path: 'schoolNumber',
-            builder: (_, __) => const SchoolNumberView(),
+            builder: (_, __) => const SchoolNumberView()
           ),
-          GoRoute(path: 'email', builder: (_, __) => const EmailView()),
           GoRoute(
-            path: 'verifyCode',
-            builder: (_, __) => const VerifyCodeView(),
+              path: 'email',
+              builder: (_, __) => const EmailView()
           ),
-          GoRoute(path: 'password', builder: (_, __) => const PasswordView()),
+          GoRoute(
+              path: 'verifyCode',
+              builder: (_, __) => const VerifyCodeView()
+          ),
+          GoRoute(
+              path: 'password',
+              builder: (_, __) => const PasswordView()
+          ),
         ],
       ),
-      GoRoute(path: '/signin', builder: (_, __) => const SigninView()),
-      GoRoute(path: '/roulette', builder: (_, __) => const RouletteView()),
       GoRoute(
-        path: '/reward',
-        pageBuilder: (context, state) {
-          final reward = state.extra as Reward;
-          return CustomTransitionPage(
-            opaque: false,
-            child: RouletteRewardView(type: reward.type, amount: reward.amount),
-            transitionsBuilder: (context, anim1, anim2, child) =>
-                FadeTransition(opacity: anim1, child: child),
-          );
-        },
+        path: '/signin',
+        builder: (_, __) => const SigninView(),
+      ),
+      GoRoute(
+        path: '/roulette',
+        builder: (_, __) => const RouletteView(),
+      ),
+      GoRoute(
+          path: '/reward',
+          pageBuilder: (context, state) {
+            final reward = state.extra as Reward;
+            return CustomTransitionPage(
+              opaque: false,
+              child: RouletteRewardView(type: reward.type, amount: reward.amount,),
+              transitionsBuilder: (context, anim1, anim2, child) => FadeTransition(opacity: anim1, child: child),
+            );
+          }
       ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
@@ -126,7 +137,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
                         title: post.title,
                         content: post.content,
                       );
-                    }
+                    },
                   ),
                 ],
               ),

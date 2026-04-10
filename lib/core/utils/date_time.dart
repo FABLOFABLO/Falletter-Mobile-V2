@@ -1,6 +1,11 @@
-String getLetterFormatDateTime(DateTime dateTime) {
+String sendLetterFormatDateTime(DateTime dateTime) {
   final now = DateTime.now();
+  final arrivedAt = dateTime.add(const Duration(hours: 12));
   final diff = now.difference(dateTime);
+
+  if (now.isBefore(arrivedAt)) {
+    return '전송 중';
+  }
 
   if (diff.inDays >= 31) {
     return '${(diff.inDays / 30).floor()}달 전에 도착함';
@@ -17,6 +22,6 @@ String getLetterFormatDateTime(DateTime dateTime) {
   }
 }
 
-String sendLetterFormatTime(DateTime dateTime) {
+String getLetterFormatDateTime(DateTime dateTime) {
   return '${dateTime.month}월 ${dateTime.day}일 도착';
 }
