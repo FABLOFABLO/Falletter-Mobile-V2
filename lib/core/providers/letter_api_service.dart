@@ -1,3 +1,4 @@
+import 'dart:developer' as develop;
 import 'package:dio/dio.dart';
 import 'package:falletter_mobile_v2/core/network/api_endpoints.dart';
 import 'package:falletter_mobile_v2/models/get_letter_model.dart';
@@ -19,7 +20,8 @@ class LetterApiService {
       if (response.statusCode == 201) return;
       throw Exception('편지 발송 실패');
     } catch(e) {
-      throw Exception('편지 발송 실패: $e');
+      develop.log('error: $e');
+      throw Exception('편지 발송 실패');
     }
   }
 
@@ -33,7 +35,8 @@ class LetterApiService {
       }
       throw Exception('보낸 편지 목록 조회 실패');
     } catch(e) {
-      throw Exception('보낸 편지 목록 조회 실패: $e');
+      develop.log('error: $e');
+      throw Exception('보낸 편지 목록 조회 실패');
     }
   }
 
@@ -46,7 +49,8 @@ class LetterApiService {
       }
       throw Exception('보낸 편지 상세 조회 실패');
     } catch(e) {
-      throw Exception('보낸 편지 상세 조회 실패: $e');
+      develop.log('error: $e');
+      throw Exception('보낸 편지 상세 조회 실패');
     }
   }
 
@@ -60,7 +64,8 @@ class LetterApiService {
       }
       throw Exception('받은 레터 목록 조회 실패');
     } catch(e) {
-      throw Exception('받은 레터 목록 조회 실패: $e');
+      develop.log('error: $e');
+      throw Exception('받은 레터 목록 조회 실패');
     }
   }
 
@@ -73,7 +78,8 @@ class LetterApiService {
       }
       throw Exception('받은 레터 상세 조회 실패');
     } catch(e) {
-      throw Exception('받은 레터 상세 조회 실패: $e');
+      develop.log('error: $e');
+      throw Exception('받은 레터 상세 조회 실패');
     }
   }
 }

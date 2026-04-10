@@ -1,3 +1,4 @@
+import 'dart:developer' as develop;
 import 'package:falletter_mobile_v2/core/network/dio.dart';
 import 'package:falletter_mobile_v2/core/providers/user_api_service.dart';
 import 'package:falletter_mobile_v2/models/student_model.dart';
@@ -25,7 +26,8 @@ class StudentNotifier extends StateNotifier<List<StudentModel>> {
       final students = await apiService.getAllStudent();
       state = students;
     } catch(e) {
-      throw Exception('학생 목록 조회에 실패했습니다. $e');
+      develop.log('error: $e');
+      throw Exception('학생 목록 조회 실패');
     }
   }
 }

@@ -1,3 +1,4 @@
+import 'dart:developer' as develop;
 import 'package:falletter_mobile_v2/core/network/dio.dart';
 import 'package:falletter_mobile_v2/core/providers/letter_api_service.dart';
 import 'package:falletter_mobile_v2/models/letter_model.dart';
@@ -25,7 +26,8 @@ class SendLetterNotifier extends StateNotifier<List<SendLetterModel>> {
       final letters = await apiService.getSendLetterAll();
       state = letters;
     } catch(e) {
-      throw Exception('보낸 레터 목록 조회에 실패했습니다. $e');
+      develop.log('error: $e');
+      throw Exception('보낸 레터 목록 조회에 실패했습니다.');
     }
   }
 
@@ -33,7 +35,8 @@ class SendLetterNotifier extends StateNotifier<List<SendLetterModel>> {
     try {
       await apiService.postLetter(request);
     } catch(e) {
-      throw Exception('편지 발송에 실패했습니다. $e');
+      develop.log('error: $e');
+      throw Exception('편지 발송에 실패했습니다.');
     }
   }
 }
