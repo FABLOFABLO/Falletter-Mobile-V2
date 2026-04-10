@@ -1,7 +1,6 @@
 import 'package:falletter_mobile_v2/core/components/modal/default_modal.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
-import 'package:falletter_mobile_v2/core/network/token_storage.dart';
 import 'package:falletter_mobile_v2/core/providers/auth_status_provider.dart';
 import 'package:falletter_mobile_v2/core/providers/item_count_provider.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
@@ -14,7 +13,6 @@ import 'package:falletter_mobile_v2/presentation/mypage/widget/menu_button.dart'
 import 'package:falletter_mobile_v2/presentation/mypage/widget/my_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
 
 class FalletterMypageView extends ConsumerStatefulWidget {

@@ -1,5 +1,3 @@
-import 'package:falletter_mobile_v2/models/student_model.dart';
-
 class GetLetterModel {
   final int id;
   final String content;

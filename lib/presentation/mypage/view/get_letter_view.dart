@@ -47,7 +47,6 @@ class _GetLetterViewState extends ConsumerState<GetLetterView> {
                 itemCount: letters.length,
                 itemBuilder: (BuildContext context, int idx) {
                   final letter = letters[idx];
-                  final date = letter.createdAt;
                   return ContentCardButton(
                     width: double.infinity,
                     height: null,
