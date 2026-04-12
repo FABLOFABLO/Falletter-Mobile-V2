@@ -2,9 +2,11 @@ import 'dart:math';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
+import 'package:falletter_mobile_v2/core/providers/brick_count_provider.dart';
 import 'package:falletter_mobile_v2/core/providers/roulette_provider.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
 import 'package:falletter_mobile_v2/core/theme/app_theme_color.dart';
+import 'package:falletter_mobile_v2/presentation/letter/provider/letter_provider.dart';
 import 'package:falletter_mobile_v2/presentation/roulette/components/roulette_pointer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -97,10 +99,29 @@ class _RouletteState extends ConsumerState<Roulette> with SingleTickerProviderSt
     return _startAngle + (_targetAngle - _startAngle) * t;
   }
 
-  void applyReward() {
+  void applyReward() async {
     final reward = rewards[selectedIndex];
-    final manager = ref.read(rouletteManagerProvider.notifier);
-    manager.applyReward(reward.type, reward.amount);
+    final letterNotifier = ref.read(letterProvider.notifier);
+    final brickNotifier = ref.read(brickCountProvider.notifier);
+
+    switch (reward.type) {
+      case RewardType.brick:
+        await brickNotifier.updateBrickCount(reward.amount);
+        break;
+
+      case RewardType.letter:
+        await letterNotifier.updateLetterCount(reward.amount);
+        break;
+
+      case RewardType.rewardSet:
+        await brickNotifier.updateBrickCount(reward.amount);
+        await letterNotifier.updateLetterCount(reward.amount);
+        break;
+
+      case RewardType.miss:
+        break;
+    }
+
     context.push('/reward', extra: reward);
     context.pop();
   }
@@ -110,6 +131,7 @@ class _RouletteState extends ConsumerState<Roulette> with SingleTickerProviderSt
     final selectedTheme = ref.watch(themeProvider);
     final themeColors = appThemeColors[selectedTheme]!;
     final rouletteState = ref.watch(rouletteManagerProvider);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Stack(
       alignment: Alignment.center,
@@ -128,7 +150,11 @@ class _RouletteState extends ConsumerState<Roulette> with SingleTickerProviderSt
                   children: [
                     CustomPaint(
                       size: const Size(300, 300),
-                      painter: RoulettePaint(count: rewards.length),
+                      painter: isDark
+                          ? RoulettePaint(count: rewards.length)
+                          : RoulettePaint(count: rewards.length,
+                        borderGradient: themeColors.progressIndicator,
+                      ),
                     ),
                     ..._buildRewardWidgets(angle),
                   ],
@@ -142,7 +168,9 @@ class _RouletteState extends ConsumerState<Roulette> with SingleTickerProviderSt
           top: 0,
           child: CustomPaint(
             size: const Size(30, 40),
-            painter: PointerPaint(),
+            painter: isDark
+                ? PointerPaint(color: FalletterColor.gray200)
+                : PointerPaint(gradient: themeColors.primaryGradient),
           ),
         ),
 
@@ -200,7 +228,7 @@ class _RouletteState extends ConsumerState<Roulette> with SingleTickerProviderSt
                   padding: const EdgeInsets.only(top: 45),
                   child: Text(
                       'X${reward.amount}',
-                      style: FalletterTextStyle.subTitle2
+                      style: FalletterTextStyle.subTitle2.copyWith(color: FalletterColor.white)
                   ),
                 ),
               if (reward.type == RewardType.rewardSet)
@@ -209,7 +237,8 @@ class _RouletteState extends ConsumerState<Roulette> with SingleTickerProviderSt
                   child: Text(
                       '선물세트',
                       style: FalletterTextStyle.body2.copyWith(
-                          fontWeight: FontWeight.bold
+                          fontWeight: FontWeight.bold,
+                        color: FalletterColor.white
                       )
                   ),
                 ),
@@ -258,8 +287,14 @@ class _RouletteState extends ConsumerState<Roulette> with SingleTickerProviderSt
 
 class RoulettePaint extends CustomPainter {
   final int count;
+  final Color? borderColor;
+  final Gradient? borderGradient;
 
-  RoulettePaint({required this.count});
+  RoulettePaint({
+    required this.count,
+    this.borderColor,
+    this.borderGradient,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -287,6 +322,14 @@ class RoulettePaint extends CustomPainter {
       ..color = FalletterColor.gray200
       ..style = PaintingStyle.stroke
       ..strokeWidth = 6;
+
+    if (borderGradient != null) {
+      border.shader = borderGradient!.createShader(
+        Rect.fromCircle(center: center, radius: radius),
+      );
+    } else {
+      border.color = borderColor ?? FalletterColor.gray200;
+    }
 
     canvas.drawCircle(center, radius, border);
   }

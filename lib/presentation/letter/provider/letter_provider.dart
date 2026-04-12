@@ -1,44 +1,69 @@
-import 'package:falletter_mobile_v2/core/providers/letter_count_provider.dart';
+import 'dart:developer' as develop;
+
+import 'package:falletter_mobile_v2/core/network/dio.dart';
+import 'package:falletter_mobile_v2/core/providers/item_api_service.dart';
+import 'package:falletter_mobile_v2/models/letter_count_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class LetterState {
-  final int count;
+  final LetterCountModel count;
   final bool valid;
 
   LetterState({required this.count, required this.valid});
 
-  LetterState copyWith({int? count, bool? valid}) {
+  LetterState copyWith({LetterCountModel? count, bool? valid}) {
     return LetterState(count: count ?? this.count, valid: valid ?? this.valid);
   }
 }
 
-class LetterStateNotifier extends StateNotifier<LetterState> {
-  LetterStateNotifier(int letterCount)
-    : super(LetterState(count: letterCount, valid: false));
+final itemApiServiceProvider = Provider<ItemApiService>((ref) {
+  final dio = ref.watch(dioClientProvider).dio;
+  return ItemApiService(dio);
+});
 
-  void decrease() {
-    if (state.count > 0) {
-      state = state.copyWith(count: state.count - 1);
-    }
-  }
+class LetterStateNotifier extends StateNotifier<AsyncValue<LetterState>> {
+  final ItemApiService apiService;
+  LetterStateNotifier(this.apiService) : super(AsyncValue.loading());
 
   bool valid({
     required String selectName,
     required String inputStudent,
     required String content,
   }) {
+    final current = state.value;
+    if (current == null) return false;
+
     final nameValid = selectName.isNotEmpty && selectName == inputStudent;
     final contentValid = content.trim().isNotEmpty;
-    final countValid = state.count > 0;
+    final countValid = current.count.letterCount > 0;
+
     final valid = nameValid && contentValid && countValid;
-    state = state.copyWith(valid: valid);
+    state = AsyncValue.data(current.copyWith(valid: valid));
     return valid;
+  }
+
+  Future<void> loadLetterCount() async {
+    try {
+      final count = await apiService.getLetterCount();
+      state = AsyncValue.data(LetterState(count: count, valid: false));
+    } catch(e) {
+      develop.log('error: $e');
+    }
+  }
+
+  Future<void> updateLetterCount(int letterUpdate) async {
+    try {
+      await apiService.updateLetterCount(letterUpdate);
+      await loadLetterCount();
+    } catch(e) {
+      develop.log('error: $e');
+    }
   }
 }
 
-final letterProvider = StateNotifierProvider<LetterStateNotifier, LetterState>(
+final letterProvider = StateNotifierProvider<LetterStateNotifier, AsyncValue<LetterState>>(
   (ref) {
-   final letterCount =  ref.watch(letterCountProvider);
-   return LetterStateNotifier(letterCount.letterCount);
+   final apiService = ref.read(itemApiServiceProvider);
+   return LetterStateNotifier(apiService);
   },
 );

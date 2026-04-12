@@ -109,7 +109,7 @@ class NoticeApiService {
       'thirdHint': thirdHint,
     };
     try {
-      final response = await _dio.patch(ApiEndpoints.update, data: requestBody);
+      await _dio.patch(ApiEndpoints.update, data: requestBody);
     } catch (e) {
       if (e is DioException) {
         final statusCode = e.response?.statusCode;
@@ -148,7 +148,7 @@ class NoticeApiService {
     };
 
     try {
-      final response = await _dio.post(
+      await _dio.post(
         ApiEndpoints.brickSave,
         data: requestBody,
       );

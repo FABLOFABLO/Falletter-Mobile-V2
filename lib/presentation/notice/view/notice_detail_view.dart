@@ -5,9 +5,13 @@ import 'package:falletter_mobile_v2/core/components/button/answer_button.dart';
 import 'package:falletter_mobile_v2/core/components/button/elevated_button.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
+import 'package:falletter_mobile_v2/core/providers/brick_count_provider.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
 import 'package:falletter_mobile_v2/core/theme/app_theme_color.dart';
+import 'package:falletter_mobile_v2/models/brick_use_check_model.dart';
 import 'package:falletter_mobile_v2/models/notice_models.dart';
+import 'package:falletter_mobile_v2/presentation/mypage/provider/brick_history_provider.dart';
+import 'package:falletter_mobile_v2/presentation/mypage/provider/user_info_provider.dart';
 import 'package:falletter_mobile_v2/presentation/notice/provider/notice_provider.dart';
 import 'package:falletter_mobile_v2/presentation/notice/widget/hint_unlock_dialog.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +30,7 @@ class FalletterNoticeDetailView extends ConsumerStatefulWidget {
 class _FalletterNoticeDetailViewState
     extends ConsumerState<FalletterNoticeDetailView> {
   final List<String> _names = ['홍길동', '홍길동', '홍길동', '홍길동'];
-  final int _highlightedIndex = 1;
+  late final _highlightedIndex;
   static const List<String> _choseong = [
     'ㄱ',
     'ㄲ',
@@ -55,6 +59,7 @@ class _FalletterNoticeDetailViewState
   @override
   void initState() {
     super.initState();
+    _highlightedIndex = widget.notice.id % _names.length;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final notifier = ref.read(noticeDetailProvider(_noticeId).notifier);
       notifier.initFromNoticeItem(widget.notice);
@@ -93,11 +98,31 @@ class _FalletterNoticeDetailViewState
     return '?';
   }
 
+  String _getHintDescription(HintData? hintData) {
+    final nextIndex = (hintData?.unlockedCount ?? 0) + 1;
+
+    switch (nextIndex) {
+      case 1:
+        return "첫 번째 힌트 열람";
+      case 2:
+        return "두 번째 힌트 열람";
+      case 3:
+        return "세 번째 힌트 열람";
+      default:
+        return "힌트 열람";
+    }
+  }
+
   Future<void> _onUnlockHint(NoticeDetail detail) async {
     final notifier = ref.read(noticeDetailProvider(_noticeId).notifier);
     HintData? hintData = detail.hintData;
     final nextCost = _getNextHintCost(hintData);
-    final brickCount = ref.read(brickCountProvider);
+    final brickState = ref.read(brickCountProvider);
+    final brickCount = brickState.when(
+      data: (data) => data.brickCount,
+      loading: () => 0,
+      error: (_, __) => 0,
+    );
 
     if (brickCount < nextCost) {
       if (mounted) {
@@ -110,12 +135,25 @@ class _FalletterNoticeDetailViewState
 
     final bool? result = await showDialog<bool>(
       context: context,
-      barrierColor: Colors.black.withValues(alpha: 0.85),
+      barrierColor: context.bgColor.withValues(alpha: 0.85),
       builder: (context) => HintUnlockDialog(requiredBricks: nextCost),
     );
 
     if (result == true) {
       final nextHintValue = _nextHintValue(hintData);
+
+      final request = SaveBrickModel(
+          title: '힌트 사용',
+          description: _getHintDescription(hintData),
+          amount: nextCost,
+          type: 'QUESTION',
+          questionId: detail.questionId,
+          targetUserId: detail.targetUserId,
+          writerUserId: detail.writerUserId
+      );
+
+      await ref.read(brickHistoryProvider.notifier).saveBrickHistory(request);
+
       bool success;
       if (hintData == null) {
         success = await notifier.saveHint(
@@ -132,7 +170,7 @@ class _FalletterNoticeDetailViewState
       }
 
       if (success) {
-        ref.read(brickCountProvider.notifier).state -= nextCost;
+        await ref.read(brickCountProvider.notifier).updateBrickCount(-nextCost);
       } else {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -151,62 +189,84 @@ class _FalletterNoticeDetailViewState
 
   @override
   Widget build(BuildContext context) {
-    final brickCount = ref.watch(brickCountProvider);
+    final brickState = ref.watch(brickCountProvider);
     final detailAsync = ref.watch(noticeDetailProvider(_noticeId));
+    final brickCount = brickState.when(
+      data: (data) => data.brickCount,
+      loading: () => 0,
+      error: (_, __) => 0,
+    );
 
-    return Scaffold(
-      backgroundColor: context.bgColor,
-      appBar: CustomAppBar(
-        icon: true,
-        appBarAction: AppBarAction.brickCount,
-        count: brickCount,
-      ),
-      body: RefreshIndicator(
-        onRefresh: _onRefresh,
-        backgroundColor: context.middleColor,
-        color: context.textColor,
-        child: detailAsync.when(
-          loading: () => Center(
-            child: CircularProgressIndicator(color: context.textColor),
+    return Container(
+      color: context.bgColor,
+      child: SafeArea(
+        child: Scaffold(
+          backgroundColor: context.bgColor,
+          appBar: CustomAppBar(
+            icon: true,
+            appBarAction: AppBarAction.brickCount,
+            count: brickCount,
           ),
-          error: (error, _) => Center(
-            child: Text('알림을 불러올 수 없습니다.', style: FalletterTextStyle.body2),
-          ),
-          data: (detail) {
-            final hintData = detail.hintData;
-            final hasHints = hintData != null && hintData.unlockedCount > 0;
+          bottomNavigationBar: detailAsync.when(
+            data: (detail) {
+              final hintData = detail.hintData;
+              final hasHints = hintData != null && hintData.unlockedCount > 0;
 
-            return hasHints
-                ? _buildHintBody(detail, hintData)
-                : _buildInitialDetailBody(detail);
-          },
+              if (hasHints && hintData.allUnlocked) return SizedBox();
+
+              return Padding(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                child: _buildBottomButton(detail),
+              );
+            },
+            loading: () => SizedBox(),
+            error: (_, __) => SizedBox(),
+          ),
+          body: RefreshIndicator(
+            onRefresh: _onRefresh,
+            backgroundColor: context.middleColor,
+            color: context.textColor,
+            child: detailAsync.when(
+              loading: () => Center(
+                child: CircularProgressIndicator(color: context.textColor),
+              ),
+              error: (error, _) => Center(
+                child: Text('알림을 불러올 수 없습니다.', style: FalletterTextStyle.body2),
+              ),
+              data: (detail) {
+                final hintData = detail.hintData;
+                final hasHints = hintData != null && hintData.unlockedCount > 0;
+
+                return hasHints
+                    ? _buildHintBody(detail, hintData)
+                    : _buildInitialDetailBody(detail);
+              },
+            ),
+          ),
         ),
       ),
     );
   }
 
   Widget _buildInitialDetailBody(NoticeDetail detail) {
-    return SingleChildScrollView(
-      physics: const AlwaysScrollableScrollPhysics(),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
-        child: Column(
-          children: [
-            const SizedBox(height: 60),
-            _buildEmojiIcon(detail.emoji),
-            const SizedBox(height: 24),
-            Text(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Column(
+        children: [
+          const SizedBox(height: 60),
+          _buildEmojiIcon(detail.emoji),
+          const SizedBox(height: 24),
+          Container(
+            width: 250,
+            child: Text(
               detail.question,
               textAlign: TextAlign.center,
               style: FalletterTextStyle.title2,
             ),
-            const SizedBox(height: 40),
-            _buildBlurredCards(),
-            const SizedBox(height: 80),
-            _buildBottomButton(detail),
-            const SizedBox(height: 40),
-          ],
-        ),
+          ),
+          const SizedBox(height: 40),
+          _buildBlurredCards(),
+        ],
       ),
     );
   }
@@ -215,54 +275,53 @@ class _FalletterNoticeDetailViewState
     final unlockedCount = hintData.unlockedCount;
     final allUnlocked = hintData.allUnlocked;
 
-    return CustomScrollView(
-      physics: const AlwaysScrollableScrollPhysics(),
-      slivers: [
-        SliverFillRemaining(
-          hasScrollBody: false,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: Column(
-              children: [
-                const SizedBox(height: 40),
-                Text(
-                  _buildHintTitle(unlockedCount),
-                  textAlign: TextAlign.center,
-                  style: FalletterTextStyle.title2,
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  "선택한 사람의 이름에 들어가는 초성입니다",
-                  style: FalletterTextStyle.body2,
-                ),
-                const SizedBox(height: 40),
-                _buildHintCircles(hintData),
-                const Spacer(),
-                if (!allUnlocked) ...[
-                  Text(
-                    "더 궁금하다면?",
-                    style: FalletterTextStyle.subTitle2,
-                  ),
-                  const SizedBox(height: 16),
-                  _buildBottomButton(detail),
-                ],
-                const SizedBox(height: 40),
-              ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Column(
+        children: [
+          const SizedBox(height: 40),
+          Text(
+            _buildHintTitle(unlockedCount),
+            textAlign: TextAlign.center,
+            style: FalletterTextStyle.title2,
+          ),
+          const SizedBox(height: 4),
+          Text(
+            "선택한 사람의 이름에 들어가는 초성입니다",
+            style: FalletterTextStyle.body2.copyWith(
+              color: context.textColor
             ),
           ),
-        ),
-      ],
+          const SizedBox(height: 40),
+          _buildHintCircles(hintData),
+          const Spacer(),
+          if (!allUnlocked) ...[
+            Text(
+              "더 궁금하다면?",
+              style: FalletterTextStyle.subTitle2,
+            ),
+            const SizedBox(height: 16),
+          ],
+        ],
+      ),
     );
   }
 
   Widget _buildBottomButton(NoticeDetail detail) {
-    final brickCount = ref.watch(brickCountProvider);
+    final brickState = ref.watch(brickCountProvider);
     final nextCost = _getNextHintCost(detail.hintData);
+
+    final brickCount = brickState.when(
+      data: (data) => data.brickCount,
+      loading: () => 0,
+      error: (_, __) => 0,
+    );
+
     final hasEnough = brickCount >= nextCost;
 
     return CustomElevatedButton(
       onPressed: hasEnough ? () => _onUnlockHint(detail) : null,
-      child: Text(hasEnough ? "브릭 사용으로 힌트 얻기" : "브릭이 부족합니다"),
+      child: Text(hasEnough ? "브릭 사용으로 힌트 얻기" : "브릭이 부족합니다", style: TextStyle(color: context.reverseTextColor)),
     );
   }
 
@@ -297,6 +356,9 @@ class _FalletterNoticeDetailViewState
   }
 
   Widget _buildBlurredCards() {
+    final selectedTheme = ref.watch(themeProvider);
+    final themeColors = appThemeColors[selectedTheme]!;
+    final myInfo = ref.watch(userInfoProvider);
     return SizedBox(
       width: double.infinity,
       child: GridView.builder(
@@ -306,7 +368,7 @@ class _FalletterNoticeDetailViewState
           crossAxisCount: 2,
           crossAxisSpacing: 16,
           mainAxisSpacing: 16,
-          childAspectRatio: 2.5,
+          mainAxisExtent: 80
         ),
         itemCount: _names.length,
         itemBuilder: (context, index) {
@@ -318,28 +380,25 @@ class _FalletterNoticeDetailViewState
               children: [
                 Positioned.fill(
                   child: AnswerButton(
-                    label: _names[index],
+                    label: isHighlighted ? myInfo.value?.name ?? '' : _names[index],
                     isSelected: false,
                     onPressed: () {},
                     showBorder: isHighlighted,
                     borderGradient: isHighlighted
-                        ? LinearGradient(
-                            colors: FalletterColor.blueGradient,
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          )
+                        ? themeColors.text
                         : null,
                   ),
                 ),
-                Positioned.fill(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
-                      child: Container(color: Colors.transparent),
+                if (!isHighlighted)
+                  Positioned.fill(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
+                        child: Container(color: Colors.transparent),
+                      ),
                     ),
                   ),
-                ),
               ],
             ),
           );

@@ -4,8 +4,6 @@ import 'package:falletter_mobile_v2/models/notice_models.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'notice_api_service.dart';
 
-final brickCountProvider = StateProvider<int>((ref) => 5);
-
 final noticeApiServiceProvider = Provider<NoticeApiService>((ref) {
   final client = ref.watch(dioClientProvider);
   return NoticeApiService(client.dio);

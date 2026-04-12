@@ -30,11 +30,11 @@ class BrickUseCheckModel {
       amount: json['amount'],
       type: json['type'],
       question: json['question'],
-      targetUserId: json['target_user_id'],
-      writerUserId: json['writer_user_id'],
+      targetUserId: json['targetUserId'],
+      writerUserId: json['writerUserId'],
       gender: json['gender'],
-      schoolNumber: json['school_number'],
-      createdAt: DateTime.parse(json['created_at']),
+      schoolNumber: json['schoolNumber'],
+      createdAt: DateTime.parse(json['createdAt'] + 'Z').toLocal(),
     );
   }
 
@@ -44,11 +44,11 @@ class BrickUseCheckModel {
     'amount': amount,
     'type': type,
     'question': question,
-    'target_user_id': targetUserId,
-    'writer_user_id': writerUserId,
+    'targetUserId': targetUserId,
+    'writerUserId': writerUserId,
     'gender': gender,
-    'school_number': schoolNumber,
-    'created_at': createdAt,
+    'schoolNumber': schoolNumber,
+    'createdAt': createdAt,
   };
 }
 
@@ -77,9 +77,9 @@ class SaveBrickModel {
     description: json['description'],
     amount : json['amount'],
     type : json['type'],
-    questionId : json['question_id'],
-    targetUserId : json['target_user_id'],
-    writerUserId : json['writer_user_id'],
+    questionId : json['questionId'],
+    targetUserId : json['targetUserId'],
+    writerUserId : json['writerUserId'],
     );
   }
 
@@ -88,8 +88,8 @@ class SaveBrickModel {
     'description': description,
     'amount': amount,
     'type': type,
-    'question_id': questionId,
-    'target_user_id': targetUserId,
-    'writer_user_id': writerUserId,
+    'questionId': questionId,
+    'targetUserId': targetUserId,
+    'writerUserId': writerUserId,
   };
 }

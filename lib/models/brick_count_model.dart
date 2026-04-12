@@ -1,19 +1,19 @@
 class BrickCountModel {
-  final int brickCount;
   final int userId;
+  final int brickCount;
 
-  BrickCountModel({required this.brickCount, required this.userId});
+  BrickCountModel({required this.userId, required this.brickCount});
 
   factory BrickCountModel.fromJson(Map<String, dynamic> json) {
     return BrickCountModel(
-      brickCount: json['brick_count'],
-      userId: json['user_id'],
+      userId: json['userId'],
+      brickCount: json['brickCount'],
     );
   }
 
   Map<String, dynamic> toJson() => {
-    'brick_count': brickCount,
-    'user_id': userId,
+    'userId': userId,
+    'brickCount': brickCount,
   };
 
   BrickCountModel copyWith({int? brickCount, int? userId}) {
@@ -22,16 +22,4 @@ class BrickCountModel {
       userId: userId ?? this.userId,
     );
   }
-}
-
-class BrickUpdateModel {
-  final int brickUpdate;
-
-  BrickUpdateModel({required this.brickUpdate});
-
-  factory BrickUpdateModel.fromJson(Map<String, dynamic> json) {
-    return BrickUpdateModel(brickUpdate: json['brick_update']);
-  }
-
-  Map<String, dynamic> toJson() => {'brick_update': brickUpdate};
 }

@@ -26,7 +26,8 @@ class TypeAhead extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final students = ref.watch(studentProvider);
     final userAsync = ref.watch(userInfoProvider);
-    final count = ref.watch(letterProvider).count;
+    final letterState = ref.watch(letterProvider);
+    final count = letterState.value?.count.letterCount ?? 0;
     final scrollController = ScrollController();
     return TypeAheadField<StudentModel>(
       controller: controller,
@@ -80,7 +81,7 @@ class TypeAhead extends ConsumerWidget {
             dense: true,
             title: Text.rich(
               TextSpan(
-                style: baseStyle.copyWith(color: context.middleColor),
+                style: baseStyle.copyWith(color: FalletterColor.gray400),
                 children: [
                   TextSpan(text: text.substring(0, stressText)),
                   TextSpan(

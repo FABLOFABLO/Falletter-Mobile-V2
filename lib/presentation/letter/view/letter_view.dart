@@ -21,12 +21,20 @@ class FalletterLetterView extends ConsumerStatefulWidget {
 }
 
 class _FalletterLetterViewState extends ConsumerState<FalletterLetterView> {
-  static final double titleHeight = 16;
+  static final double titleHeight = 10;
   String? name;
   int? receptionId;
   bool isSending = false;
   final TextEditingController _peopleController = TextEditingController();
   final TextEditingController _contentController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      ref.read(letterProvider.notifier).loadLetterCount();
+    });
+  }
 
   @override
   void dispose() {
@@ -47,9 +55,18 @@ class _FalletterLetterViewState extends ConsumerState<FalletterLetterView> {
 
   @override
   Widget build(BuildContext context) {
-    final count = ref.watch(letterProvider).count;
-    final isNextStep = ref.watch(letterProvider).valid;
+    final letterState = ref.watch(letterProvider);
+    final count = letterState.value?.count.letterCount ?? 0;
+    final isNextStep = letterState.value?.valid ?? false;
     final style = FalletterTextStyle.subTitle1;
+
+    if (letterState.isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (letterState.hasError) {
+      return const Center(child: Text('레터 정보를 불러오지 못했습니다.'));
+    }
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
@@ -70,7 +87,7 @@ class _FalletterLetterViewState extends ConsumerState<FalletterLetterView> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        const SizedBox(height: 40),
+                        const SizedBox(height: 46),
                         Text('누구에게 보내시나요?', style: style),
                         SizedBox(height: titleHeight),
                         TypeAhead(
@@ -84,7 +101,7 @@ class _FalletterLetterViewState extends ConsumerState<FalletterLetterView> {
                             _enabled();
                           },
                         ),
-                        SizedBox(height: titleHeight * 2),
+                        SizedBox(height: 32),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -106,7 +123,7 @@ class _FalletterLetterViewState extends ConsumerState<FalletterLetterView> {
                             ),
                           ],
                         ),
-                        SizedBox(height: titleHeight),
+                        SizedBox(height: 10),
                         CustomTextFormField(
                           onChanged: (value) {
                             setState(() {});
@@ -140,6 +157,7 @@ class _FalletterLetterViewState extends ConsumerState<FalletterLetterView> {
                                 content: _contentController.text,
                                 receptionId: receptionId!
                             );
+                            await ref.read(letterProvider.notifier).updateLetterCount(-1);
                             await ref.read(sendLetterProvider.notifier).sendLetter(request);
                             await showDialog(
                               barrierDismissible: false,
@@ -148,7 +166,6 @@ class _FalletterLetterViewState extends ConsumerState<FalletterLetterView> {
                                 sendName: _peopleController.text,
                               ),
                             );
-                            ref.read(letterProvider.notifier).decrease();
                             _peopleController.clear();
                             _contentController.clear();
                             setState(() {

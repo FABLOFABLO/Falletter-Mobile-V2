@@ -22,25 +22,6 @@ class RouletteManager extends StateNotifier<RouletteState> {
 
   RouletteState build() => RouletteState(angle: 0);
 
-  void applyReward(RewardType type, int amount) {
-    switch (type) {
-      case RewardType.brick:
-      // TODO: 브릭 상태관리로 추가
-        break;
-
-      case RewardType.letter:
-      // TODO: 레터 상태관리로 추가
-        break;
-
-      case RewardType.rewardSet:
-      // TODO: add 메서드로 브릭 및 레터 상태관리로 추가
-        break;
-
-      case RewardType.miss:
-        break;
-    }
-  }
-
   int getRandomIndex() {
     final random = Random().nextInt(100);
     if (random < 18) return 0;

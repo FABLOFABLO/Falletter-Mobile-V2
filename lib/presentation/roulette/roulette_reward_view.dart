@@ -20,7 +20,7 @@ class RouletteRewardView extends ConsumerStatefulWidget {
   const RouletteRewardView({
     super.key,
     required this.type,
-    required this.amount
+    required this.amount,
   });
 
   @override
@@ -41,18 +41,15 @@ class _RouletteRewardViewState extends ConsumerState<RouletteRewardView> {
       rewardName = '브릭';
       iconPath = themeColors.brickSvg;
       titleText = '$rewardName ${widget.amount}개 획득';
-    }
-    else if (widget.type == RewardType.letter) {
+    } else if (widget.type == RewardType.letter) {
       rewardName = '레터';
       iconPath = themeColors.letterSvg;
       titleText = '$rewardName ${widget.amount}개 획득';
-    }
-    else if (widget.type == RewardType.miss) {
+    } else if (widget.type == RewardType.miss) {
       rewardName = '꽝';
       iconPath = themeColors.missSvg;
       titleText = '$rewardName! 다음에...';
-    }
-    else {
+    } else {
       rewardName = '선물세트';
       iconPath = themeColors.rewardSetSvg;
       titleText = '$rewardName 획득';
@@ -61,76 +58,80 @@ class _RouletteRewardViewState extends ConsumerState<RouletteRewardView> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Stack(
-          children: [
-            Positioned.fill(
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
-                child: Container(
-                  color: context.bgColor.withAlpha(204),
+        children: [
+          Positioned.fill(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+              child: Container(color: context.bgColor.withAlpha(204)),
+            ),
+          ),
+          SafeArea(
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                SvgPicture.asset(iconPath),
+                if (widget.amount > 1 && widget.type != RewardType.rewardSet)
+                  Positioned(
+                    right: 80,
+                    bottom: 300,
+                    child: Container(
+                      width: 60,
+                      height: 60,
+                      decoration: BoxDecoration(
+                        color: context.reverseMiddleColor,
+                        borderRadius: BorderRadius.circular(100),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'X${widget.amount}',
+                          style: FalletterTextStyle.title2.copyWith(
+                            color: context.reverseTextColor,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 80),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          '출석체크 보상',
+                          style: FalletterTextStyle.title3.copyWith(
+                            color: context.textColor,
+                          ),
+                        ),
+                        GradientText(
+                          text: titleText,
+                          gradient: themeColors.primaryGradient,
+                          style: FalletterTextStyle.title1,
+                        ),
+                        SizedBox(height: 330),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 30),
+                          child: GestureDetector(
+                            onTap: () {
+                              ref
+                                  .read(rouletteTimerProvider.notifier)
+                                  .startRouletteTimer();
+                              context.go(RoutePaths.main);
+                            },
+                            child: Text(
+                              '닫기',
+                              style: FalletterTextStyle.subTitle2,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
-            SafeArea(
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    SvgPicture.asset(
-                      iconPath
-                    ),
-                    if (widget.amount > 1 && widget.type != RewardType.rewardSet)
-                      Positioned(
-                        right: 80,
-                        bottom: 300,
-                        child: Container(
-                          width: 60,
-                          height: 60,
-                          decoration: BoxDecoration(
-                              color: context.cardBg,
-                              borderRadius: BorderRadius.circular(100)
-                          ),
-                          child: Center(
-                              child: Text('X${widget.amount}',
-                                  style: FalletterTextStyle.title2,
-                              )
-                          ),
-                        ),
-                      ),
-                    Center(
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 80),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text('출석체크 보상',
-                                style: FalletterTextStyle.title3.copyWith(
-                                    color: context.textColor)
-                            ),
-                            GradientText(
-                                text: titleText,
-                                gradient: themeColors.primaryGradient,
-                                style: FalletterTextStyle.title1
-                            ),
-                            SizedBox(height: 330),
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 30),
-                              child: GestureDetector(
-                                onTap: () {
-                                  ref.read(rouletteTimerProvider.notifier).startRouletteTimer();
-                                  context.go(RoutePaths.main);
-                                  },
-                                child: Text('닫기',
-                                    style: FalletterTextStyle.subTitle2,
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                )
-            ),
-          ]
+          ),
+        ],
       ),
     );
   }
