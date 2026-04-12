@@ -16,6 +16,14 @@ class _SelectState extends ConsumerState<BrickHistoryView> {
   static const double spacing = 20;
 
   @override
+  void initState() {
+    Future.microtask(() {
+      ref.read(brickHistoryProvider.notifier).loadBrickList();
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final brickHistory = ref.watch(brickHistoryProvider);
     return Scaffold(

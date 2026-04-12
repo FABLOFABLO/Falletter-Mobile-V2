@@ -1,18 +1,25 @@
 class LetterCountModel {
-  final int letterCount;
   final int userId;
+  final int letterCount;
 
-  LetterCountModel({required this.letterCount, required this.userId});
+  LetterCountModel({required this.userId, required this.letterCount});
 
   factory LetterCountModel.fromJson(Map<String, dynamic> json) {
     return LetterCountModel(
-      letterCount: json['letter_count'],
-      userId: json['user_id'],
+      userId: json['userId'],
+      letterCount: json['letterCount'],
     );
   }
 
   Map<String, dynamic> toJson() => {
-    'letter_count': letterCount,
-    'user_id': userId,
+    'userId': userId,
+    'letterCount': letterCount,
   };
+
+  LetterCountModel copyWith({int? userId, int? letterCount}) {
+    return LetterCountModel(
+      userId: userId ?? this.userId,
+      letterCount: letterCount ?? this.letterCount,
+    );
+  }
 }

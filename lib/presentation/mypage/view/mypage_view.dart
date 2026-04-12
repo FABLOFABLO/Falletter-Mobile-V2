@@ -2,11 +2,12 @@ import 'package:falletter_mobile_v2/core/components/modal/default_modal.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/providers/auth_status_provider.dart';
-import 'package:falletter_mobile_v2/core/providers/item_count_provider.dart';
+import 'package:falletter_mobile_v2/core/providers/brick_count_provider.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
 import 'package:falletter_mobile_v2/core/router/route_paths.dart';
 import 'package:falletter_mobile_v2/core/theme/app_theme_color.dart';
 import 'package:falletter_mobile_v2/models/my_info_model.dart';
+import 'package:falletter_mobile_v2/presentation/letter/provider/letter_provider.dart';
 import 'package:falletter_mobile_v2/presentation/mypage/provider/user_info_provider.dart';
 import 'package:falletter_mobile_v2/presentation/mypage/widget/item_container.dart';
 import 'package:falletter_mobile_v2/presentation/mypage/widget/menu_button.dart';
@@ -32,13 +33,24 @@ class _FalletterMypageViewState extends ConsumerState<FalletterMypageView> {
   );
 
   @override
+  void initState() {
+    super.initState();
+
+    Future.microtask(() {
+      ref.read(letterProvider.notifier).loadLetterCount();
+      ref.read(brickCountProvider.notifier).loadBrickCount();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final selectedTheme = ref.watch(themeProvider);
     final themeColors = appThemeColors[selectedTheme]!;
     final myInfo = ref.watch(userInfoProvider);
-    final brickCount = ref.watch(brickCountProvider);
-
-    /// todo 레터 뷰에 있는 레터 provider 사용해서 letter count 넣기
+    final letterState = ref.watch(letterProvider);
+    final brickState = ref.watch(brickCountProvider);
+    final letterCount = letterState.value?.count.letterCount ?? 0;
+    final brickCount = brickState.value?.brickCount ?? 0;
 
     return Scaffold(
       body: SafeArea(
@@ -71,11 +83,11 @@ class _FalletterMypageViewState extends ConsumerState<FalletterMypageView> {
                     titleHeight,
                     Row(
                       children: [
-                        ItemContainer(item: themeColors.letterSvg, count: 0),
+                        ItemContainer(item: themeColors.letterSvg, count: letterCount),
                         betweenWidth,
                         ItemContainer(
                           item: themeColors.brickSvg,
-                          count: brickCount.brickCount,
+                          count: brickCount,
                         ),
                       ],
                     ),
@@ -136,6 +148,7 @@ class _FalletterMypageViewState extends ConsumerState<FalletterMypageView> {
                           await tokenStorage.clear();
                           ref.invalidate(userInfoProvider);
                           if (context.mounted) {
+                            context.pop();
                             context.go('/splash');
                           }
                         } catch (e) {
@@ -143,6 +156,7 @@ class _FalletterMypageViewState extends ConsumerState<FalletterMypageView> {
                           await tokenStorage.clear();
                           ref.invalidate(userInfoProvider);
                           if (context.mounted) {
+                            context.pop();
                             context.go('/splash');
                           }
                         }

@@ -1,8 +1,10 @@
+import 'dart:developer' as develop;
 import 'package:falletter_mobile_v2/core/network/dio.dart';
 import 'package:falletter_mobile_v2/core/providers/user_api_service.dart';
 import 'package:falletter_mobile_v2/models/my_info_model.dart';
 import 'package:falletter_mobile_v2/models/question_model.dart';
 import 'package:falletter_mobile_v2/models/student_model.dart';
+import 'package:falletter_mobile_v2/presentation/answer/provider/answer_api_service.dart';
 import 'package:falletter_mobile_v2/presentation/answer/provider/question_api_service.dart';
 import 'package:falletter_mobile_v2/presentation/mypage/provider/user_info_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,6 +19,11 @@ final questionApiServiceProvider = Provider<QuestionApiService>((ref) {
 final userApiServiceProvider = Provider<UserApiService>((ref) {
   final dio = ref.read(dioClientProvider).dio;
   return UserApiService(dio);
+});
+
+final answerApiServiceProvider = Provider<AnswerApiService>((ref) {
+  final dio = ref.read(dioClientProvider).dio;
+  return AnswerApiService(dio);
 });
 
 final questionListProvider = FutureProvider<List<QuestionModel>>((ref) async {
@@ -38,7 +45,7 @@ final userNamesProvider = StateProvider.autoDispose<Set<String>>((ref) => {});
 
 class QuizItem {
   final QuestionModel question;
-  final List<String> choices;
+  final List<StudentModel> choices;
 
   QuizItem({
     required this.question,
@@ -71,14 +78,12 @@ class QuizNotifier extends Notifier<QuizItem?> {
     _setQuiz(0);
   }
 
-  List<String> _createChoices(int index) {
+  List<StudentModel> _createChoices(int index) {
     final filtered = students.where((e) => e.id != user.id).toList();
-    final result = filtered.skip(index * 4).take(4).map((e) => e.name).toList();
+    final result = filtered.skip(index * 4).take(4).toList();
     if (result.length < 4) {
       final remain = 4 - result.length;
-      result.addAll(
-        filtered.take(remain).map((e) => e.name),
-      );
+      result.addAll(filtered.take(remain));
     }
     return result;
   }
@@ -98,6 +103,16 @@ class QuizNotifier extends Notifier<QuizItem?> {
     final nextIndex = ref.read(currentIndexProvider) + 1;
     ref.read(currentIndexProvider.notifier).state = nextIndex;
     _setQuiz(nextIndex);
+  }
+
+  Future<void> saveAnswer(int questionId, int targetUser) async {
+    try {
+      final apiService = ref.read(answerApiServiceProvider);
+      await apiService.chooseAnswer(questionId, targetUser);
+    } catch(e) {
+      develop.log('error: $e');
+      throw Exception('답변 저장에 실패했습니다.');
+    }
   }
 }
 

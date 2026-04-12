@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/providers/bottom_nav_provider.dart';
+import 'package:falletter_mobile_v2/core/providers/brick_count_provider.dart';
 import 'package:falletter_mobile_v2/presentation/notice/provider/notice_provider.dart';
 import 'package:falletter_mobile_v2/presentation/notice/widget/notice_box.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +30,7 @@ class _FalletterNoticeViewState extends ConsumerState<FalletterNoticeView> {
     _scrollController = ScrollController();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(noticeListProvider.notifier).loadNotices();
+      ref.read(brickCountProvider.notifier).loadBrickCount();
     });
     _autoRefreshTimer = Timer.periodic(
       const Duration(hours: 1),
@@ -59,7 +61,7 @@ class _FalletterNoticeViewState extends ConsumerState<FalletterNoticeView> {
 
   @override
   Widget build(BuildContext context) {
-    final brickCount = ref.watch(brickCountProvider);
+    final brickCount = ref.watch(brickCountProvider).value?.brickCount ?? 0;
     final noticeState = ref.watch(noticeListProvider);
 
     ref.listen(bottomNavIndexProvider, (previous, current) {
@@ -78,6 +80,7 @@ class _FalletterNoticeViewState extends ConsumerState<FalletterNoticeView> {
               appBarAction: AppBarAction.brickCount,
               count: brickCount,
             ),
+            SizedBox(height: 20),
             Expanded(
               child: RefreshIndicator(
                 onRefresh: _refreshNotices,

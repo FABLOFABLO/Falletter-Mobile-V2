@@ -51,6 +51,16 @@ abstract final class FalletterColor {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return isDark ? middleBlack : middleWhite;
   }
+
+  static Color getReverseMiddleColor(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return isDark ? middleWhite : middleBlack;
+  }
+
+  static Color getReverseTextColor(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return isDark ? black : white;
+  }
 }
 
 abstract final class FalletterGradient {
