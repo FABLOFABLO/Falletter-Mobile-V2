@@ -92,7 +92,7 @@ class NotificationSettingView extends ConsumerWidget {
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
               child: CustomElevatedButton(
                 width: double.infinity,
-                child: Text('적용하기'),
+                child: Text('적용하기', style: TextStyle(color: context.reverseTextColor)),
                 onPressed: () async {
                   await notifier.editSetting();
                   context.pop();

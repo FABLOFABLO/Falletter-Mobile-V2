@@ -1,8 +1,6 @@
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
-import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
-import 'package:falletter_mobile_v2/core/theme/app_theme_color.dart';
 import 'package:falletter_mobile_v2/core/utils/time_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -23,8 +21,6 @@ class BrickHistory extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selectedTheme = ref.watch(themeProvider);
-    final themeColors = appThemeColors[selectedTheme]!;
     final highStyle = FalletterTextStyle.subTitle2;
     final rowStyle = FalletterTextStyle.body4;
     final color = FalletterColor.gray500;
@@ -42,22 +38,7 @@ class BrickHistory extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(title, style: highStyle),
-              brick > 0
-                  ? ShaderMask(
-                      shaderCallback: (Rect bounds) {
-                        return FalletterGradient.horizontal(
-                          themeColors.text.colors,
-                        ).createShader(bounds);
-                      },
-                      child: Text(
-                        '+$brick',
-                        style: highStyle.copyWith(color: context.textColor),
-                      ),
-                    )
-                  : Text(
-                      '$brick',
-                      style: highStyle.copyWith(color: FalletterColor.error),
-                    ),
+              Text('-$brick', style: highStyle.copyWith(color: FalletterColor.error))
             ],
           ),
           if (question.isNotEmpty) ...[

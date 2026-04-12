@@ -23,8 +23,10 @@ class DefaultModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Dialog(
-      backgroundColor: FalletterColor.white,
+      backgroundColor: isDark ? FalletterColor.middleBlack : FalletterColor.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       insetPadding: const EdgeInsets.symmetric(horizontal: 20),
       child: Padding(
@@ -36,14 +38,14 @@ class DefaultModal extends StatelessWidget {
             Text(
               title,
               style: FalletterTextStyle.subTitle2.copyWith(
-                color: FalletterColor.black,
+                color: isDark ? FalletterColor.white : FalletterColor.black,
               ),
             ),
             const SizedBox(height: 6),
             Text(
               description,
               style: FalletterTextStyle.body3.copyWith(
-                color: FalletterColor.gray700,
+                color: isDark ? FalletterColor.gray400 : FalletterColor.gray700,
               ),
             ),
             const SizedBox(height: 20),
@@ -52,10 +54,10 @@ class DefaultModal extends StatelessWidget {
                 Expanded(
                   child: CustomElevatedButton(
                     onPressed: onLeftPressed,
-                    gradient: const LinearGradient(
-                      colors: [FalletterColor.gray200, FalletterColor.gray200],
+                    gradient: LinearGradient(
+                      colors: isDark ? [FalletterColor.gray600, FalletterColor.gray600] : [FalletterColor.gray200, FalletterColor.gray200],
                     ),
-                    textColor: FalletterColor.gray700,
+                    textColor: FalletterColor.white,
                     child: Text(leftButton),
                   ),
                 ),

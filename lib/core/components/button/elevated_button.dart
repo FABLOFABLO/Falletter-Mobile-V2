@@ -1,6 +1,7 @@
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
+import 'package:falletter_mobile_v2/core/providers/theme/theme_mode_provoder.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
 import 'package:falletter_mobile_v2/core/theme/app_theme_color.dart';
 import 'package:flutter/material.dart';
@@ -29,13 +30,12 @@ class CustomElevatedButton extends ConsumerWidget {
     final bool isEnabled = onPressed != null;
     final selectedTheme = ref.watch(themeProvider);
     final themeColors = appThemeColors[selectedTheme]!;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
       width: width,
       height: height,
       decoration: BoxDecoration(
-        gradient: _getGradient(isEnabled, themeColors, isDark),
+        gradient: _getGradient(isEnabled, themeColors, context, ref),
         borderRadius: BorderRadius.circular(8),
       ),
       child: ElevatedButton(
@@ -53,7 +53,7 @@ class CustomElevatedButton extends ConsumerWidget {
           ),
         ),
         child: DefaultTextStyle(
-          style: _getTextStyle(context, isEnabled),
+          style: _getTextStyle(context, isEnabled, ref),
           textAlign: TextAlign.center,
           child: child,
         ),
@@ -61,20 +61,25 @@ class CustomElevatedButton extends ConsumerWidget {
     );
   }
 
-  Gradient _getGradient(bool isEnabled, ThemeColors themeColors, bool isDark) {
+  Gradient _getGradient(bool isEnabled, ThemeColors themeColors, BuildContext context, WidgetRef ref) {
+    final themeMode = ref.watch(themeModeProvider);
+    final isDark = themeMode == ThemeMode.dark;
+
     if (!isEnabled) {
-      final disabledColor = isDark ? FalletterColor.gray900 : FalletterColor.gray600;
+      final disabledColor = isDark ? FalletterColor.gray800 : FalletterColor.gray300;
       return FalletterGradient.horizontal([disabledColor, disabledColor]);
     }
     return gradient ?? themeColors.button;
   }
 
-  TextStyle _getTextStyle(BuildContext context, bool isEnabled) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+  TextStyle _getTextStyle(BuildContext context, bool isEnabled, WidgetRef ref) {
+    final themeMode = ref.watch(themeModeProvider);
+    final isDark = themeMode == ThemeMode.dark;
+
     return FalletterTextStyle.button.copyWith(
       color: isEnabled
-          ? (textColor ?? context.textColor)
-          : (isDark ? FalletterColor.gray700 : FalletterColor.white),
+          ? (textColor ?? context.reverseTextColor)
+          : isDark ? FalletterColor.gray500 : FalletterColor.middleWhite,
     );
   }
 }

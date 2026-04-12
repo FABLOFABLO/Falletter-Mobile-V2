@@ -31,7 +31,7 @@ class HintUnlockDialog extends ConsumerWidget {
               style: FalletterTextStyle.body1,
             ),
             const SizedBox(height: 32),
-            _buildBrickIcon(themeColors),
+            _buildBrickIcon(themeColors, context),
             const SizedBox(height: 24),
             Text(
               "브릭 $requiredBricks개가 차감됩니다.",
@@ -48,14 +48,14 @@ class HintUnlockDialog extends ConsumerWidget {
                     ]),
                     textColor: context.textColor,
                     onPressed: () => Navigator.pop(context, false),
-                    child: const Text("취소"),
+                    child: Text("취소", style: TextStyle(color: context.reverseTextColor)),
                   ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: CustomElevatedButton(
                     onPressed: () => Navigator.pop(context, true),
-                    child: const Text("힌트보기"),
+                    child: Text("힌트보기", style: TextStyle(color: context.reverseTextColor)),
                   ),
                 ),
               ],
@@ -66,7 +66,7 @@ class HintUnlockDialog extends ConsumerWidget {
     );
   }
 
-  Widget _buildBrickIcon(ThemeColors themeColors) {
+  Widget _buildBrickIcon(ThemeColors themeColors, BuildContext context) {
     return Stack(
       clipBehavior: Clip.none,
       alignment: Alignment.center,
@@ -78,13 +78,14 @@ class HintUnlockDialog extends ConsumerWidget {
           child: Container(
             width: 60,
             height: 60,
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               shape: BoxShape.circle,
+              color: FalletterColor.gray100
             ),
             alignment: Alignment.center,
             child: Text(
               "-$requiredBricks",
-              style: FalletterTextStyle.title2,
+              style: FalletterTextStyle.title2.copyWith(color: FalletterColor.gray900),
             ),
           ),
         ),

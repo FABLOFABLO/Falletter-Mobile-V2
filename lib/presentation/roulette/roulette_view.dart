@@ -41,7 +41,7 @@ class RouletteView extends ConsumerWidget {
                   ),
                   GradientText(
                       text: '출석체크 랜덤 블록',
-                      gradient: themeColors.primaryGradient,
+                      gradient: themeColors.text,
                       style: FalletterTextStyle.title1
                   ),
                   Padding(

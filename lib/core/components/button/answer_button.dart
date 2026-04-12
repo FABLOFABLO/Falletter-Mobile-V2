@@ -37,7 +37,7 @@ class AnswerButton extends ConsumerWidget {
             context.cardBg,
           ]);
     final hasBorder = showBorder;
-    final textColor = isSelected ? context.bgColor : null;
+    final textColor = context.textColor;
 
     return Container(
       height: height,
@@ -45,13 +45,14 @@ class AnswerButton extends ConsumerWidget {
         gradient: hasBorder ? borderGradient : null,
         borderRadius: BorderRadius.circular(12),
       ),
-      padding: hasBorder ? EdgeInsets.all(2) : EdgeInsets.zero,
+      padding: hasBorder ? EdgeInsets.all(4) : EdgeInsets.zero,
       child: CustomElevatedButton(
+        onPressed: () {},
         gradient: gradient,
         textColor: textColor,
         child: Text(
           label,
-          style: textColor != null ? FalletterTextStyle.title3.copyWith(color: textColor) : FalletterTextStyle.title3,
+          style: FalletterTextStyle.title3.copyWith(color: textColor),
         ),
       ),
     );

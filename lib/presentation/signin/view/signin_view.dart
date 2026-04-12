@@ -3,6 +3,7 @@ import 'package:falletter_mobile_v2/core/components/icon/field_icon.dart';
 import 'package:falletter_mobile_v2/core/components/text_form_field/text_form_field.dart';
 import 'package:falletter_mobile_v2/core/components/text_form_field/text_form_field_label.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
+import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/router/route_paths.dart';
 import 'package:falletter_mobile_v2/presentation/mypage/provider/user_info_provider.dart';
@@ -75,7 +76,7 @@ class _SigninViewState extends ConsumerState<SigninView> {
                 spacing,
                 Text('로그인하고\n팔레터 사용하기', style: FalletterTextStyle.title2),
                 const SizedBox(height: 40),
-                CustomTextFormFieldLabel(labelText: '이메일'),
+                CustomTextFormFieldLabel(labelText: '이메일', labelStyle: TextStyle(color: context.textColor)),
                 smallSpacing,
                 CustomTextFormField(
                   controller: _emailController,
@@ -87,7 +88,7 @@ class _SigninViewState extends ConsumerState<SigninView> {
                   ),
                 ),
                 spacing,
-                CustomTextFormFieldLabel(labelText: '비밀번호'),
+                CustomTextFormFieldLabel(labelText: '비밀번호', labelStyle: TextStyle(color: context.textColor)),
                 smallSpacing,
                 CustomTextFormField(
                   maxLines: 1,
@@ -106,8 +107,8 @@ class _SigninViewState extends ConsumerState<SigninView> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      '아직 계정이 없으신가요?',
-                      style: baseStyle,
+                      '아직 계정이 없으신가요?  ',
+                      style: baseStyle.copyWith(color: FalletterColor.gray700),
                     ),
                     smallSpacing,
                     GestureDetector(
@@ -119,24 +120,27 @@ class _SigninViewState extends ConsumerState<SigninView> {
                   ],
                 ),
                 const SizedBox(height: 12),
-                CustomElevatedButton(
-                  onPressed: isEnabled
-                      ? () async {
-                    final success = await ref.read(signInProvider.notifier).signIn(
-                        email: _emailController.text.trim(),
-                        password: _passwordController.text.trim()
-                    );
-                    if (success) {
-                      ref.invalidate(userInfoProvider);
-                      context.go(RoutePaths.main);
-                    } else {
-                      setState(() {
-                        errorMessage = '이메일 또는 비밀번호가 일치하지 않습니다.';
-                      });
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 20),
+                  child: CustomElevatedButton(
+                    onPressed: isEnabled
+                        ? () async {
+                      final success = await ref.read(signInProvider.notifier).signIn(
+                          email: _emailController.text.trim(),
+                          password: _passwordController.text.trim()
+                      );
+                      if (success) {
+                        ref.invalidate(userInfoProvider);
+                        context.go(RoutePaths.main);
+                      } else {
+                        setState(() {
+                          errorMessage = '이메일 또는 비밀번호가 일치하지 않습니다.';
+                        });
+                      }
                     }
-                  }
-                      : null,
-                  child: Text('로그인하기'),
+                        : null,
+                    child: Text('로그인하기', style: TextStyle(color: context.reverseTextColor)),
+                  ),
                 ),
               ],
             ),

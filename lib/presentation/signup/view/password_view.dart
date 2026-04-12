@@ -1,6 +1,7 @@
 import 'package:falletter_mobile_v2/core/components/app_bar/custom_app_bar.dart';
 import 'package:falletter_mobile_v2/core/components/button/elevated_button.dart';
 import 'package:falletter_mobile_v2/core/components/text_form_field/text_form_field.dart';
+import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/router/route_paths.dart';
 import 'package:falletter_mobile_v2/presentation/signup/provider/signup_provider.dart';
@@ -110,7 +111,7 @@ class _PasswordViewState extends ConsumerState<PasswordView> {
                 ),
                 const Spacer(),
                 Padding(
-                  padding: EdgeInsets.only(bottom: 16),
+                  padding: EdgeInsets.only(bottom: 20),
                   child: CustomElevatedButton(
                     onPressed: isNextStep
                         ? () {
@@ -123,7 +124,7 @@ class _PasswordViewState extends ConsumerState<PasswordView> {
                           }
                         : null,
                     width: double.infinity,
-                    child: Text('회원가입'),
+                    child: Text('회원가입', style: TextStyle(color: context.reverseTextColor)),
                   ),
                 ),
               ],

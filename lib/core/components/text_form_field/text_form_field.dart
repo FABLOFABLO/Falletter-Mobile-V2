@@ -153,6 +153,7 @@ class CustomTextFormField extends StatelessWidget {
           ),
         ],
         TextFormField(
+          cursorColor: context.textColor,
           autocorrect: autocorrect,
           showCursor: showCursor,
           controller: controller,

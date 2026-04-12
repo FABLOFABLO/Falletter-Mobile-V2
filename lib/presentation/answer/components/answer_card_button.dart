@@ -1,3 +1,4 @@
+import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
 import 'package:falletter_mobile_v2/core/theme/app_theme_color.dart';
@@ -27,7 +28,7 @@ class AnswerCardButton extends ConsumerWidget {
     return GestureDetector(
       onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.all(15),
+        padding: const EdgeInsets.all(10),
         child: Container(
             width: width ?? double.infinity,
             height: 80,
@@ -37,7 +38,10 @@ class AnswerCardButton extends ConsumerWidget {
               borderRadius: BorderRadius.circular(10),
             ),
             child: Center(
-              child: Text(name, style: FalletterTextStyle.title3,),
+              child: Text(
+                  name, style: FalletterTextStyle.title3.copyWith(
+                  color: (isSelected) ? context.reverseTextColor : context.textColor)
+              ),
             )
         ),
       ),

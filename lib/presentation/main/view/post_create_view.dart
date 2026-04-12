@@ -99,7 +99,7 @@ class _PostCreateViewState extends ConsumerState<PostCreateView> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20).copyWith(bottom: 30),
+              padding: EdgeInsets.symmetric(horizontal: 20).copyWith(bottom: 35),
               child: CustomElevatedButton(
                 width: double.infinity,
                 onPressed: isEnabled

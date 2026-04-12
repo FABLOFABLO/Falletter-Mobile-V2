@@ -1,5 +1,6 @@
 import 'package:falletter_mobile_v2/core/components/app_bar/custom_app_bar.dart';
 import 'package:falletter_mobile_v2/core/components/button/elevated_button.dart';
+import 'package:falletter_mobile_v2/core/components/snackbar/snackbar.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
@@ -48,47 +49,41 @@ class JoinAgreementView extends ConsumerWidget {
                 isChecked: agreeCheck,
               ),
               const Spacer(),
-              CustomElevatedButton(
-                width: double.infinity,
-                onPressed: toggleBox.isCheckedToggle
-                    ? () async {
-                  final state = ref.read(signUpProvider);
-                  final agreeState = ref.read(agreeProvider);
-                  final request = SignupModel(
-                      email: "${state.email!}@dsm.hs.kr",
-                      password: state.password!,
-                      schoolNumber: state.schoolNumber!,
-                      name: state.name!,
-                      gender: state.gender!,
-                      theme: "BLUE",
-                      profileImage: "",
-                      serviceTerms: agreeState[Agree.use] ?? false,
-                      privacyPolicy: agreeState[Agree.privacy] ?? false,
-                      communityTerms: agreeState[Agree.community] ?? false,
-                      pushNotification: agreeState[Agree.push] ?? false
-                  );
-                  final success = await ref.read(signUpProvider.notifier).signup(request);
-                  if (success) {
-                    await ref.read(signInProvider.notifier).signIn(
-                        email: state.email!.trim(),
-                        password: state.password!
+              Padding(
+                padding: const EdgeInsets.only(bottom: 20),
+                child: CustomElevatedButton(
+                  width: double.infinity,
+                  onPressed: toggleBox.isCheckedToggle
+                      ? () async {
+                    final state = ref.read(signUpProvider);
+                    final agreeState = ref.read(agreeProvider);
+                    final request = SignupModel(
+                        email: "${state.email!}@dsm.hs.kr",
+                        password: state.password!,
+                        schoolNumber: state.schoolNumber!,
+                        name: state.name!,
+                        gender: state.gender!,
+                        theme: "BLUE",
+                        profileImage: "",
+                        serviceTerms: agreeState[Agree.use] ?? false,
+                        privacyPolicy: agreeState[Agree.privacy] ?? false,
+                        communityTerms: agreeState[Agree.community] ?? false,
+                        pushNotification: agreeState[Agree.push] ?? false
                     );
-                    context.go(RoutePaths.signupComplete);
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          '회원가입에 실패했습니다.\n다시 시도해주세요.',
-                          style: TextStyle(color: FalletterColor.error),
-                        ),
-                        duration: Duration(seconds: 2),
-                        backgroundColor: context.cardBg,
-                      )
-                    );
+                    final success = await ref.read(signUpProvider.notifier).signup(request);
+                    if (success) {
+                      await ref.read(signInProvider.notifier).signIn(
+                          email: state.email!.trim(),
+                          password: state.password!
+                      );
+                      context.go(RoutePaths.signupComplete);
+                    } else {
+                      ErrorSnackBar(context, '회원가입에 실패했습니다.\n다시 시도해주세요.');
+                    }
                   }
-                }
-                    : null,
-                child: const Text('가입하기'),
+                      : null,
+                  child: Text('가입하기', style: TextStyle(color: context.reverseTextColor)),
+                ),
               ),
             ],
           ),

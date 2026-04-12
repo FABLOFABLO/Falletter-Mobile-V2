@@ -209,11 +209,14 @@ class _VerifyCodeViewState extends ConsumerState<VerifyCodeView> {
                 ],
               ),
               const SizedBox(height: 16),
-              CustomElevatedButton(
-                onPressed: isNextStep ? () {
-                    context.push(RoutePaths.password);
-                } : null,
-                child: Text('다음'),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 20),
+                child: CustomElevatedButton(
+                  onPressed: isNextStep ? () {
+                      context.push(RoutePaths.password);
+                  } : null,
+                  child: Text('다음', style: TextStyle(color: context.reverseTextColor)),
+                ),
               ),
             ],
           ),

@@ -1,5 +1,6 @@
 import 'package:falletter_mobile_v2/core/components/button/elevated_button.dart';
 import 'package:falletter_mobile_v2/core/components/gradient_text.dart';
+import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
@@ -44,7 +45,7 @@ class _SplashViewState extends ConsumerState<SplashView> {
                       children: [
                         Text(
                           '아직 계정이 없으신가요?  ',
-                          style: FalletterTextStyle.body3,
+                          style: FalletterTextStyle.body3.copyWith(color: FalletterColor.gray700),
                         ),
                         GestureDetector(
                           onTap: () {

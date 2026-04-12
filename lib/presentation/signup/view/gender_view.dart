@@ -2,6 +2,7 @@ import 'package:falletter_mobile_v2/core/components/app_bar/custom_app_bar.dart'
 import 'package:falletter_mobile_v2/core/components/button/elevated_button.dart';
 import 'package:falletter_mobile_v2/core/components/button/selectable_button.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
+import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/router/route_paths.dart';
 import 'package:falletter_mobile_v2/presentation/signup/provider/signup_provider.dart';
@@ -64,14 +65,17 @@ class SetGenderView extends ConsumerWidget {
                 ],
               ),
               const Spacer(),
-              CustomElevatedButton(
-                onPressed: isNextStep
-                    ? () {
-                        context.push(RoutePaths.schoolNumber);
-                      }
-                    : null,
-                width: double.infinity,
-                child: const Text('다음'),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: CustomElevatedButton(
+                  onPressed: isNextStep
+                      ? () {
+                          context.push(RoutePaths.schoolNumber);
+                        }
+                      : null,
+                  width: double.infinity,
+                  child: Text('다음', style: TextStyle(color: context.reverseTextColor)),
+                ),
               ),
             ],
           ),

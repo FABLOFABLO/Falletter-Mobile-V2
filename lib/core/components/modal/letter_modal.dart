@@ -1,3 +1,4 @@
+import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
@@ -25,7 +26,7 @@ class LetterModal extends ConsumerWidget {
 
     final closeButtonSize = MediaQuery.of(context).size.width * 0.13;
     const height = SizedBox(height: 12);
-    final divider = Divider(color: context.middleColor, height: 1);
+    final divider = Divider(color: FalletterColor.gray200, height: 1);
 
     return Dialog(
       backgroundColor: Colors.transparent,
@@ -54,7 +55,7 @@ class LetterModal extends ConsumerWidget {
                       child: Text(
                         dear,
                         style: FalletterTextStyle.body3.copyWith(
-                          color: context.middleColor,
+                          color: context.textColor,
                         ),
                       ),
                     ),
@@ -76,7 +77,7 @@ class LetterModal extends ConsumerWidget {
                       child: Text(
                         bottom,
                         style: FalletterTextStyle.body3.copyWith(
-                          color: context.middleColor,
+                          color: context.textColor,
                         ),
                       ),
                     ),

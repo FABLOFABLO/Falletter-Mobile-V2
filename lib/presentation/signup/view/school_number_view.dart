@@ -1,6 +1,7 @@
 import 'package:falletter_mobile_v2/core/components/app_bar/custom_app_bar.dart';
 import 'package:falletter_mobile_v2/core/components/button/elevated_button.dart';
 import 'package:falletter_mobile_v2/core/components/text_form_field/text_form_field.dart';
+import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/router/route_paths.dart';
 import 'package:falletter_mobile_v2/presentation/signup/provider/signup_provider.dart';
@@ -86,13 +87,13 @@ class _SchoolNumberViewState extends ConsumerState<SchoolNumberView> {
                 ),
                 const Spacer(),
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 16),
+                  padding: const EdgeInsets.only(bottom: 20),
                   child: CustomElevatedButton(
                     onPressed: isNextStep ? () {
                       context.push(RoutePaths.email);
                     } : null,
                     width: double.infinity,
-                    child: Text('다음'),
+                    child: Text('다음', style: TextStyle(color: context.reverseTextColor)),
                   ),
                 ),
               ],

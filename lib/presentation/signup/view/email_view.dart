@@ -1,6 +1,7 @@
 import 'package:falletter_mobile_v2/core/components/app_bar/custom_app_bar.dart';
 import 'package:falletter_mobile_v2/core/components/button/elevated_button.dart';
 import 'package:falletter_mobile_v2/core/components/icon/field_icon.dart';
+import 'package:falletter_mobile_v2/core/components/snackbar/snackbar.dart';
 import 'package:falletter_mobile_v2/core/components/text_form_field/text_form_field.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
@@ -62,30 +63,24 @@ class _EmailViewState extends ConsumerState<EmailView> {
                 onTapOutside: (event) => FocusScope.of(context).unfocus(),
               ),
               const Spacer(),
-              CustomElevatedButton(
-                onPressed: isNextStep
-                    ? () async {
-                        ref.read(signUpProvider.notifier).setTimer(Duration(seconds: 300));
-                        final success = await ref.read(signUpProvider.notifier).sendEmailCode();
-                        if (success) {
-                          context.push(RoutePaths.verifyCode);
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: CustomElevatedButton(
+                  onPressed: isNextStep
+                      ? () async {
+                          ref.read(signUpProvider.notifier).setTimer(Duration(seconds: 300));
+                          final success = await ref.read(signUpProvider.notifier).sendEmailCode();
+                          if (success) {
+                            context.push(RoutePaths.verifyCode);
+                          }
+                          else {
+                            ErrorSnackBar(context, '이미 가입된 이메일입니다.\n다른 이메일로 시도해주세요.');
+                          }
                         }
-                        else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  '이미 가입된 이메일입니다.\n다른 이메일로 시도해주세요.',
-                                  style: TextStyle(color: FalletterColor.error),
-                                ),
-                                duration: Duration(seconds: 2),
-                                backgroundColor: context.cardBg,
-                              )
-                          );
-                        }
-                      }
-                    : null,
-                width: double.infinity,
-                child: Text('인증번호 전송'),
+                      : null,
+                  width: double.infinity,
+                  child: Text('인증번호 전송', style: TextStyle(color: context.reverseTextColor)),
+                ),
               ),
             ],
           ),

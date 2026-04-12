@@ -60,7 +60,7 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
                   children: [
                     SvgPicture.asset(
                       themeColors.brickSvg,
-                      height: 38,
+                      height: 35,
                       width: 36,
                     ),
                     SizedBox(width: width),
