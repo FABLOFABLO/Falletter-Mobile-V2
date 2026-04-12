@@ -1,3 +1,4 @@
+import 'package:falletter_mobile_v2/core/components/snackbar/snackbar.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
@@ -32,16 +33,7 @@ class _QuestionViewState extends ConsumerState<QuestionView> {
 
       await Future.delayed(const Duration(milliseconds: 700), goNext);
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            '답변 저장에 실패했습니다.\n다시 시도해주세요.',
-            style: TextStyle(color: FalletterColor.error),
-          ),
-          duration: Duration(seconds: 2),
-          backgroundColor: context.cardBg,
-        ),
-      );
+      ErrorSnackBar(context, '답변 저장에 실패했습니다.\n다시 시도해주세요.');
     }
   }
 

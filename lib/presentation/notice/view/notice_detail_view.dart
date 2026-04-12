@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:falletter_mobile_v2/core/components/snackbar/snackbar.dart';
 import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/components/app_bar/custom_app_bar.dart';
 import 'package:falletter_mobile_v2/core/components/button/answer_button.dart';
@@ -126,9 +127,7 @@ class _FalletterNoticeDetailViewState
 
     if (brickCount < nextCost) {
       if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text('브릭이 부족합니다.')));
+        ErrorSnackBar(context, '브릭이 부족합니다.');
       }
       return;
     }
@@ -173,9 +172,7 @@ class _FalletterNoticeDetailViewState
         await ref.read(brickCountProvider.notifier).updateBrickCount(-nextCost);
       } else {
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('힌트 열기에 실패했습니다. 다시 시도해 주세요.')),
-          );
+          ErrorSnackBar(context, '힌트 열기에 실패했습니다. 다시 시도해 주세요.');
         }
       }
     }

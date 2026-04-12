@@ -1,5 +1,6 @@
 import 'package:falletter_mobile_v2/core/components/app_bar/custom_app_bar.dart';
 import 'package:falletter_mobile_v2/core/components/button/elevated_button.dart';
+import 'package:falletter_mobile_v2/core/components/snackbar/snackbar.dart';
 import 'package:falletter_mobile_v2/core/components/text_form_field/text_form_field.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
@@ -173,9 +174,7 @@ class _FalletterLetterViewState extends ConsumerState<FalletterLetterView> {
                             });
                             _enabled();
                           } catch(e) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('전송 중 오류가 발생했습니다.'), backgroundColor: FalletterColor.middleBlack,),
-                            );
+                            ErrorSnackBar(context, '전송 중 오류가 발생했습니다.');
                           } finally {
                             setState(() {
                               isSending = false;
