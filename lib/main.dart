@@ -54,7 +54,7 @@ class MyApp extends ConsumerWidget {
       debugShowCheckedModeBanner: false,
       routerConfig: router,
       themeMode: themeMode,
-      theme: darkTheme.copyWith(
+      theme: lightTheme.copyWith(
         textSelectionTheme: textSelectionTheme,
       ),
       darkTheme: darkTheme.copyWith(
