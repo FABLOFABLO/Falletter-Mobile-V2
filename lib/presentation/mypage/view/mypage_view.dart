@@ -1,4 +1,5 @@
 import 'package:falletter_mobile_v2/core/components/modal/default_modal.dart';
+import 'package:falletter_mobile_v2/core/components/progress/loading_progress_indicator.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/providers/auth_status_provider.dart';
@@ -6,8 +7,8 @@ import 'package:falletter_mobile_v2/core/providers/brick_count_provider.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
 import 'package:falletter_mobile_v2/core/router/route_paths.dart';
 import 'package:falletter_mobile_v2/core/theme/app_theme_color.dart';
+import 'package:falletter_mobile_v2/features/letter/provider/letter_provider.dart';
 import 'package:falletter_mobile_v2/models/my_info_model.dart';
-import 'package:falletter_mobile_v2/presentation/letter/provider/letter_provider.dart';
 import 'package:falletter_mobile_v2/presentation/mypage/provider/user_info_provider.dart';
 import 'package:falletter_mobile_v2/presentation/mypage/widget/item_container.dart';
 import 'package:falletter_mobile_v2/presentation/mypage/widget/menu_button.dart';
@@ -61,16 +62,7 @@ class _FalletterMypageViewState extends ConsumerState<FalletterMypageView> {
               error: (Object error, StackTrace stackTrace) {
                 return Center(child: Text('오류입니다 다시 시도해주세요.'));
               },
-              loading: () => Center(
-                child: ShaderMask(
-                  shaderCallback: (Rect bounds) {
-                    return themeColors.progressIndicator.createShader(bounds);
-                  },
-                  child: const CircularProgressIndicator(
-                    color: Colors.transparent,
-                  ),
-                ),
-              ),
+              loading: () => loadingCircularIndicator(ref),
               data: (UserInfoModel data) {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

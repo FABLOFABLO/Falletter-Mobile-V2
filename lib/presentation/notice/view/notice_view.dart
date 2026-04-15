@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:falletter_mobile_v2/core/components/progress/loading_progress_indicator.dart';
 import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/providers/bottom_nav_provider.dart';
@@ -96,9 +97,7 @@ class _FalletterNoticeViewState extends ConsumerState<FalletterNoticeView> {
 
   Widget _buildBody(NoticeListState noticeState) {
     if (noticeState.isLoading && noticeState.notices.isEmpty) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
+      return loadingCircularIndicator(ref);
     }
 
     if (noticeState.error != null && noticeState.notices.isEmpty) {

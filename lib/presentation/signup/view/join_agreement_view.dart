@@ -1,7 +1,6 @@
 import 'package:falletter_mobile_v2/core/components/app_bar/custom_app_bar.dart';
 import 'package:falletter_mobile_v2/core/components/button/elevated_button.dart';
 import 'package:falletter_mobile_v2/core/components/snackbar/snackbar.dart';
-import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/router/route_paths.dart';
@@ -78,7 +77,7 @@ class JoinAgreementView extends ConsumerWidget {
                       );
                       context.go(RoutePaths.signupComplete);
                     } else {
-                      ErrorSnackBar(context, '회원가입에 실패했습니다.\n다시 시도해주세요.');
+                      errorSnackBar(context, '회원가입에 실패했습니다.\n다시 시도해주세요.');
                     }
                   }
                       : null,

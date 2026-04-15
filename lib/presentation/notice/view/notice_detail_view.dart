@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:falletter_mobile_v2/core/components/progress/loading_progress_indicator.dart';
 import 'package:falletter_mobile_v2/core/components/snackbar/snackbar.dart';
 import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/components/app_bar/custom_app_bar.dart';
@@ -127,7 +128,7 @@ class _FalletterNoticeDetailViewState
 
     if (brickCount < nextCost) {
       if (mounted) {
-        ErrorSnackBar(context, '브릭이 부족합니다.');
+        errorSnackBar(context, '브릭이 부족합니다.');
       }
       return;
     }
@@ -172,7 +173,7 @@ class _FalletterNoticeDetailViewState
         await ref.read(brickCountProvider.notifier).updateBrickCount(-nextCost);
       } else {
         if (mounted) {
-          ErrorSnackBar(context, '힌트 열기에 실패했습니다. 다시 시도해 주세요.');
+          errorSnackBar(context, '힌트 열기에 실패했습니다. 다시 시도해 주세요.');
         }
       }
     }
@@ -224,9 +225,7 @@ class _FalletterNoticeDetailViewState
             backgroundColor: context.middleColor,
             color: context.textColor,
             child: detailAsync.when(
-              loading: () => Center(
-                child: CircularProgressIndicator(color: context.textColor),
-              ),
+              loading: () => loadingCircularIndicator(ref),
               error: (error, _) => Center(
                 child: Text('알림을 불러올 수 없습니다.', style: FalletterTextStyle.body2),
               ),

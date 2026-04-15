@@ -1,5 +1,6 @@
 import 'package:falletter_mobile_v2/core/components/app_bar/custom_app_bar.dart';
 import 'package:falletter_mobile_v2/core/components/button/elevated_button.dart';
+import 'package:falletter_mobile_v2/core/components/progress/loading_progress_indicator.dart';
 import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/presentation/mypage/provider/notification_setting_provider.dart';
@@ -24,7 +25,7 @@ class NotificationSettingView extends ConsumerWidget {
       Future.microtask(() {
         notifier.loadSetting();
       });
-      return Scaffold(body: Center(child: CircularProgressIndicator()));
+      return loadingCircularIndicator(ref);
     }
 
     return Scaffold(

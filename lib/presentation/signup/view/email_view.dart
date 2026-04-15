@@ -3,7 +3,6 @@ import 'package:falletter_mobile_v2/core/components/button/elevated_button.dart'
 import 'package:falletter_mobile_v2/core/components/icon/field_icon.dart';
 import 'package:falletter_mobile_v2/core/components/snackbar/snackbar.dart';
 import 'package:falletter_mobile_v2/core/components/text_form_field/text_form_field.dart';
-import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/router/route_paths.dart';
@@ -74,7 +73,7 @@ class _EmailViewState extends ConsumerState<EmailView> {
                             context.push(RoutePaths.verifyCode);
                           }
                           else {
-                            ErrorSnackBar(context, '이미 가입된 이메일입니다.\n다른 이메일로 시도해주세요.');
+                            errorSnackBar(context, '이미 가입된 이메일입니다.\n다른 이메일로 시도해주세요.');
                           }
                         }
                       : null,
