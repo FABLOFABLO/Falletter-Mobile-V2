@@ -1,11 +1,11 @@
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
-import 'package:falletter_mobile_v2/core/providers/roulette_timer_provider.dart';
+import 'package:falletter_mobile_v2/features/timer/presentation/provider/roulette_timer_provider.dart';
 import 'package:falletter_mobile_v2/core/theme/app_theme_color.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
-import 'package:falletter_mobile_v2/presentation/notice/provider/notice_provider.dart';
-import 'package:falletter_mobile_v2/presentation/roulette/roulette_timer_view.dart';
-import 'package:falletter_mobile_v2/presentation/roulette/roulette_view.dart';
+import 'package:falletter_mobile_v2/features/timer/presentation/view/roulette_timer_view.dart';
+import 'package:falletter_mobile_v2/features/roulette/presentation/view/roulette_view.dart';
+import 'package:falletter_mobile_v2/features/notice/presentation/provider/notice_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
