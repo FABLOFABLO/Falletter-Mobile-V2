@@ -66,7 +66,7 @@ class SetGenderView extends ConsumerWidget {
               ),
               const Spacer(),
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20),
+                padding: const EdgeInsets.only(bottom: 20),
                 child: CustomElevatedButton(
                   onPressed: isNextStep
                       ? () {

@@ -88,7 +88,7 @@ class SelectableButton extends ConsumerWidget {
     }
 
     return Transform.translate(
-      offset: isSelected ? Offset(-3, 0) : Offset.zero,
+      offset: isSelected ? Offset(-0.5, 0) : Offset.zero,
       child: Icon(
           icon,
           color: iconColor,
