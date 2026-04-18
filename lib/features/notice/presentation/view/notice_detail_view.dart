@@ -187,6 +187,8 @@ class _FalletterNoticeDetailViewState
 
   @override
   Widget build(BuildContext context) {
+    final selectedTheme = ref.watch(themeProvider);
+    final themeColors = appThemeColors[selectedTheme]!;
     final brickState = ref.watch(brickCountProvider);
     final detailAsync = ref.watch(noticeDetailProvider(_noticeId));
     final brickCount = brickState.when(
@@ -222,8 +224,8 @@ class _FalletterNoticeDetailViewState
           ),
           body: RefreshIndicator(
             onRefresh: _onRefresh,
-            backgroundColor: context.middleColor,
-            color: context.textColor,
+            backgroundColor: context.cardBg,
+            color: themeColors.primaryColor,
             child: detailAsync.when(
               loading: () => loadingCircularIndicator(ref),
               error: (error, _) => Center(
