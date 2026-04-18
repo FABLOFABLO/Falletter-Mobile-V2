@@ -26,6 +26,7 @@ class _SelectState extends ConsumerState<BrickHistoryView> {
   @override
   Widget build(BuildContext context) {
     final brickHistory = ref.watch(brickHistoryProvider);
+    final reversedHistory = brickHistory.reversed.toList();
     return Scaffold(
       appBar: CustomAppBar(icon: true),
       body: Padding(
@@ -38,9 +39,9 @@ class _SelectState extends ConsumerState<BrickHistoryView> {
             const SizedBox(height: 24),
             Expanded(
               child: ListView.separated(
-                itemCount: brickHistory.length,
+                itemCount: reversedHistory.length,
                 itemBuilder: (BuildContext context, int index) {
-                  final bricks = brickHistory[index];
+                  final bricks = reversedHistory[index];
                   return BrickHistory(
                     title: bricks.description,
                     brick: bricks.amount,

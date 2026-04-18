@@ -1,9 +1,10 @@
 import 'dart:async';
-
 import 'package:falletter_mobile_v2/core/components/progress/loading_progress_indicator.dart';
 import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/providers/bottom_nav_provider.dart';
+import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
+import 'package:falletter_mobile_v2/core/theme/app_theme_color.dart';
 import 'package:falletter_mobile_v2/features/item/presentation/provider/brick_count_provider.dart';
 import 'package:falletter_mobile_v2/features/notice/presentation/provider/notice_provider.dart';
 import 'package:falletter_mobile_v2/features/notice/presentation/widget/notice_box.dart';
@@ -64,6 +65,8 @@ class _FalletterNoticeViewState extends ConsumerState<FalletterNoticeView> {
   Widget build(BuildContext context) {
     final brickCount = ref.watch(brickCountProvider).value?.brickCount ?? 0;
     final noticeState = ref.watch(noticeListProvider);
+    final selectedTheme = ref.watch(themeProvider);
+    final themeColors = appThemeColors[selectedTheme]!;
 
     ref.listen(bottomNavIndexProvider, (previous, current) {
       if (current == 3) {
@@ -85,7 +88,8 @@ class _FalletterNoticeViewState extends ConsumerState<FalletterNoticeView> {
             Expanded(
               child: RefreshIndicator(
                 onRefresh: _refreshNotices,
-                backgroundColor: context.middleColor,
+                backgroundColor: context.cardBg,
+                color: themeColors.primaryColor,
                 child: _buildBody(noticeState),
               ),
             ),
@@ -96,6 +100,8 @@ class _FalletterNoticeViewState extends ConsumerState<FalletterNoticeView> {
   }
 
   Widget _buildBody(NoticeListState noticeState) {
+    final reversedNotice = noticeState.notices.reversed.toList();
+
     if (noticeState.isLoading && noticeState.notices.isEmpty) {
       return loadingCircularIndicator(ref);
     }
@@ -125,9 +131,9 @@ class _FalletterNoticeViewState extends ConsumerState<FalletterNoticeView> {
     return ListView.builder(
       controller: _scrollController,
       physics: const AlwaysScrollableScrollPhysics(),
-      itemCount: noticeState.notices.length,
+      itemCount: reversedNotice.length,
       itemBuilder: (context, index) {
-        final notice = noticeState.notices[index];
+        final notice = reversedNotice[index];
         final isRead = notice.isRead || _readNoticeIds.contains(notice.id);
 
         return NoticeBox(

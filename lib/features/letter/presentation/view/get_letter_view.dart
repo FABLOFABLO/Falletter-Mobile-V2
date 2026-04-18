@@ -29,6 +29,7 @@ class _GetLetterViewState extends ConsumerState<GetLetterView> {
   @override
   Widget build(BuildContext context) {
     final letters = ref.watch(getLetterProvider);
+    final reversed = letters.reversed.where((l) => l.isDelivered).toList();
     return Scaffold(
       appBar: CustomAppBar(icon: true),
       body: SafeArea(
@@ -44,9 +45,9 @@ class _GetLetterViewState extends ConsumerState<GetLetterView> {
             Expanded(
               child: ListView.builder(
                 padding: EdgeInsets.zero,
-                itemCount: letters.length,
+                itemCount: reversed.length,
                 itemBuilder: (BuildContext context, int idx) {
-                  final letter = letters[idx];
+                  final letter = reversed[idx];
                   return ContentCardButton(
                     width: double.infinity,
                     height: null,

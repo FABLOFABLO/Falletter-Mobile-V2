@@ -31,6 +31,7 @@ class _SendLetterViewState extends ConsumerState<SendLetterView> {
   Widget build(BuildContext context) {
     final students = ref.watch(studentProvider);
     final letters = ref.watch(sendLetterProvider);
+    final reversedLetters = letters.reversed.toList();
 
     return Scaffold(
       appBar: CustomAppBar(icon: true),
@@ -45,13 +46,12 @@ class _SendLetterViewState extends ConsumerState<SendLetterView> {
           SizedBox(height: 24),
           Expanded(
             child: ListView.builder(
-              itemCount: letters.length,
+              itemCount: reversedLetters.length,
               itemBuilder: (BuildContext context, int index) {
-                final letter = letters[index];
-                final student = students.firstWhere(
+                final letter = reversedLetters[index];
+                final student = students.where(
                       (s) => s.id == letter.receptionId,
-
-                );
+                ).isEmpty ? null : students.firstWhere((s) => s.id == letter.receptionId);
                 return ContentCardButton(
                   width: double.infinity,
                   onTap: () {
@@ -75,7 +75,7 @@ class _SendLetterViewState extends ConsumerState<SendLetterView> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '${sendLetterFormatDateTime(letter.createdAt)}...',
+                          sendLetterFormatDateTime(letter.createdAt),
                           style: FalletterTextStyle.body3.copyWith(
                             color: FalletterColor.gray400,
                           ),
@@ -85,7 +85,9 @@ class _SendLetterViewState extends ConsumerState<SendLetterView> {
                           children: [
                             Expanded(
                               child: Text(
-                                '${student.schoolNumber} ${student.name}에게',
+                                student != null
+                                    ? '${student.schoolNumber} ${student.name}에게'
+                                    : '알 수 없는 사용자',
                                 style: FalletterTextStyle.subTitle2,
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
