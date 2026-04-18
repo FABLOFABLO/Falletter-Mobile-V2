@@ -4,7 +4,7 @@ String sendLetterFormatDateTime(DateTime dateTime) {
   final diff = now.difference(dateTime);
 
   if (now.isBefore(arrivedAt)) {
-    return '전송 중';
+    return '전송 중...';
   }
 
   if (diff.inDays >= 31) {
@@ -18,7 +18,7 @@ String sendLetterFormatDateTime(DateTime dateTime) {
   } else if (diff.inSeconds > 0) {
     return '방금 전';
   } else {
-    return '전송 중';
+    return '전송 중...';
   }
 }
 
