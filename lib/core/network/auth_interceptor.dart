@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:dio/dio.dart';
@@ -7,14 +8,15 @@ import 'package:falletter_mobile_v2/core/network/token_storage.dart';
 class AuthInterceptor extends Interceptor {
   final Dio dio;
   final TokenStorage tokenStorage;
-  final String refreshTokenEndpoint;
   final VoidCallback onAuthFailed;
+
+  bool _isRefreshing = false;
+  Completer<void>? _refreshCompleter;
 
   AuthInterceptor({
     required this.dio,
     required this.tokenStorage,
-    required this.refreshTokenEndpoint,
-    required this.onAuthFailed
+    required this.onAuthFailed,
   });
 
   @override
@@ -25,51 +27,93 @@ class AuthInterceptor extends Interceptor {
     if (accessToken != null) {
       options.headers['Authorization'] = 'Bearer $accessToken';
     }
+
     handler.next(options);
   }
 
   @override
-  Future<void> onError(DioException err, ErrorInterceptorHandler handler) async {
-    if (err.response?.statusCode == 401) {
+  Future<void> onError(
+      DioException err, ErrorInterceptorHandler handler) async {
+
+    if (err.response?.statusCode != 401) {
+      return handler.next(err);
+    }
+
+    final requestOptions = err.requestOptions;
+
+    if (_isRefreshing) {
       try {
-        final refreshToken = await tokenStorage.readRefreshToken();
+        await _refreshCompleter?.future;
 
-        if (refreshToken == null) {
-          return handler.next(err);
-        }
+        final newAccessToken = await tokenStorage.readAccessToken();
 
-        final refreshDio = Dio(
-            BaseOptions(
-              baseUrl: ApiEndpoints.baseUrl,
-            )
-        );
-        final response = await refreshDio.post(
-            ApiEndpoints.refreshToken,
-          data: {
-              "refreshToken": refreshToken
-          }
-        );
+        final newRequest = requestOptions.copyWith();
+        newRequest.headers['Authorization'] = 'Bearer $newAccessToken';
 
-        final newAccessToken = response.data['accessToken'];
-        final newRefreshToken = response.data['refreshToken'];
+        final response = await dio.fetch(newRequest);
 
-        await tokenStorage.saveTokens(
-            accessToken: newAccessToken,
-            refreshToken: newRefreshToken
-        );
+        return handler.resolve(response);
 
-        final options = err.requestOptions;
-
-        options.headers['Authorization'] = 'Bearer $newAccessToken';
-
-        final retryResponse = await dio.fetch(options);
-
-        return handler.resolve(retryResponse);
-      } catch(e) {
-        await tokenStorage.clear();
-        onAuthFailed();
+      } catch (e) {
+        return handler.next(err);
       }
     }
-    handler.next(err);
+
+    _isRefreshing = true;
+    _refreshCompleter = Completer();
+
+    try {
+      final refreshToken = await tokenStorage.readRefreshToken();
+
+      if (refreshToken == null) {
+        await tokenStorage.clear();
+        onAuthFailed();
+        return handler.reject(err);
+      }
+
+      final refreshDio = Dio(
+        BaseOptions(
+          baseUrl: ApiEndpoints.baseUrl,
+          contentType: Headers.jsonContentType,
+          responseType: ResponseType.json,
+          headers: {Headers.acceptHeader: Headers.jsonContentType},
+        ),
+      );
+
+      final response = await refreshDio.post(
+        ApiEndpoints.refreshToken,
+        data: {
+          "refreshToken": refreshToken,
+        },
+      );
+
+      final newAccessToken = response.data['accessToken'];
+      final newRefreshToken = response.data['refreshToken'];
+
+
+      await tokenStorage.saveTokens(
+        accessToken: newAccessToken,
+        refreshToken: newRefreshToken,
+      );
+
+      _refreshCompleter?.complete();
+
+      final newRequest = err.requestOptions.copyWith();
+      newRequest.headers['Authorization'] = 'Bearer $newAccessToken';
+
+      final retryResponse = await dio.fetch(newRequest);
+
+      return handler.resolve(retryResponse);
+
+    } catch (e) {
+      _refreshCompleter?.completeError(e);
+
+      await tokenStorage.clear();
+      onAuthFailed();
+
+      return handler.reject(err);
+    } finally {
+      _isRefreshing = false;
+    }
   }
 }

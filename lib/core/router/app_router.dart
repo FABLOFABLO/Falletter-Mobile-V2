@@ -2,7 +2,7 @@ import 'package:falletter_mobile_v2/core/components/bottom_navigatoin_bar/custon
 import 'package:falletter_mobile_v2/core/router/route_paths.dart';
 import 'package:falletter_mobile_v2/features/answer/presentation/view/answer_view.dart';
 import 'package:falletter_mobile_v2/features/history/presentation/view/brick_history_view.dart';
-import 'package:falletter_mobile_v2/features/theme/presentation/view/theme_select_view.dart';
+import 'package:falletter_mobile_v2/features/user/presentation/view/theme_select_view.dart';
 import 'package:falletter_mobile_v2/features/letter/presentation/view/letter_view.dart';
 import 'package:falletter_mobile_v2/features/roulette/presentation/widget/roulette.dart';
 import 'package:falletter_mobile_v2/features/roulette/presentation/view/roulette_reward_view.dart';
