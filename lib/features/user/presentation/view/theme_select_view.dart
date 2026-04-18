@@ -6,6 +6,7 @@ import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
 import 'package:falletter_mobile_v2/core/theme/app_theme_color.dart';
+import 'package:falletter_mobile_v2/features/user/presentation/provider/theme_change_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -76,8 +77,8 @@ class _ThemeSelectViewState extends ConsumerState<ThemeSelectView> {
               CustomElevatedButton(
                 onPressed: sameTheme
                     ? null
-                    : () {
-                        ref.read(themeProvider.notifier).changeTheme(_appTheme);
+                    : () async {
+                        await ref.read(themeChangeProvider.notifier).updateTheme(_appTheme);
                         context.pop();
                       },
                 child: Text('적용하기', style: TextStyle(color: sameTheme ? FalletterColor.gray700: context.reverseTextColor)),

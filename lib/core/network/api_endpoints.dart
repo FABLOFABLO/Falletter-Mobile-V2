@@ -15,6 +15,8 @@ class ApiEndpoints {
   static const logout = "/user/logout";
   static const users = "/user/users";
   static const student = "/user/student";
+  static const theme = "/user/theme/update";
+  static const withdraw = "/user/withdraw";
 
   /// Community
   static const post = "/community/posts";

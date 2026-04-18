@@ -1,3 +1,4 @@
+import 'dart:developer' as develop;
 import 'package:dio/dio.dart';
 import 'package:falletter_mobile_v2/core/network/api_endpoints.dart';
 import 'package:falletter_mobile_v2/features/user/data/model/student_model.dart';
@@ -43,6 +44,22 @@ class UserApiService {
     }
   }
 
+  Future<void> patchTheme(String theme) async {
+    try {
+      final response = await dio.patch(
+          ApiEndpoints.theme,
+          data: {
+            'theme': theme
+          }
+      );
+      if (response.statusCode == 200) return;
+      throw Exception('테마 색상 변경 실패');
+    } catch(e) {
+      develop.log('error: $e');
+      throw Exception('테마 색상 변경 실패');
+    }
+  }
+
   Future<UserInfoModel> getUserInfo() async {
     try {
       final response = await dio.get(ApiEndpoints.users);
@@ -51,7 +68,8 @@ class UserApiService {
       }
       throw Exception('내 정보 조회 실패');
     } catch(e) {
-      throw Exception('내 정보 조회 실패: $e');
+      develop.log('error: $e');
+      throw Exception('내 정보 조회 실패');
     }
   }
 
@@ -68,12 +86,24 @@ class UserApiService {
     }
   }
 
+  Future<void> withdraw() async {
+    try {
+      final response = await dio.delete(ApiEndpoints.withdraw);
+      if (response.statusCode == 204) return;
+      throw Exception('회원탈퇴 실패');
+    } catch(e) {
+      develop.log('error: $e');
+      throw Exception('회원탈퇴 실패');
+    }
+  }
+
   Future<void> logout() async {
     try {
       final response = await dio.delete(ApiEndpoints.logout);
       if (response.statusCode == 204) return;
       throw Exception('로그아웃 실패');
     } catch(e) {
+      develop.log('error: $e');
       throw Exception('로그아웃 실패');
     }
   }
