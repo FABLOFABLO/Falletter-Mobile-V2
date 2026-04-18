@@ -90,6 +90,7 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
                               timeCheck(post.updatedAt),
                               style: baseInfoStyle
                             ),
+                            SizedBox(height: 48)
                           ],
                         ),
                         if (myInfo.value?.id != null && myInfo.value?.id == post.authorId)
