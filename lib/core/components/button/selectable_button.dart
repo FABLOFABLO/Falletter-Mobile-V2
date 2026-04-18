@@ -32,13 +32,15 @@ class SelectableButton extends ConsumerWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        decoration: isSelected
-            ? BoxDecoration(
-          gradient: iconGradient ?? themeColors.answerButton,
+        decoration: BoxDecoration(
+          gradient: isSelected
+              ? (iconGradient ?? themeColors.answerButton)
+              : const LinearGradient(
+            colors: [Colors.transparent, Colors.transparent],
+          ),
           borderRadius: BorderRadius.circular(8),
-        )
-            : null,
-        padding: isSelected ? const EdgeInsets.all(3) : EdgeInsets.zero,
+        ),
+        padding: const EdgeInsets.all(3),
         child: Container(
           decoration: BoxDecoration(
             color: context.cardBg,
@@ -87,14 +89,11 @@ class SelectableButton extends ConsumerWidget {
       );
     }
 
-    return Transform.translate(
-      offset: isSelected ? Offset(-0.5, 0) : Offset.zero,
-      child: Icon(
-          icon,
-          color: iconColor,
-          size: 100,
-          fill: 1,
-      ),
+    return Icon(
+        icon,
+        color: iconColor,
+        size: 100,
+        fill: 1,
     );
   }
 }
