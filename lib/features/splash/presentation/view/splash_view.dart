@@ -43,12 +43,24 @@ class _SplashViewState extends ConsumerState<SplashView> {
           final isLoggedIn = status == AuthStatus.logIn;
 
           if (isLoggedIn) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              if (context.mounted) {
-                context.go(RoutePaths.main);
-              }
-            });
-            return const SizedBox();
+            final init = ref.watch(appInitProvider);
+
+            return init.when(
+              loading: () => loadingCircularIndicator(ref),
+
+              data: (_) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (context.mounted) {
+                    context.go(RoutePaths.main);
+                  }
+                });
+                return const SizedBox();
+              },
+
+              error: (_, __) {
+                return Center(child: Text('초기화 실패'));
+              },
+            );
           }
 
           return _LogoutUI(context, themeColors);

@@ -39,25 +39,33 @@ final authStatusProvider = FutureProvider<AuthStatus>((ref) async {
 
   if (refresh == null || refresh.isEmpty) return AuthStatus.notLogIn;
 
+  return AuthStatus.logIn;
+});
+
+final appInitProvider = FutureProvider<void>((ref) async {
+  final storage = ref.watch(tokenStorageProvider);
+  final refresh = await storage.readRefreshToken();
+
+  if (refresh == null || refresh.isEmpty) return;
+
   try {
     final access = await storage.readAccessToken();
+
     if (access == null || JwtUtils.isExpired(access)) {
       await ref.read(authApiServiceProvider).getRefreshToken(refreshToken: refresh);
     }
+
     final user = await ref.read(userApiService).getUserInfo();
+
     final theme = AppThemeParser.fromString(user.theme);
     ref.read(themeProvider.notifier).changeTheme(theme);
-    return AuthStatus.logIn;
   } catch(e) {
     if (e is DioException) {
       final statusCode = e.response?.statusCode;
 
       if (statusCode == 401 || statusCode == 403) {
         await storage.clear();
-        return AuthStatus.notLogIn;
       }
     }
-
-    return AuthStatus.logIn;
   }
 });
