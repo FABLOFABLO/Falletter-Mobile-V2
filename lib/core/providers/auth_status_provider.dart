@@ -44,17 +44,18 @@ final authStatusProvider = FutureProvider<AuthStatus>((ref) async {
 
 final appInitProvider = FutureProvider<void>((ref) async {
   final storage = ref.read(tokenStorageProvider);
-  final refresh = await storage.readRefreshToken();
+  final status = await ref.watch(authStatusProvider.future);
 
-  if (refresh == null || refresh.isEmpty) return;
+  if (status == AuthStatus.notLogIn) return;
 
   try {
     final access = await storage.readAccessToken();
 
     if (access == null || JwtUtils.isExpired(access)) {
+      final refresh = await storage.readRefreshToken();
       await ref
           .read(authApiServiceProvider)
-          .getRefreshToken(refreshToken: refresh);
+          .getRefreshToken(refreshToken: refresh!);
     }
 
     final user = await ref.read(userApiService).getUserInfo();
