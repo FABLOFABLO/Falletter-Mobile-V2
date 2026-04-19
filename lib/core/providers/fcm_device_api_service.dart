@@ -9,14 +9,11 @@ class FcmDeviceApiService {
 
   Future<FcmTokenModel> registerToken({
     required String token,
-    required String deviceId
+    required String deviceId,
   }) async {
     final response = await dio.post(
-        ApiEndpoints.fcmToken,
-      data: {
-        'token': token,
-        'deviceId': deviceId
-      }
+      ApiEndpoints.fcmToken,
+      data: {'token': token, 'deviceId': deviceId},
     );
 
     return FcmTokenModel.fromJson(response.data);

@@ -21,7 +21,9 @@ class AuthInterceptor extends Interceptor {
 
   @override
   Future<void> onRequest(
-      RequestOptions options, RequestInterceptorHandler handler) async {
+    RequestOptions options,
+    RequestInterceptorHandler handler,
+  ) async {
     final accessToken = await tokenStorage.readAccessToken();
 
     if (accessToken != null) {
@@ -33,8 +35,9 @@ class AuthInterceptor extends Interceptor {
 
   @override
   Future<void> onError(
-      DioException err, ErrorInterceptorHandler handler) async {
-
+    DioException err,
+    ErrorInterceptorHandler handler,
+  ) async {
     if (err.response?.statusCode != 401) {
       return handler.next(err);
     }
@@ -52,17 +55,13 @@ class AuthInterceptor extends Interceptor {
         final newAccessToken = await tokenStorage.readAccessToken();
 
         final newRequest = requestOptions.copyWith(
-          extra: {
-            ...requestOptions.extra,
-            'retry': true
-          }
+          extra: {...requestOptions.extra, 'retry': true},
         );
         newRequest.headers['Authorization'] = 'Bearer $newAccessToken';
 
         final response = await dio.fetch(newRequest);
 
         return handler.resolve(response);
-
       } catch (e) {
         return handler.next(err);
       }
@@ -91,14 +90,11 @@ class AuthInterceptor extends Interceptor {
 
       final response = await refreshDio.post(
         ApiEndpoints.refreshToken,
-        data: {
-          "refreshToken": refreshToken,
-        },
+        data: {"refreshToken": refreshToken},
       );
 
       final newAccessToken = response.data['accessToken'];
       final newRefreshToken = response.data['refreshToken'];
-
 
       await tokenStorage.saveTokens(
         accessToken: newAccessToken,
@@ -108,17 +104,13 @@ class AuthInterceptor extends Interceptor {
       _refreshCompleter?.complete();
 
       final newRequest = requestOptions.copyWith(
-          extra: {
-            ...requestOptions.extra,
-            'retry': true
-          }
+        extra: {...requestOptions.extra, 'retry': true},
       );
       newRequest.headers['Authorization'] = 'Bearer $newAccessToken';
 
       final retryResponse = await dio.fetch(newRequest);
 
       return handler.resolve(retryResponse);
-
     } catch (e) {
       _refreshCompleter?.completeError(e);
 

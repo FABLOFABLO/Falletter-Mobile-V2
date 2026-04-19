@@ -11,18 +11,17 @@ import '../../firebase_options.dart';
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 }
 
 class FcmService {
   FcmService._();
+
   static final FcmService instance = FcmService._();
 
   final FirebaseMessaging _messaging = FirebaseMessaging.instance;
   final FlutterLocalNotificationsPlugin _localNoti =
-  FlutterLocalNotificationsPlugin();
+      FlutterLocalNotificationsPlugin();
 
   static const String _androidChannelId = 'fcm_default_channel';
 
@@ -31,11 +30,7 @@ class FcmService {
       await Permission.notification.request();
     }
 
-    await _messaging.requestPermission(
-      alert: true,
-      badge: true,
-      sound: true,
-    );
+    await _messaging.requestPermission(alert: true, badge: true, sound: true);
 
     await _initLocalNotifications();
 
@@ -71,10 +66,7 @@ class FcmService {
     final deviceId = await _getDeviceId();
 
     try {
-      await api.registerToken(
-        token: token,
-        deviceId: deviceId,
-      );
+      await api.registerToken(token: token, deviceId: deviceId);
     } catch (e) {
       debugPrint('FCM 토큰 등록 실패: $e');
     }
@@ -112,7 +104,8 @@ class FcmService {
 
     await _localNoti
         .resolvePlatformSpecificImplementation<
-        AndroidFlutterLocalNotificationsPlugin>()
+          AndroidFlutterLocalNotificationsPlugin
+        >()
         ?.createNotificationChannel(channel);
   }
 

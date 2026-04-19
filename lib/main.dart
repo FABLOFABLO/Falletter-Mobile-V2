@@ -13,7 +13,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'firebase_options.dart';
 
 final FlutterLocalNotificationsPlugin _localNoti =
-FlutterLocalNotificationsPlugin();
+    FlutterLocalNotificationsPlugin();
 
 Future<void> _setupAndroidNotificationChannel() async {
   const channel = AndroidNotificationChannel(
@@ -23,8 +23,10 @@ Future<void> _setupAndroidNotificationChannel() async {
     importance: Importance.high,
   );
 
-  final androidPlugin = _localNoti.resolvePlatformSpecificImplementation<
-      AndroidFlutterLocalNotificationsPlugin>();
+  final androidPlugin = _localNoti
+      .resolvePlatformSpecificImplementation<
+        AndroidFlutterLocalNotificationsPlugin
+      >();
 
   await androidPlugin?.createNotificationChannel(channel);
 }
@@ -32,9 +34,7 @@ Future<void> _setupAndroidNotificationChannel() async {
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   await _setupAndroidNotificationChannel();
 
@@ -58,9 +58,7 @@ class MyApp extends ConsumerWidget {
       debugShowCheckedModeBanner: false,
       routerConfig: router,
       themeMode: themeMode,
-      theme: lightTheme.copyWith(
-        textSelectionTheme: textSelectionTheme,
-      ),
+      theme: lightTheme.copyWith(textSelectionTheme: textSelectionTheme),
       darkTheme: darkTheme.copyWith(
         inputDecorationTheme: inputDecorationTheme,
         textSelectionTheme: textSelectionTheme,
