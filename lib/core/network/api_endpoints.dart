@@ -4,6 +4,9 @@ class ApiEndpoints {
   /// Base URL
   static const baseUrl = AppEnv.baseUrl;
 
+  /// Fcm
+  static const fcmToken = '/device/token';
+
   /// Auth
   static const refreshToken = "/auth/refresh";
   static const emailVerify = "/auth/email/verify";
@@ -15,6 +18,8 @@ class ApiEndpoints {
   static const logout = "/user/logout";
   static const users = "/user/users";
   static const student = "/user/student";
+  static const theme = "/user/theme/update";
+  static const withdraw = "/user/withdraw";
 
   /// Community
   static const post = "/community/posts";

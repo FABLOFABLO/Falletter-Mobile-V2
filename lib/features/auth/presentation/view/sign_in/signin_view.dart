@@ -5,8 +5,10 @@ import 'package:falletter_mobile_v2/core/components/text_form_field/text_form_fi
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
+import 'package:falletter_mobile_v2/core/providers/auth_status_provider.dart';
+import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
 import 'package:falletter_mobile_v2/core/router/route_paths.dart';
-import 'package:falletter_mobile_v2/features/user/presentation/provider/user_info_provider.dart';
+import 'package:falletter_mobile_v2/features/user/presentation/provider/student_provider.dart';
 import 'package:falletter_mobile_v2/features/auth/presentation/provider/sign_in_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -130,7 +132,9 @@ class _SigninViewState extends ConsumerState<SigninView> {
                           password: _passwordController.text.trim()
                       );
                       if (success) {
-                        ref.invalidate(userInfoProvider);
+                        final user = await ref.read(userApiService).getUserInfo();
+                        final theme = AppThemeParser.fromString(user.theme);
+                        ref.read(themeProvider.notifier).changeTheme(theme);
                         context.go(RoutePaths.main);
                       } else {
                         setState(() {

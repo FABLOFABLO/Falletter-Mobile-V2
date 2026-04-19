@@ -24,7 +24,6 @@ class DioClient {
       AuthInterceptor(
           dio: dio,
           tokenStorage: tokenStorage,
-          refreshTokenEndpoint: ApiEndpoints.refreshToken,
           onAuthFailed: () {
             router.go('/splash');
           }

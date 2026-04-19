@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:falletter_mobile_v2/core/providers/fcm_device_provider.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_mode_provoder.dart';
 import 'package:falletter_mobile_v2/core/router/app_router.dart';
 import 'package:falletter_mobile_v2/core/theme/falletter_theme.dart';
@@ -12,7 +13,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'firebase_options.dart';
 
 final FlutterLocalNotificationsPlugin _localNoti =
-FlutterLocalNotificationsPlugin();
+    FlutterLocalNotificationsPlugin();
 
 Future<void> _setupAndroidNotificationChannel() async {
   const channel = AndroidNotificationChannel(
@@ -22,8 +23,10 @@ Future<void> _setupAndroidNotificationChannel() async {
     importance: Importance.high,
   );
 
-  final androidPlugin = _localNoti.resolvePlatformSpecificImplementation<
-      AndroidFlutterLocalNotificationsPlugin>();
+  final androidPlugin = _localNoti
+      .resolvePlatformSpecificImplementation<
+        AndroidFlutterLocalNotificationsPlugin
+      >();
 
   await androidPlugin?.createNotificationChannel(channel);
 }
@@ -31,22 +34,31 @@ Future<void> _setupAndroidNotificationChannel() async {
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   await _setupAndroidNotificationChannel();
 
   runApp(const ProviderScope(child: MyApp()));
-
-  unawaited(FcmService.instance.initAndGetToken());
 }
 
-class MyApp extends ConsumerWidget {
+class MyApp extends ConsumerStatefulWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends ConsumerState<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await FcmService.instance.init();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final router = ref.watch(goRouterProvider);
     final themeMode = ref.watch(themeModeProvider);
 
@@ -54,9 +66,7 @@ class MyApp extends ConsumerWidget {
       debugShowCheckedModeBanner: false,
       routerConfig: router,
       themeMode: themeMode,
-      theme: lightTheme.copyWith(
-        textSelectionTheme: textSelectionTheme,
-      ),
+      theme: lightTheme.copyWith(textSelectionTheme: textSelectionTheme),
       darkTheme: darkTheme.copyWith(
         inputDecorationTheme: inputDecorationTheme,
         textSelectionTheme: textSelectionTheme,

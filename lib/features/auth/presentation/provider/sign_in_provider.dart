@@ -1,5 +1,7 @@
 import 'package:falletter_mobile_v2/core/network/dio.dart';
 import 'package:falletter_mobile_v2/core/network/token_storage.dart';
+import 'package:falletter_mobile_v2/core/providers/fcm_device_provider.dart';
+import 'package:falletter_mobile_v2/core/push/fcm_service.dart';
 import 'package:falletter_mobile_v2/features/user/data/api/user_api_service.dart';
 import 'package:falletter_mobile_v2/core/utils/validator.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -53,6 +55,9 @@ class SignInNotifier extends Notifier<SignInState> {
           accessToken: token.accessToken,
           refreshToken: token.refreshToken
       );
+
+      final fcmApi = ref.read(fcmDeviceApiServiceProvider);
+      await FcmService.instance.registerToken(fcmApi);
 
       return true;
     } catch(e) {

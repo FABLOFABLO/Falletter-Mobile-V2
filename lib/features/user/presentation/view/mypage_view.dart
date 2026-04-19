@@ -1,11 +1,14 @@
+import 'package:dio/dio.dart';
 import 'package:falletter_mobile_v2/core/components/modal/default_modal.dart';
 import 'package:falletter_mobile_v2/core/components/progress/loading_progress_indicator.dart';
+import 'package:falletter_mobile_v2/core/components/snack_bar/snack_bar.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/providers/auth_status_provider.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
 import 'package:falletter_mobile_v2/core/router/route_paths.dart';
 import 'package:falletter_mobile_v2/core/theme/app_theme_color.dart';
+import 'package:falletter_mobile_v2/features/splash/presentation/provider/slpashFromLogoutProvider.dart';
 import 'package:falletter_mobile_v2/features/user/presentation/widget/menu_button.dart';
 import 'package:falletter_mobile_v2/features/item/presentation/provider/brick_count_provider.dart';
 import 'package:falletter_mobile_v2/features/item/presentation/provider/letter_count_provider.dart';
@@ -32,6 +35,23 @@ class _FalletterMypageViewState extends ConsumerState<FalletterMypageView> {
   static final style = FalletterTextStyle.button.copyWith(
     color: FalletterColor.gray400,
   );
+
+  Future<void> _Exit(BuildContext context) async {
+    final tokenStorage = ref.read(tokenStorageProvider);
+
+    await tokenStorage.clear();
+
+    ref.invalidate(userInfoProvider);
+    ref.invalidate(authStatusProvider);
+
+    ref.read(themeProvider.notifier).changeTheme(AppTheme.blue);
+    ref.read(splashFromLogoutProvider.notifier).state = true;
+
+    if (context.mounted) {
+      context.pop();
+      context.go('/splash');
+    }
+  }
 
   @override
   void initState() {
@@ -136,21 +156,9 @@ class _FalletterMypageViewState extends ConsumerState<FalletterMypageView> {
                         try {
                           final apiService = ref.read(userInfoApiService);
                           await apiService.logout();
-                          final tokenStorage = ref.read(tokenStorageProvider);
-                          await tokenStorage.clear();
-                          ref.invalidate(userInfoProvider);
-                          if (context.mounted) {
-                            context.pop();
-                            context.go('/splash');
-                          }
+                          await _Exit(context);
                         } catch (e) {
-                          final tokenStorage = ref.read(tokenStorageProvider);
-                          await tokenStorage.clear();
-                          ref.invalidate(userInfoProvider);
-                          if (context.mounted) {
-                            context.pop();
-                            context.go('/splash');
-                          }
+                          await _Exit(context);
                         }
                       },
                     ),
@@ -162,9 +170,15 @@ class _FalletterMypageViewState extends ConsumerState<FalletterMypageView> {
                       description:
                           '회원을 탈퇴하시면 지금까지의 진행 상황을 잃고\n다시 복구할 수 없어요\n정말 회원 탈퇴 하시겠습니까?',
                       rightButtonText: '탈퇴',
-                      onConfirm: () {
-                        /// todo: 탈퇴 API 연동
-                        context.go('/splash');
+                      onConfirm: () async {
+                        try {
+                          final apiService = ref.read(userInfoApiService);
+                          await apiService.withdraw();
+                          await _Exit(context);
+                        } catch (e) {
+                          errorSnackBar(context, '회원탈퇴에 실패했습니다.');
+                          return;
+                        }
                       },
                     ),
 
