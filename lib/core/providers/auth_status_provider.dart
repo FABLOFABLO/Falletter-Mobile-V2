@@ -34,7 +34,7 @@ final tokenStorageProvider = Provider<TokenStorage>((ref) {
 });
 
 final authStatusProvider = FutureProvider<AuthStatus>((ref) async {
-  final storage = ref.watch(tokenStorageProvider);
+  final storage = ref.read(tokenStorageProvider);
   final refresh = await storage.readRefreshToken();
 
   if (refresh == null || refresh.isEmpty) return AuthStatus.notLogIn;
@@ -43,7 +43,7 @@ final authStatusProvider = FutureProvider<AuthStatus>((ref) async {
 });
 
 final appInitProvider = FutureProvider<void>((ref) async {
-  final storage = ref.watch(tokenStorageProvider);
+  final storage = ref.read(tokenStorageProvider);
   final refresh = await storage.readRefreshToken();
 
   if (refresh == null || refresh.isEmpty) return;
