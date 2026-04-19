@@ -39,18 +39,26 @@ Future<void> main() async {
   await _setupAndroidNotificationChannel();
 
   runApp(const ProviderScope(child: MyApp()));
-
-  final container = ProviderContainer();
-  final api = container.read(fcmDeviceApiServiceProvider);
-
-  unawaited(FcmService.instance.initAndGetToken(api));
 }
 
-class MyApp extends ConsumerWidget {
+class MyApp extends ConsumerStatefulWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends ConsumerState<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await FcmService.instance.init();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final router = ref.watch(goRouterProvider);
     final themeMode = ref.watch(themeModeProvider);
 
