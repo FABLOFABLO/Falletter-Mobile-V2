@@ -41,13 +41,22 @@ class AuthInterceptor extends Interceptor {
 
     final requestOptions = err.requestOptions;
 
+    if (requestOptions.extra['retry'] == true) {
+      return handler.next(err);
+    }
+
     if (_isRefreshing) {
       try {
         await _refreshCompleter?.future;
 
         final newAccessToken = await tokenStorage.readAccessToken();
 
-        final newRequest = requestOptions.copyWith();
+        final newRequest = requestOptions.copyWith(
+          extra: {
+            ...requestOptions.extra,
+            'retry': true
+          }
+        );
         newRequest.headers['Authorization'] = 'Bearer $newAccessToken';
 
         final response = await dio.fetch(newRequest);
@@ -98,7 +107,12 @@ class AuthInterceptor extends Interceptor {
 
       _refreshCompleter?.complete();
 
-      final newRequest = err.requestOptions.copyWith();
+      final newRequest = requestOptions.copyWith(
+          extra: {
+            ...requestOptions.extra,
+            'retry': true
+          }
+      );
       newRequest.headers['Authorization'] = 'Bearer $newAccessToken';
 
       final retryResponse = await dio.fetch(newRequest);
