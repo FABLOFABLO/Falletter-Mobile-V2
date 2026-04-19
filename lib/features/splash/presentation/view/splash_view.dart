@@ -43,7 +43,7 @@ class _SplashViewState extends ConsumerState<SplashView> {
           final isLoggedIn = status == AuthStatus.logIn;
 
           if (isLoggedIn) {
-            final init = ref.watch(appInitProvider);
+            final init = ref.read(appInitProvider);
 
             return init.when(
               loading: () => loadingCircularIndicator(ref),
