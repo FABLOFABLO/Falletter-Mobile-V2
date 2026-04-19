@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:falletter_mobile_v2/core/providers/fcm_device_api_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -25,7 +26,7 @@ class FcmService {
 
   static const String _androidChannelId = 'fcm_default_channel';
 
-  Future<void> initAndGetToken(FcmDeviceApiService api) async {
+  Future<void> init() async {
     if (Platform.isAndroid) {
       await Permission.notification.request();
     }
@@ -40,11 +41,9 @@ class FcmService {
 
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+    FirebaseMessaging.onMessage.listen((message) async {
       await _showForegroundNotification(message);
     });
-
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {});
 
     if (Platform.isIOS) {
       await _waitForApnsToken();
@@ -53,24 +52,32 @@ class FcmService {
     final token = await _retryGetFcmToken();
 
     if (token != null) {
-      final deviceId = await _getDeviceId();
+      final storage = FlutterSecureStorage();
+      await storage.write(key: 'fcm_token', value: token);
+    }
 
+    _messaging.onTokenRefresh.listen((newToken) async {
+      final storage = FlutterSecureStorage();
+      await storage.write(key: 'fcm_token', value: newToken);
+    });
+  }
+
+  Future<void> registerToken(FcmDeviceApiService api) async {
+    const storage = FlutterSecureStorage();
+
+    final token = await storage.read(key: 'fcm_token');
+    if (token == null) return;
+
+    final deviceId = await _getDeviceId();
+
+    try {
       await api.registerToken(
         token: token,
         deviceId: deviceId,
       );
+    } catch (e) {
+      debugPrint('FCM 토큰 등록 실패: $e');
     }
-
-    _messaging.onTokenRefresh.listen((newToken) async {
-      final deviceId = await _getDeviceId();
-
-      try {
-        await api.registerToken(
-          token: newToken,
-          deviceId: deviceId,
-        );
-      } catch (_) {}
-    });
   }
 
   Future<String> _getDeviceId() async {
