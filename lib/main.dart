@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:falletter_mobile_v2/core/providers/fcm_device_provider.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_mode_provoder.dart';
 import 'package:falletter_mobile_v2/core/router/app_router.dart';
 import 'package:falletter_mobile_v2/core/theme/falletter_theme.dart';
@@ -39,7 +40,10 @@ Future<void> main() async {
 
   runApp(const ProviderScope(child: MyApp()));
 
-  unawaited(FcmService.instance.initAndGetToken());
+  final container = ProviderContainer();
+  final api = container.read(fcmDeviceApiServiceProvider);
+
+  unawaited(FcmService.instance.initAndGetToken(api));
 }
 
 class MyApp extends ConsumerWidget {

@@ -4,6 +4,9 @@ class ApiEndpoints {
   /// Base URL
   static const baseUrl = AppEnv.baseUrl;
 
+  /// Fcm
+  static const fcmToken = '/device/token';
+
   /// Auth
   static const refreshToken = "/auth/refresh";
   static const emailVerify = "/auth/email/verify";
