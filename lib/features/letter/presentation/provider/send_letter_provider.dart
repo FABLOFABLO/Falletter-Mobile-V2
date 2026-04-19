@@ -1,6 +1,6 @@
 import 'dart:developer' as develop;
 import 'package:falletter_mobile_v2/core/network/dio.dart';
-import 'package:falletter_mobile_v2/features/letter/data/api/letter_api_service.dart';
+import 'package:falletter_mobile_v2/features/letter/data/service/letter_api_service.dart';
 import 'package:falletter_mobile_v2/features/letter/data/model/letter_model.dart';
 import 'package:falletter_mobile_v2/features/letter/data/model/send_letter_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

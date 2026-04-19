@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:falletter_mobile_v2/core/network/api_endpoints.dart';
-import 'package:falletter_mobile_v2/models/fcm_token_model.dart';
+import 'package:falletter_mobile_v2/core/fcm/fcm_token_model.dart';
 
 class FcmDeviceApiService {
   final Dio dio;

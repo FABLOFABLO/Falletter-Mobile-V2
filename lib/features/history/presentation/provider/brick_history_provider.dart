@@ -1,6 +1,6 @@
 import 'dart:developer' as develop;
 import 'package:falletter_mobile_v2/core/network/dio.dart';
-import 'package:falletter_mobile_v2/features/history/data/api/history_api_service.dart';
+import 'package:falletter_mobile_v2/features/history/data/service/history_api_service.dart';
 import 'package:falletter_mobile_v2/features/history/data/model/brick_use_check_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

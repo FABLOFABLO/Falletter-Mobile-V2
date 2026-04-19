@@ -1,5 +1,5 @@
 import 'package:falletter_mobile_v2/core/components/button/elevated_button.dart';
-import 'package:falletter_mobile_v2/core/components/gradient_text.dart';
+import 'package:falletter_mobile_v2/core/components/gradient/gradient_text.dart';
 import 'package:falletter_mobile_v2/core/components/progress/loading_progress_indicator.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/color_extension.dart';

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:falletter_mobile_v2/core/network/dio.dart';
-import 'package:falletter_mobile_v2/features/auth/data/api/auth_api_service.dart';
-import 'package:falletter_mobile_v2/features/user/data/api/user_api_service.dart';
+import 'package:falletter_mobile_v2/features/auth/data/service/auth_api_service.dart';
+import 'package:falletter_mobile_v2/features/user/data/service/user_api_service.dart';
 import 'package:falletter_mobile_v2/features/auth/data/model/signup_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

@@ -1,5 +1,5 @@
 import 'package:falletter_mobile_v2/core/network/dio.dart';
-import 'package:falletter_mobile_v2/features/post/data/api/post_api_service.dart';
+import 'package:falletter_mobile_v2/features/post/data/service/post_api_service.dart';
 import 'package:falletter_mobile_v2/features/post/data/model/post_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

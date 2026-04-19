@@ -1,16 +1,15 @@
 import 'dart:async';
-import 'package:falletter_mobile_v2/core/providers/fcm_device_provider.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_mode_provoder.dart';
 import 'package:falletter_mobile_v2/core/router/app_router.dart';
 import 'package:falletter_mobile_v2/core/theme/falletter_theme.dart';
 import 'package:falletter_mobile_v2/core/theme/theme_mode.dart';
-import 'package:falletter_mobile_v2/core/push/fcm_service.dart';
+import 'package:falletter_mobile_v2/core/fcm/fcm_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'firebase_options.dart';
+import 'core/fcm/firebase_options.dart';
 
 final FlutterLocalNotificationsPlugin _localNoti =
     FlutterLocalNotificationsPlugin();

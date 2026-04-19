@@ -1,6 +1,6 @@
 import 'dart:developer' as develop;
 import 'package:falletter_mobile_v2/core/network/dio.dart';
-import 'package:falletter_mobile_v2/features/user/data/api/user_api_service.dart';
+import 'package:falletter_mobile_v2/features/user/data/service/user_api_service.dart';
 import 'package:falletter_mobile_v2/features/user/data/model/student_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

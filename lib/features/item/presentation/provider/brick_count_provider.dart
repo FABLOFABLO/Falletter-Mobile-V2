@@ -1,5 +1,5 @@
 import 'dart:developer' as develop;
-import 'package:falletter_mobile_v2/features/item/data/api/item_api_service.dart';
+import 'package:falletter_mobile_v2/features/item/data/service/item_api_service.dart';
 import 'package:falletter_mobile_v2/features/item/data/model/brick_count_model.dart';
 import 'package:falletter_mobile_v2/features/item/presentation/provider/letter_count_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

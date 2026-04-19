@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 
-import 'package:falletter_mobile_v2/core/components/gradient_text.dart';
+import 'package:falletter_mobile_v2/core/components/gradient/gradient_text.dart';
 import 'package:falletter_mobile_v2/core/components/progress/circle_progress.dart';
 import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';

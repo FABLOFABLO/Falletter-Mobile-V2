@@ -1,5 +1,5 @@
 import 'package:falletter_mobile_v2/core/network/dio.dart';
-import 'package:falletter_mobile_v2/features/notification/data/api/notification_api_service.dart';
+import 'package:falletter_mobile_v2/features/notification/data/service/notification_api_service.dart';
 import 'package:falletter_mobile_v2/features/notification/data/model/notification_setting_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

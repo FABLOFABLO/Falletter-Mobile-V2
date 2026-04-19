@@ -1,8 +1,8 @@
 import 'dart:developer' as develop;
 import 'package:falletter_mobile_v2/core/network/dio.dart';
-import 'package:falletter_mobile_v2/features/user/data/api/user_api_service.dart';
-import 'package:falletter_mobile_v2/features/answer/data/api/answer_api_service.dart';
-import 'package:falletter_mobile_v2/features/answer/data/api/question_api_service.dart';
+import 'package:falletter_mobile_v2/features/user/data/service/user_api_service.dart';
+import 'package:falletter_mobile_v2/features/answer/data/service/answer_api_service.dart';
+import 'package:falletter_mobile_v2/features/answer/data/service/question_api_service.dart';
 import 'package:falletter_mobile_v2/features/user/data/model/my_info_model.dart';
 import 'package:falletter_mobile_v2/features/answer/data/model/question_model.dart';
 import 'package:falletter_mobile_v2/features/user/data/model/student_model.dart';

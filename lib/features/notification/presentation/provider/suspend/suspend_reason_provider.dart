@@ -1,5 +1,5 @@
 import 'package:falletter_mobile_v2/features/notification/data/model/suspend/suspend_reason_model.dart';
-import 'package:falletter_mobile_v2/features/notification/data/api/suspend_api_service.dart';
+import 'package:falletter_mobile_v2/features/notification/data/service/suspend_api_service.dart';
 import 'package:falletter_mobile_v2/features/notification/presentation/provider/suspend/suspend_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

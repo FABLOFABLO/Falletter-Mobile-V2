@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:falletter_mobile_v2/core/components/modal/default_modal.dart';
 import 'package:falletter_mobile_v2/core/components/progress/loading_progress_indicator.dart';
 import 'package:falletter_mobile_v2/core/components/snack_bar/snack_bar.dart';

@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:falletter_mobile_v2/core/network/dio.dart';
 import 'package:falletter_mobile_v2/features/notice/data/model/notice_models.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../data/api/notice_api_service.dart';
+import '../../data/service/notice_api_service.dart';
 
 final noticeApiServiceProvider = Provider<NoticeApiService>((ref) {
   final client = ref.watch(dioClientProvider);
