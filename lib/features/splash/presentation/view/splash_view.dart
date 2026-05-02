@@ -1,6 +1,6 @@
 import 'package:falletter_mobile_v2/core/components/button/elevated_button.dart';
 import 'package:falletter_mobile_v2/core/components/gradient/gradient_text.dart';
-import 'package:falletter_mobile_v2/core/components/progress/loading_progress_indicator.dart';
+import 'package:falletter_mobile_v2/core/components/progress/loading_circular_indicator.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
@@ -8,6 +8,7 @@ import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
 import 'package:falletter_mobile_v2/core/router/route_paths.dart';
 import 'package:falletter_mobile_v2/core/theme/app_theme_color.dart';
 import 'package:falletter_mobile_v2/features/splash/presentation/provider/slpashFromLogoutProvider.dart';
+import 'package:falletter_mobile_v2/features/user/presentation/provider/user_info_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -22,6 +23,14 @@ class SplashView extends ConsumerStatefulWidget {
 }
 
 class _SplashViewState extends ConsumerState<SplashView> {
+  @override
+  void initState() {
+    super.initState();
+
+    Future.microtask(() {
+      ref.read(userInfoProvider.notifier).getUserInfo();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +52,7 @@ class _SplashViewState extends ConsumerState<SplashView> {
           final isLoggedIn = status == AuthStatus.logIn;
 
           if (isLoggedIn) {
-            final init = ref.read(appInitProvider);
+            final init = ref.watch(appInitProvider);
 
             return init.when(
               loading: () => loadingCircularIndicator(ref),
@@ -101,15 +110,19 @@ class _SplashViewState extends ConsumerState<SplashView> {
               ),
             ),
 
-            CustomElevatedButton(
-              onPressed: () => context.push('/signin'),
-              gradient: LinearGradient(
-                colors: [context.cardBg, context.cardBg],
-              ),
-              child: GradientText(
-                text: '로그인하기',
-                gradient: themeColors.text,
-                style: FalletterTextStyle.button,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: CustomElevatedButton(
+                width: MediaQuery.of(context).size.width,
+                onPressed: () => context.push('/signin'),
+                gradient: LinearGradient(
+                  colors: [context.cardBg, context.cardBg],
+                ),
+                child: GradientText(
+                  text: '로그인하기',
+                  gradient: themeColors.text,
+                  style: FalletterTextStyle.button,
+                ),
               ),
             ),
 

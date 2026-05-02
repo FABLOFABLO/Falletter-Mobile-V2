@@ -36,7 +36,7 @@ class RouletteView extends ConsumerWidget {
               child: Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(top: 150),
+                    padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.15),
                     child: Text('누군지 알 수 있는', style: FalletterTextStyle.title3),
                   ),
                   GradientText(
