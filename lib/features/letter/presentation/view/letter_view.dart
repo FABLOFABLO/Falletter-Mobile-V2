@@ -1,6 +1,6 @@
 import 'package:falletter_mobile_v2/core/components/app_bar/custom_app_bar.dart';
 import 'package:falletter_mobile_v2/core/components/button/elevated_button.dart';
-import 'package:falletter_mobile_v2/core/components/progress/loading_progress_indicator.dart';
+import 'package:falletter_mobile_v2/core/components/progress/loading_circular_indicator.dart';
 import 'package:falletter_mobile_v2/core/components/snack_bar/snack_bar.dart';
 import 'package:falletter_mobile_v2/core/components/text_form_field/text_form_field.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
@@ -159,10 +159,10 @@ class _FalletterLetterViewState extends ConsumerState<FalletterLetterView> {
                                 content: _contentController.text,
                                 receptionId: receptionId!
                             );
-                            await ref.read(letterProvider.notifier).updateLetterCount(-1);
                             await ref.read(sendLetterProvider.notifier).sendLetter(request);
+                            await ref.read(letterProvider.notifier).updateLetterCount(-1);
                             await showDialog(
-                              barrierDismissible: false,
+                              barrierColor: context.bgColor.withOpacity(0.7),
                               context: context,
                               builder: (_) => SendLetterModal(
                                 sendName: _peopleController.text,
