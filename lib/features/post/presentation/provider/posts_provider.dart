@@ -4,7 +4,7 @@ import 'package:falletter_mobile_v2/features/post/data/model/post_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final postApiServiceProvider = Provider<PostApiService>((ref) {
-  final dio = ref.read(dioClientProvider).dio;
+  final dio = ref.watch(dioClientProvider).dio;
   return PostApiService(dio);
 });
 

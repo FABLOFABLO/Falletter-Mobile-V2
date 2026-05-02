@@ -1,10 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:falletter_mobile_v2/core/network/token_storage.dart';
-import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
 import 'package:falletter_mobile_v2/core/theme/app_theme_color.dart';
 import 'package:falletter_mobile_v2/core/utils/jwt_utils.dart';
 import 'package:falletter_mobile_v2/features/auth/presentation/provider/signup_provider.dart';
-import 'package:falletter_mobile_v2/features/user/presentation/provider/student_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -57,11 +55,6 @@ final appInitProvider = FutureProvider<void>((ref) async {
           .read(authApiServiceProvider)
           .getRefreshToken(refreshToken: refresh!);
     }
-
-    final user = await ref.read(userApiService).getUserInfo();
-
-    final theme = AppThemeParser.fromString(user.theme);
-    ref.read(themeProvider.notifier).changeTheme(theme);
   } catch (e) {
     if (e is DioException) {
       final statusCode = e.response?.statusCode;
