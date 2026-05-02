@@ -2,7 +2,7 @@ import 'package:falletter_mobile_v2/core/components/app_bar/custom_app_bar.dart'
 import 'package:falletter_mobile_v2/core/components/button/content_card_button.dart';
 import 'package:falletter_mobile_v2/core/components/button/send_button.dart';
 import 'package:falletter_mobile_v2/core/components/modal/default_modal.dart';
-import 'package:falletter_mobile_v2/core/components/progress/loading_progress_indicator.dart';
+import 'package:falletter_mobile_v2/core/components/progress/loading_circular_indicator.dart';
 import 'package:falletter_mobile_v2/core/components/text_form_field/text_form_field.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
@@ -243,7 +243,7 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
             ),
             Divider(thickness: 0.5),
             Padding(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20).copyWith(top: 10),
               child: Row(
                 children: [
                   Expanded(

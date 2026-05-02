@@ -28,7 +28,8 @@ class Roulette extends ConsumerStatefulWidget {
   ConsumerState<Roulette> createState() => _RouletteState();
 }
 
-class _RouletteState extends ConsumerState<Roulette> with SingleTickerProviderStateMixin {
+class _RouletteState extends ConsumerState<Roulette>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   int selectedIndex = 0;
   double _startAngle = 0.0;
@@ -69,7 +70,10 @@ class _RouletteState extends ConsumerState<Roulette> with SingleTickerProviderSt
     manager.startSpin();
 
     final prizeIndex = manager.getRandomIndex();
-    final rotationDegrees = manager.calculateRotation(prizeIndex, rewards.length);
+    final rotationDegrees = manager.calculateRotation(
+      prizeIndex,
+      rewards.length,
+    );
 
     animateRoulette(rotationDegrees, prizeIndex);
   }
@@ -151,10 +155,12 @@ class _RouletteState extends ConsumerState<Roulette> with SingleTickerProviderSt
                     CustomPaint(
                       size: const Size(300, 300),
                       painter: isDark
-                          ? RoulettePaint(count: rewards.length)
-                          : RoulettePaint(count: rewards.length,
-                        borderGradient: themeColors.progressIndicator,
-                      ),
+                          ? RoulettePaint(count: rewards.length, isDark: isDark)
+                          : RoulettePaint(
+                              count: rewards.length,
+                              isDark: isDark,
+                              borderGradient: themeColors.progressIndicator,
+                            ),
                     ),
                     ..._buildRewardWidgets(angle),
                   ],
@@ -219,27 +225,31 @@ class _RouletteState extends ConsumerState<Roulette> with SingleTickerProviderSt
             children: [
               if (reward.type == RewardType.miss)
                 _buildIcon(reward)
-              else Padding(
-                padding: const EdgeInsets.only(bottom: 25),
-                child: _buildIcon(reward),
-              ),
-              if (reward.type != RewardType.miss && reward.type != RewardType.rewardSet)
+              else
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 25),
+                  child: _buildIcon(reward),
+                ),
+              if (reward.type != RewardType.miss &&
+                  reward.type != RewardType.rewardSet)
                 Padding(
                   padding: const EdgeInsets.only(top: 45),
                   child: Text(
-                      'X${reward.amount}',
-                      style: FalletterTextStyle.subTitle2.copyWith(color: FalletterColor.white)
+                    'X${reward.amount}',
+                    style: FalletterTextStyle.subTitle2.copyWith(
+                      color: context.textColor,
+                    ),
                   ),
                 ),
               if (reward.type == RewardType.rewardSet)
                 Padding(
                   padding: const EdgeInsets.only(top: 40, left: 20),
                   child: Text(
-                      '선물세트',
-                      style: FalletterTextStyle.body2.copyWith(
-                          fontWeight: FontWeight.bold,
-                        color: FalletterColor.white
-                      )
+                    '선물세트',
+                    style: FalletterTextStyle.body2.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: context.textColor,
+                    ),
                   ),
                 ),
             ],
@@ -255,23 +265,11 @@ class _RouletteState extends ConsumerState<Roulette> with SingleTickerProviderSt
 
     switch (reward.type) {
       case RewardType.brick:
-        return SvgPicture.asset(
-          themeColors.brickSvg,
-          width: 42,
-          height: 42,
-        );
+        return SvgPicture.asset(themeColors.brickSvg, width: 42, height: 42);
       case RewardType.letter:
-        return SvgPicture.asset(
-          themeColors.letterSvg,
-          width: 32,
-          height: 32,
-        );
+        return SvgPicture.asset(themeColors.letterSvg, width: 32, height: 32);
       case RewardType.miss:
-        return SvgPicture.asset(
-          themeColors.missSvg,
-          width: 46,
-          height: 46,
-        );
+        return SvgPicture.asset(themeColors.missSvg, width: 46, height: 46);
       case RewardType.rewardSet:
         return Padding(
           padding: const EdgeInsets.only(top: 20, right: 5),
@@ -289,11 +287,13 @@ class RoulettePaint extends CustomPainter {
   final int count;
   final Color? borderColor;
   final Gradient? borderGradient;
+  final bool isDark;
 
   RoulettePaint({
     required this.count,
     this.borderColor,
     this.borderGradient,
+    required this.isDark,
   });
 
   @override
@@ -304,7 +304,9 @@ class RoulettePaint extends CustomPainter {
 
     for (int i = 0; i < count; i++) {
       final paint = Paint()
-        ..color = i.isEven ? FalletterColor.gray800 : FalletterColor.gray900
+        ..color = i.isEven
+            ? (isDark ? FalletterColor.gray800 : FalletterColor.gray100)
+            : (isDark ? FalletterColor.gray900 : FalletterColor.gray200)
         ..style = PaintingStyle.fill;
 
       final startAngle = (i * sweep) - (pi / 2) - (sweep / 2);
