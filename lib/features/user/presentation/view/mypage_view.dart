@@ -1,5 +1,5 @@
 import 'package:falletter_mobile_v2/core/components/modal/default_modal.dart';
-import 'package:falletter_mobile_v2/core/components/progress/loading_progress_indicator.dart';
+import 'package:falletter_mobile_v2/core/components/progress/loading_circular_indicator.dart';
 import 'package:falletter_mobile_v2/core/components/snack_bar/snack_bar.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
@@ -7,7 +7,11 @@ import 'package:falletter_mobile_v2/core/providers/auth_status_provider.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
 import 'package:falletter_mobile_v2/core/router/route_paths.dart';
 import 'package:falletter_mobile_v2/core/theme/app_theme_color.dart';
+import 'package:falletter_mobile_v2/features/answer/presentation/provider/answer_provider.dart';
+import 'package:falletter_mobile_v2/features/answer/presentation/provider/progress_provider.dart';
 import 'package:falletter_mobile_v2/features/splash/presentation/provider/slpashFromLogoutProvider.dart';
+import 'package:falletter_mobile_v2/features/timer/presentation/provider/answer_timer_provider.dart';
+import 'package:falletter_mobile_v2/features/timer/presentation/provider/roulette_timer_provider.dart';
 import 'package:falletter_mobile_v2/features/user/presentation/widget/menu_button.dart';
 import 'package:falletter_mobile_v2/features/item/presentation/provider/brick_count_provider.dart';
 import 'package:falletter_mobile_v2/features/item/presentation/provider/letter_count_provider.dart';
@@ -40,8 +44,15 @@ class _FalletterMypageViewState extends ConsumerState<FalletterMypageView> {
 
     await tokenStorage.clear();
 
-    ref.invalidate(userInfoProvider);
     ref.invalidate(authStatusProvider);
+    ref.invalidate(userInfoProvider);
+    ref.invalidate(progressProvider);
+    ref.invalidate(questionListProvider);
+    ref.invalidate(allNamesProvider);
+    ref.invalidate(selectQuestionListProvider);
+    ref.invalidate(currentChoicesProvider);
+    ref.invalidate(answerTimerProvider);
+    ref.invalidate(rouletteTimerProvider);
 
     ref.read(themeProvider.notifier).changeTheme(AppTheme.blue);
     ref.read(splashFromLogoutProvider.notifier).state = true;
