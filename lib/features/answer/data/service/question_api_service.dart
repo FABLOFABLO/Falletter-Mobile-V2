@@ -1,7 +1,8 @@
+import 'dart:developer' as develop;
+
 import 'package:dio/dio.dart';
 import 'package:falletter_mobile_v2/core/network/api_endpoints.dart';
 import 'package:falletter_mobile_v2/features/answer/data/model/question_model.dart';
-
 class QuestionApiService {
   final Dio dio;
 
@@ -17,7 +18,8 @@ class QuestionApiService {
       }
       throw Exception('질문 조회 실패');
     } catch(e) {
-      throw Exception('질문 조회 실패: $e');
+      develop.log('error: $e');
+      throw Exception('질문 조회 실패');
     }
   }
 }

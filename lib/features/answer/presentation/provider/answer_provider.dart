@@ -1,15 +1,12 @@
-import 'dart:developer' as develop;
 import 'package:falletter_mobile_v2/core/network/dio.dart';
-import 'package:falletter_mobile_v2/features/user/data/service/user_api_service.dart';
 import 'package:falletter_mobile_v2/features/answer/data/service/answer_api_service.dart';
 import 'package:falletter_mobile_v2/features/answer/data/service/question_api_service.dart';
-import 'package:falletter_mobile_v2/features/user/data/model/my_info_model.dart';
+import 'package:falletter_mobile_v2/features/user/data/service/user_api_service.dart';
 import 'package:falletter_mobile_v2/features/answer/data/model/question_model.dart';
 import 'package:falletter_mobile_v2/features/user/data/model/student_model.dart';
 import 'package:falletter_mobile_v2/features/user/presentation/provider/user_info_provider.dart';
+import 'package:falletter_mobile_v2/features/answer/presentation/provider/progress_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-final currentIndexProvider = StateProvider.autoDispose<int>((ref) => 0);
 
 final questionApiServiceProvider = Provider<QuestionApiService>((ref) {
   final dio = ref.read(dioClientProvider).dio;
@@ -27,95 +24,81 @@ final answerApiServiceProvider = Provider<AnswerApiService>((ref) {
 });
 
 final questionListProvider = FutureProvider<List<QuestionModel>>((ref) async {
-  final apiService = ref.read(questionApiServiceProvider);
-  final list = await apiService.getQuestionList();
-  final shuffle = [...list]..shuffle();
-  return shuffle;
+  final api = ref.read(questionApiServiceProvider);
+  return await api.getQuestionList();
+});
+
+final selectQuestionListProvider = Provider<List<QuestionModel>>((ref) {
+  final progress = ref.watch(progressProvider);
+  final questions = ref.watch(questionListProvider);
+
+  if (!progress.hasValue || progress.value == null) return [];
+
+  return questions.when(
+    data: (qList) {
+      final map = {for (var q in qList) q.id: q};
+
+      return progress.value!.questionIds
+          .map((id) => map[id])
+          .whereType<QuestionModel>()
+          .toList();
+    },
+    loading: () => [],
+    error: (_, __) => [],
+  );
+});
+
+final currentQuestionProvider = Provider<QuestionModel?>((ref) {
+  final progress = ref.watch(progressProvider);
+  final list = ref.watch(selectQuestionListProvider);
+
+  if (!progress.hasValue || progress.value == null) return null;
+
+  final index = progress.value!.currentIndex;
+
+  if (list.isEmpty) return null;
+  if (index >= list.length) return list.last;
+
+  return list[index];
 });
 
 final allNamesProvider = FutureProvider<List<StudentModel>>((ref) async {
-  final apiService = ref.read(userApiServiceProvider);
-  final list = await apiService.getAllStudent();
-  return list;
+  final api = ref.read(userApiServiceProvider);
+  return await api.getAllStudent();
 });
 
-final selectedIndexProvider = StateProvider.autoDispose<int?>((ref) => null);
+final currentChoicesProvider = Provider<List<StudentModel>>((ref) {
+  final progress = ref.watch(progressProvider);
+  final studentsAsync = ref.watch(allNamesProvider);
+  final userAsync = ref.watch(userInfoProvider);
 
-final userNamesProvider = StateProvider.autoDispose<Set<String>>((ref) => {});
+  if (!progress.hasValue || progress.value == null) return [];
 
-class QuizItem {
-  final QuestionModel question;
-  final List<StudentModel> choices;
+  return studentsAsync.when(
+    data: (students) {
+      return userAsync.when(
+        data: (user) {
+          final filtered =
+          students.where((e) => e.id != user.id).toList();
 
-  QuizItem({
-    required this.question,
-    required this.choices,
-  });
-}
+          final start = progress.value!.currentIndex * 4;
+          final result = filtered.skip(start).take(4).toList();
 
-class QuizNotifier extends Notifier<QuizItem?> {
-  late List<QuestionModel> questions;
-  late List<StudentModel> students;
-  late UserInfoModel user;
+          if (result.length < 4) {
+            final remain = 4 - result.length;
+            result.addAll(filtered.take(remain));
+          }
 
-  @override
-  QuizItem? build() {
-    return null;
-  }
-
-  Future<void> init() async {
-    questions = await ref.read(questionListProvider.future);
-    students = await ref.read(allNamesProvider.future);
-    await ref.read(userInfoProvider.notifier).getUserInfo();
-    final userAsync = ref.read(userInfoProvider);
-    user = userAsync.when(
-      data: (data) => data,
-      loading: () => throw Exception('로딩 중'),
-      error: (e, st) => throw e,
-    );
-    questions.shuffle();
-    students.shuffle();
-    _setQuiz(0);
-  }
-
-  List<StudentModel> _createChoices(int index) {
-    final filtered = students.where((e) => e.id != user.id).toList();
-    final result = filtered.skip(index * 4).take(4).toList();
-    if (result.length < 4) {
-      final remain = 4 - result.length;
-      result.addAll(filtered.take(remain));
-    }
-    return result;
-  }
-
-  void _setQuiz(int index) {
-    final question = questions[index];
-    final choices = _createChoices(index);
-
-    state = QuizItem(
-      question: question,
-      choices: choices,
-    );
-  }
-
-  void nextQuestion() {
-    ref.read(selectedIndexProvider.notifier).state = null;
-    final nextIndex = ref.read(currentIndexProvider) + 1;
-    ref.read(currentIndexProvider.notifier).state = nextIndex;
-    _setQuiz(nextIndex);
-  }
-
-  Future<void> saveAnswer(int questionId, int targetUser) async {
-    try {
-      final apiService = ref.read(answerApiServiceProvider);
-      await apiService.chooseAnswer(questionId, targetUser);
-    } catch(e) {
-      develop.log('error: $e');
-      throw Exception('답변 저장에 실패했습니다.');
-    }
-  }
-}
-
-final quizProvider = NotifierProvider<QuizNotifier, QuizItem?>(() {
-  return QuizNotifier();
+          return result;
+        },
+        loading: () => [],
+        error: (_, __) => [],
+      );
+    },
+    loading: () => [],
+    error: (_, __) => [],
+  );
 });
+
+final selectedIndexProvider =
+StateProvider.autoDispose<int?>((ref) => null);
