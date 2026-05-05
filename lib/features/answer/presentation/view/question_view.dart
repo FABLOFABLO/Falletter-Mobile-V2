@@ -34,8 +34,7 @@ class _QuestionViewState extends ConsumerState<QuestionView> {
     ref.read(selectedIndexProvider.notifier).state = index;
 
     try {
-      final apiService = ref.read(answerApiServiceProvider);
-      await apiService.chooseAnswer(question.id, choices[index].id);
+      await ref.read(answerProvider.notifier).chooseAnswer(question.id, choices[index].id);
       await Future.delayed(const Duration(milliseconds: 700));
       await goNext();
     } catch (e) {

@@ -78,8 +78,7 @@ final currentChoicesProvider = FutureProvider<List<StudentModel>>((ref) {
     data: (students) {
       return userAsync.when(
         data: (user) {
-          final filtered =
-          students.where((e) => e.id != user.id).toList();
+          final filtered = students.where((e) => e.id != user.id).toList();
 
           final start = progress.value!.currentIndex * 4;
           final result = filtered.skip(start).take(4).toList();
@@ -100,5 +99,26 @@ final currentChoicesProvider = FutureProvider<List<StudentModel>>((ref) {
   );
 });
 
-final selectedIndexProvider =
-StateProvider<int?>((ref) => null);
+final selectedIndexProvider = StateProvider<int?>((ref) => null);
+
+final answerProvider = StateNotifierProvider<AnswerNotifier, AsyncValue<void>>((
+  ref,
+) {
+  final apiService = ref.read(answerApiServiceProvider);
+  return AnswerNotifier(apiService);
+});
+
+class AnswerNotifier extends StateNotifier<AsyncValue<void>> {
+  final AnswerApiService apiService;
+
+  AnswerNotifier(this.apiService) : super(AsyncValue.loading());
+
+  Future<void> chooseAnswer(int questionId, int targetUser) async {
+    try {
+      await apiService.chooseAnswer(questionId, targetUser);
+      state = const AsyncValue.data(null);
+    } catch (e, st) {
+      state = AsyncValue.error(e, st);
+    }
+  }
+}
