@@ -63,9 +63,7 @@ class _QuestionViewState extends ConsumerState<QuestionView> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() {
-      ref.read(progressProvider.notifier).loadProgress();
-    });
+    ref.read(progressProvider.notifier).loadProgress();
   }
 
   @override
