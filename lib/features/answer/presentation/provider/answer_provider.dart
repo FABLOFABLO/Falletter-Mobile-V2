@@ -101,4 +101,4 @@ final currentChoicesProvider = Provider<List<StudentModel>>((ref) {
 });
 
 final selectedIndexProvider =
-StateProvider.autoDispose<int?>((ref) => null);
+StateProvider<int?>((ref) => null);
