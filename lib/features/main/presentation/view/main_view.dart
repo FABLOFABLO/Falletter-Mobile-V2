@@ -133,10 +133,7 @@ class _FalletterMainViewState extends ConsumerState<FalletterMainView> {
                       context.push('${RoutePaths.main}/detail', extra: post.id);
                     },
                     child: Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 20,
-                        vertical: 20,
-                      ),
+                      padding: EdgeInsets.all(20),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
