@@ -67,7 +67,7 @@ final allNamesProvider = FutureProvider<List<StudentModel>>((ref) async {
   return await api.getAllStudent();
 });
 
-final currentChoicesProvider = Provider<List<StudentModel>>((ref) {
+final currentChoicesProvider = FutureProvider<List<StudentModel>>((ref) {
   final progress = ref.watch(progressProvider);
   final studentsAsync = ref.watch(allNamesProvider);
   final userAsync = ref.watch(userInfoProvider);

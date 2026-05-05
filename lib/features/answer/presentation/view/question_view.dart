@@ -25,7 +25,8 @@ class _QuestionViewState extends ConsumerState<QuestionView> {
   void _onTap(WidgetRef ref, int index) async {
     final selected = ref.read(selectedIndexProvider);
     final question = ref.read(currentQuestionProvider);
-    final choices = ref.read(currentChoicesProvider);
+    final choicesAsync = ref.read(currentChoicesProvider);
+    final choices = choicesAsync.value ?? [];
     final progressState = ref.read(progressProvider);
 
     if (selected != null || question == null || !progressState.hasValue) return;
@@ -77,7 +78,8 @@ class _QuestionViewState extends ConsumerState<QuestionView> {
     final selectedIndex = ref.watch(selectedIndexProvider);
     final progress = ref.watch(progressProvider);
     final question = ref.watch(currentQuestionProvider);
-    final choices = ref.watch(currentChoicesProvider);
+    final choicesAsync = ref.read(currentChoicesProvider);
+    final choices = choicesAsync.value ?? [];
 
     if (progress.isLoading) {
       return Center(child: loadingCircularIndicator(ref));
