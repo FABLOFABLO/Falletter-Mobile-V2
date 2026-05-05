@@ -1,5 +1,5 @@
 import 'dart:ui';
-import 'package:falletter_mobile_v2/core/components/progress/loading_progress_indicator.dart';
+import 'package:falletter_mobile_v2/core/components/progress/loading_circular_indicator.dart';
 import 'package:falletter_mobile_v2/core/components/snack_bar/snack_bar.dart';
 import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/components/app_bar/custom_app_bar.dart';

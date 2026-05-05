@@ -73,13 +73,13 @@ class _PostEditViewState extends ConsumerState<PostEditView> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('제목을 입력해주세요', style: FalletterTextStyle.subTitle1),
+                      Text('제목을 입력해주세요', style: FalletterTextStyle.subTitle1.copyWith(color: FalletterColor.gray500)),
                       SizedBox(height: 10),
                       AbsorbPointer(
                         child: CustomTextFormField(
                           controller: _titleController,
                           readOnly: true,
-                          style: FalletterTextStyle.placeholder,
+                          style: FalletterTextStyle.placeholder.copyWith(color: FalletterColor.gray700),
                         ),
                       ),
                       SizedBox(height: 32),

@@ -46,6 +46,9 @@ class ApiEndpoints {
   /// Answer
   static const choose = "/answer/choose";
   static const chosen = "/answer/chosen";
+  static const progress = "/answer/progress";
+  static const complete = "/answer/progress/complete";
+  static const skip = "/answer/progress/skip";
 
   /// Question
   static const all = "/question/all";

@@ -15,6 +15,7 @@ class SignupState {
   final bool? verified;
   final Duration? timer;
   final String? hasError;
+  final bool isLoading;
 
   SignupState({
     this.gender,
@@ -26,6 +27,7 @@ class SignupState {
     this.verified,
     this.timer,
     this.hasError,
+    this.isLoading = false,
   });
 
   bool emailValid() {
@@ -33,7 +35,6 @@ class SignupState {
     final isValid = RegExp(r'^[a-zA-Z0-9._]+$').hasMatch(input);
     return isValid && input.length >= 4;
   }
-
 
   SignupState copyWith({
     String? gender,
@@ -45,6 +46,7 @@ class SignupState {
     bool? verified,
     Duration? timer,
     String? hasError,
+    bool? isLoading,
   }) {
     return SignupState(
       gender: gender ?? this.gender,
@@ -55,7 +57,8 @@ class SignupState {
       passwordCheck: passwordCheck ?? this.passwordCheck,
       verified: verified ?? this.verified,
       timer: timer ?? this.timer,
-      hasError: hasError ?? this.hasError,
+      hasError: hasError,
+      isLoading: isLoading ?? this.isLoading,
     );
   }
 }
@@ -66,14 +69,18 @@ class SignUpNotifier extends StateNotifier<SignupState> {
 
   SignUpNotifier(
       this.authApiService,
-      this.userApiService
-  ) : super(SignupState());
-Timer? timer;
+      this.userApiService,
+      ) : super(SignupState());
+
+  Timer? timer;
+
   void startTimer() {
     int limitTime = 300;
-      timer?.cancel();
-      state = state.copyWith(timer: Duration(seconds: limitTime));
-    timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    timer?.cancel();
+
+    state = state.copyWith(timer: Duration(seconds: limitTime));
+
+    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (limitTime > 0) {
         limitTime--;
         state = state.copyWith(timer: Duration(seconds: limitTime));
@@ -124,12 +131,23 @@ Timer? timer;
   }
 
   Future<bool> sendEmailCode() async {
+    if (state.isLoading) return false;
+
     try {
+      state = state.copyWith(isLoading: true, hasError: null);
+
       final email = state.email;
-      if (email == null) throw Exception('이메일이 올바르지 않습니다.');
+      if (email == null) throw Exception();
+
       await authApiService.sendEmailVerify(email: email);
+
+      state = state.copyWith(isLoading: false);
       return true;
-    } catch(e) {
+    } catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        hasError: '이미 가입된 이메일입니다.',
+      );
       return false;
     }
   }
@@ -138,18 +156,21 @@ Timer? timer;
     try {
       final email = state.email;
       if (email == null) return false;
+
       await authApiService.checkVerifyCode(
-          email: '$email@dsm.hs.kr',
-          verifyCode: verifyCode
+        email: '$email@dsm.hs.kr',
+        verifyCode: verifyCode,
       );
+
       return true;
-    } catch(e) {
+    } catch (e) {
       return false;
     }
   }
 }
 
-final signUpProvider = StateNotifierProvider<SignUpNotifier, SignupState>((ref) {
+final signUpProvider =
+StateNotifierProvider<SignUpNotifier, SignupState>((ref) {
   final authApiService = ref.read(authApiServiceProvider);
   final userApiService = ref.read(userApiServiceProvider);
   return SignUpNotifier(authApiService, userApiService);

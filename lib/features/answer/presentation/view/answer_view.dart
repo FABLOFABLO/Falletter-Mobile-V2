@@ -1,7 +1,6 @@
 import 'dart:async';
-import 'package:falletter_mobile_v2/core/components/progress/loading_progress_indicator.dart';
+import 'package:falletter_mobile_v2/core/components/progress/loading_circular_indicator.dart';
 import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
-import 'package:falletter_mobile_v2/features/answer/presentation/provider/answer_provider.dart';
 import 'package:falletter_mobile_v2/features/timer/presentation/provider/answer_timer_provider.dart';
 import 'package:falletter_mobile_v2/features/timer/presentation/view/answer_timer_view.dart';
 import 'package:falletter_mobile_v2/features/answer/presentation/view/question_view.dart';
@@ -16,18 +15,6 @@ class FalletterAnswerView extends ConsumerStatefulWidget {
 }
 
 class _FalletterAnswerViewState extends ConsumerState<FalletterAnswerView> {
-
-  void goNext() {
-
-    final current = ref.read(currentIndexProvider);
-    const total = 5;
-
-    if (current + 1 < total) {
-      ref.read(quizProvider.notifier).nextQuestion();
-    } else {
-      ref.read(answerTimerProvider.notifier).startAnswerTimer();
-    }
-  }
 
   @override
   void initState() {
@@ -51,7 +38,7 @@ class _FalletterAnswerViewState extends ConsumerState<FalletterAnswerView> {
       child: Scaffold(
         body: timer.isActive
             ? AnswerTimerView()
-            : QuestionView(goNext: goNext)
+            : QuestionView()
       ),
     );
   }

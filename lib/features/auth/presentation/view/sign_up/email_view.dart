@@ -1,6 +1,7 @@
 import 'package:falletter_mobile_v2/core/components/app_bar/custom_app_bar.dart';
 import 'package:falletter_mobile_v2/core/components/button/elevated_button.dart';
 import 'package:falletter_mobile_v2/core/components/icon/field_icon.dart';
+import 'package:falletter_mobile_v2/core/components/progress/loading_circular_indicator.dart';
 import 'package:falletter_mobile_v2/core/components/snack_bar/snack_bar.dart';
 import 'package:falletter_mobile_v2/core/components/text_form_field/text_form_field.dart';
 import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
@@ -33,6 +34,7 @@ class _EmailViewState extends ConsumerState<EmailView> {
 
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(signUpProvider);
     final isNextStep = ref.watch(
       signUpProvider.select((enWrite) => enWrite.emailValid()),
     );
@@ -65,7 +67,7 @@ class _EmailViewState extends ConsumerState<EmailView> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 20),
                 child: CustomElevatedButton(
-                  onPressed: isNextStep
+                  onPressed: (isNextStep && !state.isLoading)
                       ? () async {
                           ref.read(signUpProvider.notifier).setTimer(Duration(seconds: 300));
                           final success = await ref.read(signUpProvider.notifier).sendEmailCode();
@@ -78,7 +80,12 @@ class _EmailViewState extends ConsumerState<EmailView> {
                         }
                       : null,
                   width: double.infinity,
-                  child: Text('인증번호 전송', style: TextStyle(color: context.reverseTextColor)),
+                  child: state.isLoading
+                      ? SizedBox(
+                    height: 20,
+                    width: 20,
+                    child: loadingCircularIndicator(ref),
+                  ) : Text('인증번호 전송', style: TextStyle(color: context.reverseTextColor)),
                 ),
               ),
             ],

@@ -1,4 +1,5 @@
 import 'dart:developer' as develop;
+import 'package:dio/dio.dart';
 import 'package:falletter_mobile_v2/core/network/dio.dart';
 import 'package:falletter_mobile_v2/features/history/data/service/history_api_service.dart';
 import 'package:falletter_mobile_v2/features/history/data/model/brick_use_check_model.dart';
@@ -24,9 +25,13 @@ class BrickHistoryNotifier extends StateNotifier<List<BrickUseCheckModel>> {
     try {
       final brickList = await apiService.getBrickUsed();
       state = brickList;
-    } catch(e) {
-      develop.log('error: $e');
-      throw Exception('브릭 사용 기록 조회에 실패했습니다.');
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 404) {
+        state = [];
+      } else {
+        develop.log('error: $e');
+        throw Exception('브릭 사용 기록 조회에 실패했습니다.');
+      }
     }
   }
 

@@ -1,4 +1,5 @@
 import 'dart:developer' as develop;
+import 'package:dio/dio.dart';
 import 'package:falletter_mobile_v2/core/network/dio.dart';
 import 'package:falletter_mobile_v2/features/letter/data/service/letter_api_service.dart';
 import 'package:falletter_mobile_v2/features/letter/data/model/get_letter_model.dart';
@@ -24,9 +25,13 @@ class GetLetterNotifier extends StateNotifier<List<GetLetterModel>> {
     try {
       final letters = await apiService.getLetterAll();
       state = letters;
-    } catch(e) {
-      develop.log('error: $e');
-      throw Exception('받은 레터 목록 조회에 실패했습니다.');
+    } on DioException catch(e) {
+      if (e.response?.statusCode == 404) {
+        state = [];
+      } else {
+        develop.log('error: $e');
+        throw Exception('받은 레터 목록 조회에 실패했습니다.');
+      }
     }
   }
 }

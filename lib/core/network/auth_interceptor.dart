@@ -38,7 +38,7 @@ class AuthInterceptor extends Interceptor {
     DioException err,
     ErrorInterceptorHandler handler,
   ) async {
-    if (err.response?.statusCode != 401) {
+    if (err.response?.statusCode != 401 && err.response?.statusCode != 403) {
       return handler.next(err);
     }
 

@@ -16,7 +16,7 @@ class AnnouncementModel {
         id: json['id'],
         title: json['title'],
         authorName: json['authorName'],
-        createdAt: json['createdAt']
+        createdAt: DateTime.parse(json['createdAt'] + 'Z')
     );
   }
 }

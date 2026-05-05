@@ -59,19 +59,22 @@ class _NotificationTabViewState extends ConsumerState<NotificationTabView> {
                 children: [
                   Row(
                     children: [
-                      Image.network(
-                        notification.imageUrl!,
-                        width: 20,
-                        height: 20,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Icon(
-                            Symbols.error,
-                            size: 20,
-                            color: FalletterColor.error,
-                          );
-                        },
-                      ),
-                      SizedBox(width: 6),
+                      if (notification.type != 'COMMENT' && notification.type != 'ADMIN_NOTICE')
+                        Padding(
+                          padding: const EdgeInsets.only(right: 6),
+                          child: Image.network(
+                            notification.imageUrl!,
+                            width: 20,
+                            height: 20,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Icon(
+                                Symbols.error,
+                                size: 20,
+                                color: FalletterColor.error,
+                              );
+                            },
+                          ),
+                        ),
                       Expanded(
                         child: Text(notification.title, style: titleStyle),
                       ),
@@ -97,10 +100,13 @@ class _NotificationTabViewState extends ConsumerState<NotificationTabView> {
             onTap: () {
               switch (notification.type) {
                 case 'COMMENT':
-                  context.push(RoutePaths.notice);
+                  context.push('${RoutePaths.main}/detail', extra: notification.relatedId);
                   break;
                 case 'BRICK_ACTIVATION':
                   context.push(RoutePaths.answer);
+                  break;
+                case 'BRICK':
+                  context.go(RoutePaths.notice);
                   break;
                 case 'LETTER':
                   context.push('${RoutePaths.mypage}/getLetter');

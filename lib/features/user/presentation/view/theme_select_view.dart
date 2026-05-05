@@ -75,6 +75,7 @@ class _ThemeSelectViewState extends ConsumerState<ThemeSelectView> {
               ),
               const Spacer(),
               CustomElevatedButton(
+                width: MediaQuery.of(context).size.width,
                 onPressed: sameTheme
                     ? null
                     : () async {

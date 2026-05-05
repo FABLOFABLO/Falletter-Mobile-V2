@@ -1,3 +1,4 @@
+import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
 import 'package:falletter_mobile_v2/core/theme/app_theme_color.dart';
@@ -38,8 +39,8 @@ class SendButton extends ConsumerWidget {
           Symbols.send,
           size: 30,
           color: isEnabled
-              ? context.textColor
-              : context.middleColor,
+              ? context.reverseTextColor
+              : FalletterColor.gray800,
           fill: 1,
         ),
       ),

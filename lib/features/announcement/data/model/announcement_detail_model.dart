@@ -18,8 +18,8 @@ class AnnouncementDetailModel {
         id: json["id"],
         title: json["title"],
         content: json["content"],
-        authorName: json["author_name"],
-        createdAt: json["created_at"]
+        authorName: json["authorName"],
+        createdAt: DateTime.parse(json["createdAt"] + 'Z')
     );
   }
 }

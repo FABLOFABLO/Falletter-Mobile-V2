@@ -4,7 +4,7 @@ import 'package:falletter_mobile_v2/features/user/data/model/my_info_model.dart'
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final userInfoApiService = Provider<UserApiService>((ref) {
-  final dio = ref.read(dioClientProvider).dio;
+  final dio = ref.watch(dioClientProvider).dio;
   return UserApiService(dio);
 });
 
