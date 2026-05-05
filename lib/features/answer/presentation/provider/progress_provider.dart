@@ -25,10 +25,8 @@ class ProgressNotifier extends StateNotifier<AsyncValue<ProgressModel?>> {
       final progress = await apiService.getProgress();
       state = AsyncValue.data(progress);
     } on DioException catch (e) {
-      print(e.response?.statusCode);
-      if (!hasTriedCreate) {
+      if (!hasTriedCreate || e.response?.statusCode == 404) {
         hasTriedCreate = true;
-
         await apiService.createProgress();
         final progress = await apiService.getProgress();
         state = AsyncValue.data(progress);
