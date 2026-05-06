@@ -146,7 +146,7 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
                                           );
                                         },
                                       ),
-                                      Divider(color: context.middleColor),
+                                      Divider(color: FalletterColor.gray900),
                                       ListTile(
                                         title: Center(
                                           child: Padding(
