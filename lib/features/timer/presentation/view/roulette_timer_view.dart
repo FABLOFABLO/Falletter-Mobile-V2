@@ -61,7 +61,7 @@ class _RouletteTimerViewState extends ConsumerState<RouletteTimerView> {
           ),
           SafeArea(
             child: Padding(
-              padding: const EdgeInsets.only(top: 130),
+              padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.2),
               child: Center(
                 child: Column(
                   children: [
