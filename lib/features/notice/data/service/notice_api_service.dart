@@ -24,7 +24,7 @@ class NoticeApiService {
     }
   }
 
-  Future<int> saveHint({
+  Future<void> saveHint({
     required int answerId,
     required String firstHint,
     String secondHint = '',
@@ -37,31 +37,25 @@ class NoticeApiService {
       'thirdHint': thirdHint,
     };
     try {
-      final response = await _dio.post(ApiEndpoints.save, data: requestBody);
+      await _dio.post(
+        ApiEndpoints.save,
+        data: requestBody,
+      );
+    } on DioException catch (e) {
+      final statusCode = e.response?.statusCode;
+      final responseData = e.response?.data;
 
-      int hintId = 0;
-      if (response.data != null) {
-        if (response.data is Map) {
-          hintId = response.data['id'] ?? response.data['hintId'] ?? 0;
-        }
+      if (statusCode == 400) {
+        throw Exception(responseData['message'] ?? '잘못된 요청입니다');
+      } else if (statusCode == 401) {
+        throw Exception('인증이 필요합니다');
+      } else if (statusCode == 403) {
+        throw Exception('권한이 없습니다');
+      } else if (statusCode == 404) {
+        throw Exception('답변을 찾을 수 없습니다');
       }
-      return hintId;
-    } catch (e) {
-      if (e is DioException) {
-        final statusCode = e.response?.statusCode;
-        final responseData = e.response?.data;
 
-        if (statusCode == 400) {
-          throw Exception(responseData['message'] ?? '잘못된 요청입니다');
-        } else if (statusCode == 401) {
-          throw Exception('인증이 필요합니다');
-        } else if (statusCode == 403) {
-          throw Exception('권한이 없습니다');
-        } else if (statusCode == 404) {
-          throw Exception('답변을 찾을 수 없습니다');
-        }
-      }
-      throw Exception('힌트 저장 실패: $e');
+      throw Exception('힌트 저장 실패');
     }
   }
 
@@ -95,15 +89,13 @@ class NoticeApiService {
   }
 
   Future<void> updateHint({
-    required int answerId,
-    int? hintId,
+    required int hintId,
     required String firstHint,
     required String secondHint,
     required String thirdHint,
   }) async {
     final requestBody = {
-      'answerId': answerId,
-      if (hintId != null && hintId > 0) 'hintId': hintId,
+      'hintId': hintId,
       'firstHint': firstHint,
       'secondHint': secondHint,
       'thirdHint': thirdHint,

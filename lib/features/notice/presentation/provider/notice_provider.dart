@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:dio/dio.dart';
 import 'package:falletter_mobile_v2/core/network/dio.dart';
 import 'package:falletter_mobile_v2/features/notice/data/model/notice_models.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -79,12 +80,10 @@ final noticeListProvider =
 
 class NoticeDetailNotifier extends StateNotifier<AsyncValue<NoticeDetail>> {
   final NoticeApiService _apiService;
-  NoticeItem? _noticeItem;
 
   NoticeDetailNotifier(this._apiService) : super(const AsyncValue.loading());
 
   void initFromNoticeItem(NoticeItem item) {
-    _noticeItem = item;
     final currentHint = state.valueOrNull?.hintData;
     state = AsyncValue.data(
       NoticeDetail.fromNoticeItem(item).copyWith(hintData: currentHint),
@@ -101,6 +100,7 @@ class NoticeDetailNotifier extends StateNotifier<AsyncValue<NoticeDetail>> {
     if (currentDetail == null) return;
 
     final previousHint = currentDetail.hintData;
+
     final nextHint = HintData(
       id: hintId ?? previousHint?.id ?? 0,
       firstHint: firstHint,
@@ -116,23 +116,33 @@ class NoticeDetailNotifier extends StateNotifier<AsyncValue<NoticeDetail>> {
     if (incoming.unlockedCount >= current.unlockedCount) {
       return incoming;
     }
+
     return current;
   }
 
   Future<HintData?> fetchHint(int answerId) async {
     try {
       final fetchedHint = await _apiService.getHint(answerId: answerId);
+
       final currentDetail = state.value;
+
       if (currentDetail != null) {
         final currentHint = currentDetail.hintData;
+
         final resolvedHint = currentHint == null
             ? fetchedHint
             : _preferMoreUnlockedHint(currentHint, fetchedHint);
+
         state = AsyncValue.data(currentDetail.copyWith(hintData: resolvedHint));
       }
+
       return fetchedHint;
-    } catch (e) {
-      return null;
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 404) {
+        return null;
+      }
+
+      rethrow;
     }
   }
 
@@ -143,35 +153,15 @@ class NoticeDetailNotifier extends StateNotifier<AsyncValue<NoticeDetail>> {
     String thirdHint = '',
   }) async {
     try {
-      final hintId = await _apiService.saveHint(
+      await _apiService.saveHint(
         answerId: answerId,
         firstHint: firstHint,
         secondHint: secondHint,
         thirdHint: thirdHint,
       );
 
-      _updateLocalHint(
-        hintId: hintId > 0 ? hintId : null,
-        firstHint: firstHint,
-        secondHint: secondHint,
-        thirdHint: thirdHint,
-      );
+      await fetchHint(answerId);
 
-      if (_noticeItem != null) {
-        await _apiService.saveBrickHistory(
-          title: '힌트 사용',
-          description: '첫 번째 힌트 열람',
-          amount: 1,
-          type: 'QUESTION',
-          questionId: _noticeItem!.questionId,
-          targetUserId: _noticeItem!.targetUserId,
-          writerUserId: _noticeItem!.writerUserId,
-        );
-      }
-
-      if (hintId <= 0) {
-        await fetchHint(answerId);
-      }
       return true;
     } catch (e) {
       return false;
@@ -179,15 +169,13 @@ class NoticeDetailNotifier extends StateNotifier<AsyncValue<NoticeDetail>> {
   }
 
   Future<bool> updateHint({
-    required int answerId,
-    int? hintId,
+    required int hintId,
     required String firstHint,
     required String secondHint,
     required String thirdHint,
   }) async {
     try {
       await _apiService.updateHint(
-        answerId: answerId,
         hintId: hintId,
         firstHint: firstHint,
         secondHint: secondHint,
@@ -195,13 +183,11 @@ class NoticeDetailNotifier extends StateNotifier<AsyncValue<NoticeDetail>> {
       );
 
       _updateLocalHint(
-        hintId: hintId,
         firstHint: firstHint,
         secondHint: secondHint,
         thirdHint: thirdHint,
       );
 
-      await fetchHint(answerId);
       return true;
     } catch (e) {
       return false;
@@ -209,8 +195,7 @@ class NoticeDetailNotifier extends StateNotifier<AsyncValue<NoticeDetail>> {
   }
 
   Future<bool> unlockNextHint({
-    required int answerId,
-    int? hintId,
+    required int hintId,
     required HintData currentHint,
     required String newHintValue,
   }) async {
@@ -237,25 +222,11 @@ class NoticeDetailNotifier extends StateNotifier<AsyncValue<NoticeDetail>> {
     }
 
     final success = await updateHint(
-      answerId: answerId,
       hintId: hintId,
       firstHint: firstHint,
       secondHint: secondHint,
       thirdHint: thirdHint,
     );
-
-    if (success && _noticeItem != null) {
-      final descriptions = ['첫 번째 힌트 열람', '두 번째 힌트 열람', '세 번째 힌트 열람'];
-      await _apiService.saveBrickHistory(
-        title: '힌트 사용',
-        description: descriptions[unlockedCount],
-        amount: unlockedCount + 1,
-        type: 'QUESTION',
-        questionId: _noticeItem!.questionId,
-        targetUserId: _noticeItem!.targetUserId,
-        writerUserId: _noticeItem!.writerUserId,
-      );
-    }
 
     return success;
   }

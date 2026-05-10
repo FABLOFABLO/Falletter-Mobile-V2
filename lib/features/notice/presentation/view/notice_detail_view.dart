@@ -148,8 +148,8 @@ class _FalletterNoticeDetailViewState
           amount: nextCost,
           type: 'QUESTION',
           questionId: detail.questionId,
-          targetUserId: detail.targetUserId,
-          writerUserId: detail.writerUserId
+          targetUserId: detail.writerUserId,
+          writerUserId: detail.targetUserId
       );
 
       await ref.read(brickHistoryProvider.notifier).saveBrickHistory(request);
@@ -162,8 +162,7 @@ class _FalletterNoticeDetailViewState
         );
       } else {
         success = await notifier.unlockNextHint(
-          answerId: _answerId,
-          hintId: hintData.id > 0 ? hintData.id : null,
+          hintId: hintData.id,
           currentHint: hintData,
           newHintValue: nextHintValue,
         );
