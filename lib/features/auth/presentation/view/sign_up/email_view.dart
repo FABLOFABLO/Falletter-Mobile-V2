@@ -75,7 +75,7 @@ class _EmailViewState extends ConsumerState<EmailView> {
                             context.push(RoutePaths.verifyCode);
                           }
                           else {
-                            errorSnackBar(context, '이미 가입된 이메일입니다.\n다른 이메일로 시도해주세요.');
+                            errorSnackBar(context, '이미 인증번호를 발송한 이메일입니다.\n잠시 후 시도하거나 다른 이메일로 시도해주세요.');
                           }
                         }
                       : null,
