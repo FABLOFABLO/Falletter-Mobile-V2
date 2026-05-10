@@ -96,15 +96,16 @@ class _SplashViewState extends ConsumerState<SplashView> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    '아직 계정이 없으신가요?',
+                  Text('아직 계정이 없으신가요?  ',
                     style: FalletterTextStyle.body3.copyWith(
                       color: FalletterColor.gray700,
                     ),
                   ),
                   GestureDetector(
-                    onTap: () => context.push('/signup/gender'),
-                    child: Text('회원가입'),
+                    onTap: () {
+                      context.push(RoutePaths.gender);
+                    },
+                    child: Text('회원가입', style: FalletterTextStyle.body3),
                   ),
                 ],
               ),
