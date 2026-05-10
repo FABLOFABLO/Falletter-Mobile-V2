@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:falletter_mobile_v2/core/components/app_bar/custom_app_bar.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FalletterNoticeView extends ConsumerStatefulWidget {
   const FalletterNoticeView({super.key});
@@ -26,17 +27,49 @@ class _FalletterNoticeViewState extends ConsumerState<FalletterNoticeView> {
   Timer? _autoRefreshTimer;
   late ScrollController _scrollController;
 
+  Future<void> _loadReadNotices() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    final ids = prefs.getStringList('readNoticeIds') ?? [];
+
+    setState(() {
+      _readNoticeIds.addAll(
+        ids.map(int.parse),
+      );
+    });
+  }
+
+  Future<void> _saveReadNotice(int id) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      _readNoticeIds.add(id);
+    });
+
+    await prefs.setStringList(
+      'readNoticeIds',
+      _readNoticeIds.map((e) => e.toString()).toList(),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
+
     _scrollController = ScrollController();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(noticeListProvider.notifier).loadNotices();
-      ref.read(brickCountProvider.notifier).loadBrickCount();
-    });
+
+    _initialize();
+  }
+
+  Future<void> _initialize() async {
+    await _loadReadNotices();
+
+    await ref.read(noticeListProvider.notifier).loadNotices();
+    await ref.read(brickCountProvider.notifier).loadBrickCount();
+
     _autoRefreshTimer = Timer.periodic(
       const Duration(hours: 1),
-      (_) => _refreshNotices(),
+          (_) => _refreshNotices(),
     );
   }
 
@@ -134,7 +167,7 @@ class _FalletterNoticeViewState extends ConsumerState<FalletterNoticeView> {
       itemCount: reversedNotice.length,
       itemBuilder: (context, index) {
         final notice = reversedNotice[index];
-        final isRead = notice.isRead || _readNoticeIds.contains(notice.id);
+        final isRead = _readNoticeIds.contains(notice.id);
 
         return NoticeBox(
           title: notice.gradeGenderLabel,
@@ -143,9 +176,8 @@ class _FalletterNoticeViewState extends ConsumerState<FalletterNoticeView> {
           isClicked: isRead,
           onTap: () async {
             await context.push('/notice/detail', extra: notice);
-            setState(() {
-              _readNoticeIds.add(notice.id);
-            });
+
+            await _saveReadNotice(notice.id);
           },
         );
       },
