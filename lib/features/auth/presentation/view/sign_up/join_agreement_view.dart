@@ -9,6 +9,7 @@ import 'package:falletter_mobile_v2/features/auth/presentation/provider/sign_in_
 import 'package:falletter_mobile_v2/features/auth/presentation/provider/join_agreement_provider.dart';
 import 'package:falletter_mobile_v2/features/auth/presentation/provider/signup_provider.dart';
 import 'package:falletter_mobile_v2/features/auth/presentation/widget/check_button.dart';
+import 'package:falletter_mobile_v2/features/user/presentation/provider/user_info_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -75,7 +76,9 @@ class JoinAgreementView extends ConsumerWidget {
                           email: state.email!.trim(),
                           password: state.password!
                       );
-                      context.go(RoutePaths.signupComplete);
+                      await ref.read(userInfoProvider.notifier).getUserInfo();
+                      ref.read(signupCompleteProvider.notifier).state = true;
+                      context.go(RoutePaths.main);
                     } else {
                       errorSnackBar(context, '회원가입에 실패했습니다.\n다시 시도해주세요.');
                     }

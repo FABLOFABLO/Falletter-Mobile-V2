@@ -26,7 +26,6 @@ import 'package:falletter_mobile_v2/features/auth/presentation/view/sign_up/emai
 import 'package:falletter_mobile_v2/features/auth/presentation/view/sign_up/join_agreement_view.dart';
 import 'package:falletter_mobile_v2/features/auth/presentation/view/sign_up/password_view.dart';
 import 'package:falletter_mobile_v2/features/auth/presentation/view/sign_up/school_number_view.dart';
-import 'package:falletter_mobile_v2/features/auth/presentation/view/sign_up/sign_up_complete_view.dart';
 import 'package:falletter_mobile_v2/features/auth/presentation/view/sign_up/verify_code_view.dart';
 import 'package:falletter_mobile_v2/features/splash/presentation/view/splash_view.dart';
 import 'package:falletter_mobile_v2/features/auth/presentation/view/sign_up/gender_view.dart';
@@ -52,10 +51,6 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: 'joinAgree',
             builder: (_, __) => const JoinAgreementView(),
-          ),
-          GoRoute(
-            path: 'complete',
-            builder: (_, __) => const SignUpCompleteView(),
           ),
           GoRoute(
             path: 'schoolNumber',

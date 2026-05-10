@@ -8,6 +8,8 @@ import 'package:falletter_mobile_v2/core/providers/auth_status_provider.dart';
 import 'package:falletter_mobile_v2/core/providers/bottom_nav_provider.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
 import 'package:falletter_mobile_v2/core/theme/app_theme_color.dart';
+import 'package:falletter_mobile_v2/features/auth/presentation/provider/signup_provider.dart';
+import 'package:falletter_mobile_v2/features/auth/presentation/widget/sign_up_complete_modal.dart';
 import 'package:falletter_mobile_v2/features/letter/data/model/get_letter_model.dart';
 import 'package:falletter_mobile_v2/features/letter/presentation/provider/get_letter_provider.dart';
 import 'package:falletter_mobile_v2/features/letter/presentation/utils/letter_check_util.dart';
@@ -43,6 +45,21 @@ class _FalletterMainViewState extends ConsumerState<FalletterMainView> {
       ref.read(themeProvider.notifier).changeTheme(theme);
 
       ref.read(postsProvider.notifier).loadPosts();
+
+      final isSignupComplete =
+      ref.read(signupCompleteProvider);
+
+      if (isSignupComplete && context.mounted) {
+        await showGeneralDialog(
+          context: context,
+          barrierDismissible: false,
+          pageBuilder: (_, __, ___) {
+            return const SignUpCompleteModal();
+          },
+        );
+
+        ref.read(signupCompleteProvider.notifier).state = false;
+      }
 
       if (hasShownLetterPopupThisSession) return;
 

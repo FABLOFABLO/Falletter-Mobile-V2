@@ -5,6 +5,8 @@ import 'package:falletter_mobile_v2/features/user/data/service/user_api_service.
 import 'package:falletter_mobile_v2/features/auth/data/model/signup_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+final signupCompleteProvider = StateProvider<bool>((ref) => false);
+
 class SignupState {
   final String? gender;
   final String? schoolNumber;
