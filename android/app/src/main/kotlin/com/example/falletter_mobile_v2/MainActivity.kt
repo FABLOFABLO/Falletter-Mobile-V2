@@ -1,4 +1,4 @@
-package com.example.falletter_mobile_v2
+package com.falletter.app
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -9,7 +9,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.falletterMobileV2</string>
+	<string>com.falletter.app</string>
 	<key>PROJECT_ID</key>
 	<string>falletter-v2</string>
 	<key>STORAGE_BUCKET</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:100967266390:ios:abdecc12417405247b63f7</string>
+	<string>1:100967266390:ios:13b3f5e2a805a7307b63f7</string>
 </dict>
 </plist>
