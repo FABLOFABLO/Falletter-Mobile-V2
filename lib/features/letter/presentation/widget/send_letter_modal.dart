@@ -44,6 +44,7 @@ class _SendLetterModalState extends ConsumerState<SendLetterModal>
           Text(
             '${widget.sendName}에게\n레터를 전송할게요.',
             style: FalletterTextStyle.body1,
+            textAlign: TextAlign.center,
           ),
           Lottie.asset(
             themeColors.sendLetterLottie,
