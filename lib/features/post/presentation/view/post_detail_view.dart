@@ -242,29 +242,32 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
               ),
             ),
             Divider(thickness: 0.5),
-            Padding(
-              padding: const EdgeInsets.all(20).copyWith(top: 10),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: CustomTextFormField(
-                      controller: _commentController,
-                      maxLines: 1,
-                      decoration: InputDecoration(hintText: '댓글을 작성하세요'),
+            SafeArea(
+              top: false,
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: CustomTextFormField(
+                        controller: _commentController,
+                        maxLines: 1,
+                        decoration: InputDecoration(hintText: '댓글을 작성하세요'),
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 12),
-                    child: SendButton(isEnabled: isEnabled, onPressed: () {
-                      FocusScope.of(context).unfocus();
-                      ref.read(postsDetailProvider.notifier).addComment(
-                          widget.postId,
-                          _commentController.text
-                      );
-                      _commentController.text = '';
-                    }),
-                  ),
-                ],
+                    Padding(
+                      padding: const EdgeInsets.only(left: 12),
+                      child: SendButton(isEnabled: isEnabled, onPressed: () {
+                        FocusScope.of(context).unfocus();
+                        ref.read(postsDetailProvider.notifier).addComment(
+                            widget.postId,
+                            _commentController.text
+                        );
+                        _commentController.text = '';
+                      }),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
