@@ -1,3 +1,3 @@
 class AppEnv {
-  static const baseUrl = "https://falletter.co.kr";
+  static const baseUrl = "https://falletter-api.dsmhs.kr";
 }
