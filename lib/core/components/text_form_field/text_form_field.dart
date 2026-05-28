@@ -1,5 +1,5 @@
 import 'package:falletter_mobile_v2/core/components/text_form_field/text_form_field_label.dart';
-import 'package:falletter_mobile_v2/core/constants/color.dart';
+import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -88,7 +88,7 @@ class CustomTextFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final defaultTextStyle = FalletterTextStyle.placeholder
-        .copyWith(color: FalletterColor.white)
+        .copyWith(color: context.textColor)
         .merge(style);
 
     InputDecoration inputDecoration = InputDecoration(
@@ -153,6 +153,7 @@ class CustomTextFormField extends StatelessWidget {
           ),
         ],
         TextFormField(
+          cursorColor: context.textColor,
           autocorrect: autocorrect,
           showCursor: showCursor,
           controller: controller,

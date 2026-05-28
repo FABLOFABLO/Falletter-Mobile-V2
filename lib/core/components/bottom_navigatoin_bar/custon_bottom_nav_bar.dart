@@ -1,7 +1,9 @@
 import 'package:falletter_mobile_v2/core/components/bottom_navigatoin_bar/bottom_navigation_item.dart';
-import 'package:falletter_mobile_v2/core/constants/app_theme_color.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
+import 'package:falletter_mobile_v2/core/theme/app_theme_color.dart';
+import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
+import 'package:falletter_mobile_v2/core/providers/bottom_nav_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -31,36 +33,38 @@ class CustomBottomNavigationBar extends ConsumerWidget {
     final selectedTheme = ref.watch(themeProvider);
     final themeColors = appThemeColors[selectedTheme]!;
 
-    return Padding(
-      padding: const EdgeInsets.only(top: 10, bottom: 26),
-      child: Container(
-        decoration: const BoxDecoration(
-          color: FalletterColor.black,
-          border: Border(
-            top: BorderSide(
-              color: FalletterColor.gray900,
-              width: 0.5,
-            ),
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 10),
+      decoration: BoxDecoration(
+        color: context.bgColor,
+        border: Border(
+          top: BorderSide(
+            color: FalletterColor.gray900,
+            width: 0.5,
           ),
         ),
-        child: SafeArea(
-          top: false,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: List.generate(_icons.length, (index) {
-                final isSelected = currentIndex == index;
+      ),
+      child: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: List.generate(_icons.length, (index) {
+              final isSelected = currentIndex == index;
 
-                return BottomNavItem(
-                  icon: _icons[index],
-                  label: _labels[index],
-                  isSelected: isSelected,
-                  gradient: themeColors.bottomNavIcon,
-                  onTap: () => onTap(index),
-                );
-              }),
-            ),
+              return BottomNavItem(
+                icon: _icons[index],
+                label: _labels[index],
+                isSelected: isSelected,
+                gradient: themeColors.bottomNavIcon,
+                showBadge: false,
+                onTap: () {
+                  ref.read(bottomNavIndexProvider.notifier).state = index;
+                  onTap(index);
+                },
+              );
+            }),
           ),
         ),
       ),

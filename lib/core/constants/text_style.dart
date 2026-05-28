@@ -1,4 +1,3 @@
-import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:flutter/material.dart';
 
 abstract final class FalletterTextStyle {
@@ -65,9 +64,12 @@ abstract final class FalletterTextStyle {
     fontSize: 16,
     fontWeight: FontWeight.w600,
   );
+  static TextStyle agreeService = defaultTextStyle.copyWith(
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+  );
 }
 
 const TextStyle defaultTextStyle = TextStyle(
-  color: FalletterColor.white,
   fontFamily: 'WantedSans',
 );

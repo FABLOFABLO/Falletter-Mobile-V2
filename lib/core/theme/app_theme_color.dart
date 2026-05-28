@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 enum AppTheme { blue, pink, purple }
 
 class ThemeColors {
+  final Color primaryColor;
   final Gradient primaryGradient;
   final Gradient text;
   final Gradient button;
+  final Gradient floatingButton;
   final Gradient letterModalBorder;
   final Gradient bottomNavIcon;
   final Gradient profile;
@@ -15,18 +17,25 @@ class ThemeColors {
   final Gradient timer;
   final Gradient hintInitial;
   final Gradient rewardText;
+  final Gradient toggleCircleColor;
 
-  final String logoSvg;
+  final String onBoardingSvg;
   final String letterSvg;
   final String brickSvg;
-  final String checkLetterSvg;
+  final String missSvg;
+  final String receivedLetterSvg;
   final String signupLottie;
   final String sendLetterLottie;
+  final String noticeSvg;
+  final String rouletteCheckSvg;
+  final String rewardSetSvg;
 
   ThemeColors({
+    required this.primaryColor,
     required this.primaryGradient,
     required this.text,
     required this.button,
+    required this.floatingButton,
     required this.letterModalBorder,
     required this.bottomNavIcon,
     required this.profile,
@@ -35,20 +44,27 @@ class ThemeColors {
     required this.timer,
     required this.hintInitial,
     required this.rewardText,
-    required this.logoSvg,
+    required this.onBoardingSvg,
     required this.letterSvg,
     required this.brickSvg,
-    required this.checkLetterSvg,
+    required this.missSvg,
+    required this.receivedLetterSvg,
     required this.signupLottie,
     required this.sendLetterLottie,
+    required this.noticeSvg,
+    required this.rouletteCheckSvg,
+    required this.toggleCircleColor,
+    required this.rewardSetSvg
   });
 }
 
 Map<AppTheme, ThemeColors> appThemeColors = {
   AppTheme.blue: ThemeColors(
+    primaryColor: FalletterColor.blueGradient[1],
     primaryGradient: FalletterGradient.horizontal(FalletterColor.blueGradient),
     text: FalletterGradient.vertical(FalletterColor.blueGradient),
     button: FalletterGradient.horizontal(FalletterColor.blueGradient),
+    floatingButton: FalletterGradient.vertical(FalletterColor.blueGradient),
     letterModalBorder: FalletterGradient.horizontal(FalletterColor.blueGradient),
     bottomNavIcon: FalletterGradient.horizontal(FalletterColor.blueGradient),
     profile: FalletterGradient.vertical(FalletterColor.blueGradient),
@@ -57,18 +73,25 @@ Map<AppTheme, ThemeColors> appThemeColors = {
     timer: FalletterGradient.vertical(FalletterColor.blueGradient),
     hintInitial: FalletterGradient.vertical(FalletterColor.blueGradient),
     rewardText: FalletterGradient.vertical(FalletterColor.blueGradient),
-    logoSvg: 'assets/icon/onBoarding.svg',
-    letterSvg: 'assets/icon/letter.svg',
-    brickSvg: 'assets/icon/brick.svg',
-    checkLetterSvg: 'assets/icon/check_letter.svg',
+    toggleCircleColor: FalletterGradient.vertical(FalletterColor.blueGradient),
+    onBoardingSvg: 'assets/svg/on_boarding/on_boarding_blue.svg',
+    letterSvg: 'assets/svg/letter/letter_blue.svg',
+    brickSvg: 'assets/svg/brick/brick_blue.svg',
+    missSvg: 'assets/svg/miss/miss_blue.svg',
+    rewardSetSvg: 'assets/svg/reward_set/reward_set_blue.svg',
+    receivedLetterSvg: 'assets/svg/received_letter/received_letter_blue.svg',
+    noticeSvg: 'assets/svg/notice/notice_blue.svg',
+    rouletteCheckSvg: 'assets/svg/roulette_check/roulette_blue.svg',
     signupLottie: 'assets/lottie/congratulation.json',
     sendLetterLottie: 'assets/lottie/paperPlane.json',
   ),
 
   AppTheme.pink: ThemeColors(
+    primaryColor: FalletterColor.pinkGradient[0],
     primaryGradient: FalletterGradient.horizontal(FalletterColor.pinkGradient),
     text: FalletterGradient.vertical(FalletterColor.pinkGradient),
     button: FalletterGradient.horizontal(FalletterColor.pinkGradient),
+    floatingButton: FalletterGradient.vertical(FalletterColor.pinkGradient),
     letterModalBorder: FalletterGradient.horizontal(FalletterColor.pinkGradient),
     bottomNavIcon: FalletterGradient.horizontal(FalletterColor.pinkGradient),
     profile: FalletterGradient.vertical(FalletterColor.pinkGradient),
@@ -77,18 +100,25 @@ Map<AppTheme, ThemeColors> appThemeColors = {
     timer: FalletterGradient.vertical(FalletterColor.pinkGradient),
     hintInitial: FalletterGradient.vertical(FalletterColor.pinkGradient),
     rewardText: FalletterGradient.vertical(FalletterColor.pinkGradient),
-    logoSvg: 'assets/icon/onBoarding_pink.svg',
-    letterSvg: 'assets/icon/letter_pink.svg',
-    brickSvg: 'assets/icon/brick_pink.svg',
-    checkLetterSvg: 'assets/icon/check_letter_pink.svg',
+    toggleCircleColor: FalletterGradient.vertical(FalletterColor.pinkGradient),
+    onBoardingSvg: 'assets/svg/on_boarding/on_boarding_pink.svg',
+    letterSvg: 'assets/svg/letter/letter_pink.svg',
+    brickSvg: 'assets/svg/brick/brick_pink.svg',
+    missSvg: 'assets/svg/miss/miss_pink.svg',
+    receivedLetterSvg: 'assets/svg/received_letter/received_letter_pink.svg',
+    noticeSvg: 'assets/svg/notice/notice_pink.svg',
+    rouletteCheckSvg: 'assets/svg/roulette_check/roulette_pink.svg',
+    rewardSetSvg: 'assets/svg/reward_set/reward_set_pink.svg',
     signupLottie: 'assets/lottie/congratulation_pink.json',
     sendLetterLottie: 'assets/lottie/paperPlane_pink.json',
   ),
 
   AppTheme.purple: ThemeColors(
+    primaryColor: FalletterColor.purpleGradient[0],
     primaryGradient: FalletterGradient.horizontal(FalletterColor.purpleGradient),
     text: FalletterGradient.vertical(FalletterColor.purpleGradient),
     button: FalletterGradient.horizontal(FalletterColor.purpleGradient),
+    floatingButton: FalletterGradient.vertical(FalletterColor.purpleGradient),
     letterModalBorder: FalletterGradient.horizontal(FalletterColor.purpleGradient),
     bottomNavIcon: FalletterGradient.horizontal(FalletterColor.purpleGradient),
     profile: FalletterGradient.vertical(FalletterColor.purpleGradient),
@@ -97,10 +127,15 @@ Map<AppTheme, ThemeColors> appThemeColors = {
     timer: FalletterGradient.vertical(FalletterColor.purpleGradient),
     hintInitial: FalletterGradient.vertical(FalletterColor.purpleGradient),
     rewardText: FalletterGradient.vertical(FalletterColor.purpleGradient),
-    logoSvg: 'assets/icon/onBoarding_silver.svg',
-    letterSvg: 'assets/icon/letter_silver.svg',
-    brickSvg: 'assets/icon/brick_silver.svg',
-    checkLetterSvg: 'assets/icon/check_letter_silver.svg',
+    toggleCircleColor: FalletterGradient.vertical(FalletterColor.purpleGradient),
+    onBoardingSvg: 'assets/svg/on_boarding/on_boarding_purple.svg',
+    letterSvg: 'assets/svg/letter/letter_purple.svg',
+    brickSvg: 'assets/svg/brick/brick_purple.svg',
+    missSvg: 'assets/svg/miss/miss_purple.svg',
+    receivedLetterSvg: 'assets/svg/received_letter/received_letter_purple.svg',
+    noticeSvg: 'assets/svg/notice/notice_purple.svg',
+    rouletteCheckSvg: 'assets/svg/roulette_check/roulette_purple.svg',
+    rewardSetSvg: 'assets/svg/reward_set/reward_set_purple.svg',
     signupLottie: 'assets/lottie/congratulation_purple.json',
     sendLetterLottie: 'assets/lottie/paperPlane_purple.json',
   )

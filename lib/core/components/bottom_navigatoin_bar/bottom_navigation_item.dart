@@ -1,4 +1,4 @@
-import 'package:falletter_mobile_v2/core/components/gradient_icon.dart';
+import 'package:falletter_mobile_v2/core/components/gradient/gradient_icon.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +9,7 @@ class BottomNavItem extends StatelessWidget {
   final bool isSelected;
   final Gradient gradient;
   final VoidCallback onTap;
+  final bool showBadge;
 
   const BottomNavItem({
     super.key,
@@ -17,6 +18,7 @@ class BottomNavItem extends StatelessWidget {
     required this.isSelected,
     required this.gradient,
     required this.onTap,
+    this.showBadge = false,
   });
 
   @override
@@ -27,16 +29,30 @@ class BottomNavItem extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            isSelected
-                ? CustomGradientIcon(
-              icon: icon,
-              gradient: gradient,
-              fill: 1,
-            )
-                : Icon(
-              icon,
-              color: FalletterColor.gray700,
-              fill: 1,
+            Stack(
+              alignment: Alignment.topRight,
+              children: [
+                isSelected
+                    ? CustomGradientIcon(
+                  icon: icon,
+                  gradient: gradient,
+                  fill: 1,
+                )
+                    : Icon(
+                  icon,
+                  color: FalletterColor.gray700,
+                  fill: 1,
+                ),
+                if (showBadge)
+                  Container(
+                    width: 8,
+                    height: 8,
+                    decoration: BoxDecoration(
+                      color: FalletterColor.error,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+              ],
             ),
             const SizedBox(height: 4),
             isSelected

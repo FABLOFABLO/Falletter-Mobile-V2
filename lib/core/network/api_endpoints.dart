@@ -1,0 +1,84 @@
+import 'package:falletter_mobile_v2/core/config/app_env.dart';
+
+class ApiEndpoints {
+  /// Base URL
+  static const baseUrl = AppEnv.baseUrl;
+
+  /// Fcm
+  static const fcmToken = '/device/token';
+
+  /// Auth
+  static const refreshToken = "/auth/refresh";
+  static const emailVerify = "/auth/email/verify";
+  static const emailMatch = "/auth/email/match";
+
+  /// User
+  static const signup = "/user/signup";
+  static const signin = "/user/signin";
+  static const logout = "/user/logout";
+  static const users = "/user/users";
+  static const student = "/user/student";
+  static const theme = "/user/theme/update";
+  static const withdraw = "/user/withdraw";
+
+  /// Community
+  static const post = "/community/posts";
+
+  /// Comment
+  static const comment = "/comment";
+
+  /// Item
+  static const letterCount = "/item/letter/count";
+  static const letterUpdate = "/item/letter/update";
+  static const brickCount = '/item/brick/count';
+  static const brickUpdate = "/item/brick/update";
+
+  /// Letter
+  static const sent = "/letter/sent";
+  static const sentAll = "/letter/sent/all";
+  static const receivedAll = "/letter/received/all";
+  static const received = "/letter/received";
+
+  /// History
+  static const brickSave = "/history/brick/save";
+  static const brickUsed = "/history/brick/used";
+
+  /// Answer
+  static const choose = "/answer/choose";
+  static const chosen = "/answer/chosen";
+  static const progress = "/answer/progress";
+  static const complete = "/answer/progress/complete";
+  static const skip = "/answer/progress/skip";
+
+  /// Question
+  static const all = "/question/all";
+
+  /// Timer
+  static const rouletteTimer = "/timer/roulette";
+  static const brickTimer = "/timer/brick";
+
+  /// Notice
+  static const announcement = "/notice";
+
+  /// Hint
+  static const save = "/hint/save";
+  static const hint = "/hint";
+  static const update = "/hint/update";
+
+  /// Notification
+  static const notificationSetting = '/notification/setting';
+  static const notificationHistory = '/notification/history';
+
+  /// Suspend
+  static const suspend = '/suspend';
+  static const suspendAll = '/suspend/all';
+
+  /// Admin
+  static const letterUnPassed = "/admin/letter/unpassed";
+  static const notice = "/admin/notice";
+  static const community = "/admin/community";
+  static String warnUser(String userId) => "/admin/user/$userId/warning";
+  static String blockUser(String userId) => "/admin/user/$userId/block";
+  static const user = "/admin/user";
+  static const userAll = "/admin/user/all";
+}

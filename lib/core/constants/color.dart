@@ -1,13 +1,16 @@
-import 'package:flutter/painting.dart';
+import 'package:flutter/material.dart';
 
 abstract final class FalletterColor {
   static const Color white = Color(0xFFFFFFFF);
+  static const Color whiteBg = Color(0xFFF4F4F4);
+  static const Color middleWhite = Color(0xFFECECEC);
   static const Color black = Color(0xFF141414);
   static const Color middleBlack = Color(0xFF1C1C1C);
   static const Color error = Color(0xFFFF7A7A);
 
   static const Color gray50 = Color(0xFFF4F4F4);
   static const Color gray100 = Color(0xFFE4E4E4);
+  static const Color lightTheme = Color(0xFFDDDDDD);
   static const Color gray200 = Color(0xFFD0D0D0);
   static const Color gray300 = Color(0xFFBCBCBC);
   static const Color gray400 = Color(0xFFA7A7A7);
@@ -16,7 +19,7 @@ abstract final class FalletterColor {
   static const Color gray700 = Color(0xFF6A6A6A);
   static const Color gray800 = Color(0xFF565656);
   static const Color gray900 = Color(0xFF414141);
-
+  static const Color darkTheme = Color(0xFF3D3D3D);
   static const List<Color> blueGradient = [
     Color(0xFF0CDFE6),
     Color(0xFF93AAFF),
@@ -29,6 +32,35 @@ abstract final class FalletterColor {
     Color(0xFFEC89FF),
     Color(0xFFB640FF),
   ];
+
+  // 동적 색상 함수들
+  static Color getCardBackground(BuildContext context) {
+    return Theme.of(context).cardColor;
+  }
+
+  static Color getTextColor(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return isDark ? white : black;
+  }
+
+  static Color getBackgroundColor(BuildContext context) {
+    return Theme.of(context).scaffoldBackgroundColor;
+  }
+
+  static Color getMiddleColor(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return isDark ? middleBlack : middleWhite;
+  }
+
+  static Color getReverseMiddleColor(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return isDark ? middleWhite : middleBlack;
+  }
+
+  static Color getReverseTextColor(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return isDark ? black : white;
+  }
 }
 
 abstract final class FalletterGradient {
