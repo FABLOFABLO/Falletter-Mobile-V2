@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "100967266390",
-    "project_id": "falletter-v2",
-    "storage_bucket": "falletter-v2.firebasestorage.app"
+    "project_number": "733537124238",
+    "project_id": "falletter-prod-4227f",
+    "storage_bucket": "falletter-prod-4227f.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:100967266390:android:ac55275695a1cbd57b63f7",
+        "mobilesdk_app_id": "1:733537124238:android:b6043d469f1d96760faedf",
         "android_client_info": {
           "package_name": "com.falletter.app"
         }
@@ -15,26 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyD31A78sdTZ4LsNLqslGU8mb_P7QLBzPQg"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:100967266390:android:607fcf6d0fb0d41a7b63f7",
-        "android_client_info": {
-          "package_name": "com.falletter.app"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyD31A78sdTZ4LsNLqslGU8mb_P7QLBzPQg"
+          "current_key": "AIzaSyDg005r_AbfYw4geZxpzfWYli23KL_zJoI"
         }
       ],
       "services": {
