@@ -33,9 +33,12 @@ Future<void> _setupAndroidNotificationChannel() async {
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
-  await _setupAndroidNotificationChannel();
+  try {
+    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+    await _setupAndroidNotificationChannel();
+  } catch (e) {
+    debugPrint('Firebase 초기화 실패: $e');
+  }
 
   runApp(const ProviderScope(child: MyApp()));
 }

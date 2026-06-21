@@ -63,6 +63,6 @@ class DefaultFirebaseOptions {
     messagingSenderId: '100967266390',
     projectId: 'falletter-v2',
     storageBucket: 'falletter-v2.firebasestorage.app',
-    iosBundleId: 'com.example.falletterMobileV2',
+    iosBundleId: 'com.fablo.falletter',
   );
 }
