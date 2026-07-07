@@ -18,10 +18,6 @@ class ReportNotifier extends StateNotifier<void> {
   ReportNotifier(this.apiService) : super([]);
 
   Future<void> addReport(int contentId, String reason) async {
-    try {
-      await apiService.reportPost(contentId: contentId, reason: reason);
-    } catch(e) {
-      throw Exception('신고 등록에 실패했습니다.');
-    }
+    await apiService.reportPost(contentId: contentId, reason: reason);
   }
 }
