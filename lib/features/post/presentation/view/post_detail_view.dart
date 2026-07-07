@@ -264,10 +264,12 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
                                                         );
                                                         if (!mounted) return;
                                                         navigator.pop();
+                                                        _reportController.clear();
                                                         successSnackBar(this.context, '신고가 접수되었습니다.');
                                                       } on DioException catch (e) {
                                                         if (!mounted) return;
                                                         navigator.pop();
+                                                        _reportController.clear();
                                                         errorSnackBar(this.context, e.response?.statusCode == 409
                                                               ? '이미 신고한 게시글입니다.'
                                                               : '신고에 실패했습니다.',
