@@ -1,8 +1,10 @@
+import 'package:dio/dio.dart';
 import 'package:falletter_mobile_v2/core/components/app_bar/custom_app_bar.dart';
 import 'package:falletter_mobile_v2/core/components/button/content_card_button.dart';
 import 'package:falletter_mobile_v2/core/components/button/send_button.dart';
 import 'package:falletter_mobile_v2/core/components/modal/default_modal.dart';
 import 'package:falletter_mobile_v2/core/components/progress/loading_circular_indicator.dart';
+import 'package:falletter_mobile_v2/core/components/snack_bar/snack_bar.dart';
 import 'package:falletter_mobile_v2/core/components/text_form_field/text_form_field.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
@@ -260,11 +262,17 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
                                                             post.id,
                                                             _reportController.text
                                                         );
-                                                      } catch (_) {
-                                                        return;
+                                                        if (!mounted) return;
+                                                        navigator.pop();
+                                                        successSnackBar(this.context, '신고가 접수되었습니다.');
+                                                      } on DioException catch (e) {
+                                                        if (!mounted) return;
+                                                        navigator.pop();
+                                                        errorSnackBar(this.context, e.response?.statusCode == 409
+                                                              ? '이미 신고한 게시글입니다.'
+                                                              : '신고에 실패했습니다.',
+                                                        );
                                                       }
-                                                      if (!mounted) return;
-                                                      navigator.pop();
                                                     } : null,
                                                     child: Container(
                                                       width: 350,
