@@ -35,6 +35,7 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
   final baseInfoStyle = FalletterTextStyle.body3;
   final commentInfoStyle = FalletterTextStyle.body4;
   final maxLength = 200;
+  final reportSvg = 'assets/svg/report/siren.svg';
 
   @override
   void initState() {
@@ -294,7 +295,7 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
                                   )
                               );
                             },
-                            child: SvgPicture.asset('assets/svg/report/siren.svg'),
+                            child: SvgPicture.asset(reportSvg),
                           )
                       ],
                     ),
