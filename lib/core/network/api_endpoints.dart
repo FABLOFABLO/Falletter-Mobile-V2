@@ -73,6 +73,9 @@ class ApiEndpoints {
   static const suspend = '/suspend';
   static const suspendAll = '/suspend/all';
 
+  /// Report
+  static const report = '/report';
+
   /// Admin
   static const letterUnPassed = "/admin/letter/unpassed";
   static const notice = "/admin/notice";

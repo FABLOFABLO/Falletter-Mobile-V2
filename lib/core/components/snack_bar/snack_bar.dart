@@ -14,3 +14,16 @@ void errorSnackBar(BuildContext context, String message) {
       )
   );
 }
+
+void successSnackBar(BuildContext context, String message) {
+  ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          message,
+          style: TextStyle(color: context.textColor),
+        ),
+        duration: Duration(seconds: 2),
+        backgroundColor: context.cardBg,
+      )
+  );
+}
