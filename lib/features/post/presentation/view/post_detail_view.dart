@@ -260,7 +260,7 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
                                                       try {
                                                         await ref.read(reportProvider.notifier).addReport(
                                                             post.id,
-                                                            _reportController.text
+                                                            _reportController.text.trim()
                                                         );
                                                         if (!mounted) return;
                                                         navigator.pop();
