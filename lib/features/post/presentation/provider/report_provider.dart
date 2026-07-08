@@ -15,7 +15,7 @@ final reportProvider = StateNotifierProvider<ReportNotifier, void>((ref) {
 class ReportNotifier extends StateNotifier<void> {
   final ReportApiService apiService;
 
-  ReportNotifier(this.apiService) : super([]);
+  ReportNotifier(this.apiService) : super(null);
 
   Future<void> addReport(int contentId, String reason) async {
     await apiService.reportPost(contentId: contentId, reason: reason);
