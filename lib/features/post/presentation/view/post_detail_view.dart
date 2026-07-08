@@ -227,8 +227,8 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
                                                         builder: (context, child) => Text.rich(
                                                           TextSpan(
                                                               children: [
-                                                                TextSpan(text: '${_reportController.text.length}', style: FalletterTextStyle.body3.copyWith(color: context.textColor)),
-                                                                TextSpan(text: '/$maxLength', style: FalletterTextStyle.body3.copyWith(color: FalletterColor.gray500))
+                                                                TextSpan(text: '${_reportController.text.length}', style: baseInfoStyle.copyWith(color: context.textColor)),
+                                                                TextSpan(text: '/$maxLength', style: baseInfoStyle.copyWith(color: FalletterColor.gray500))
                                                               ]
                                                           )
                                                         ),
