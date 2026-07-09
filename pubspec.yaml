@@ -1,7 +1,7 @@
 name: falletter_mobile_v2
 description: "This is an anonymous communication community service exclusively for DSM students."
 publish_to: 'none'
-version: 1.0.0+8
+version: 1.0.0+9
 
 environment:
   sdk: ^3.9.2
@@ -72,3 +72,4 @@ flutter:
     - assets/svg/suspend/
     - assets/svg/miss/
     - assets/svg/reward_set/
+    - assets/svg/report/

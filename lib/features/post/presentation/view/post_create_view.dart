@@ -91,7 +91,7 @@ class _PostCreateViewState extends ConsumerState<PostCreateView> {
                         controller: _contentController,
                         maxLength: maxLength,
                         maxLines: 9,
-                        decoration: InputDecoration(counterText: ''),
+                        decoration: InputDecoration(counterText: '', hintText: '부적절하거나 불쾌감을 줄 수 있는 컨텐츠는\n제재를 받을 수 있습니다'),
                       ),
                     ],
                   ),

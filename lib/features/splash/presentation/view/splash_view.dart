@@ -89,7 +89,14 @@ class _SplashViewState extends ConsumerState<SplashView> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Expanded(child: SvgPicture.asset(themeColors.onBoardingSvg)),
+            Expanded(
+              child: Center(
+                child: SvgPicture.asset(
+                  themeColors.onBoardingSvg,
+                  width: MediaQuery.of(context).size.width * 0.6,
+                ),
+              ),
+            ),
 
             Padding(
               padding: EdgeInsets.only(bottom: 12),
