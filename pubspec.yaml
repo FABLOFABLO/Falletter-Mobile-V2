@@ -1,7 +1,7 @@
 name: falletter_mobile_v2
 description: "This is an anonymous communication community service exclusively for DSM students."
 publish_to: 'none'
-version: 1.0.0+4
+version: 1.0.0+5
 
 environment:
   sdk: ^3.9.2
