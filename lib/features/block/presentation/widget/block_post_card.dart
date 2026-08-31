@@ -32,12 +32,15 @@ class BlockPostCard extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  title,
-                  style: FalletterTextStyle.subTitle2,
-                  overflow: TextOverflow.ellipsis,
+                Expanded(
+                  child: Text(
+                    title,
+                    style: FalletterTextStyle.subTitle2,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
-                Spacer(),
+                SizedBox(width: 8),
                 Text(
                   timeCheck(blockedAt),
                   style: FalletterTextStyle.body4.copyWith(
