@@ -1,4 +1,5 @@
 import 'package:falletter_mobile_v2/core/components/app_bar/custom_app_bar.dart';
+import 'package:falletter_mobile_v2/core/components/state/state_message.dart';
 import 'package:falletter_mobile_v2/core/components/button/elevated_button.dart';
 import 'package:falletter_mobile_v2/core/components/progress/loading_circular_indicator.dart';
 import 'package:falletter_mobile_v2/core/components/snack_bar/snack_bar.dart';
@@ -62,12 +63,20 @@ class _FalletterLetterViewState extends ConsumerState<FalletterLetterView> {
     final isNextStep = letterState.value?.valid ?? false;
     final style = FalletterTextStyle.subTitle1;
 
-    if (letterState.isLoading) {
-      return loadingCircularIndicator(ref);
-    }
-
-    if (letterState.hasError) {
-      return const Center(child: Text('레터 정보를 불러오지 못했습니다.'));
+    if (letterState.isLoading || letterState.hasError) {
+      return Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: CustomAppBar(
+          icon: false,
+          count: count,
+          appBarAction: AppBarAction.letterCount,
+        ),
+        body: SafeArea(
+          child: letterState.isLoading
+              ? loadingCircularIndicator(ref)
+              : stateMessage(StateMessages.loadFailed),
+        ),
+      );
     }
 
     return GestureDetector(

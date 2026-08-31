@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:falletter_mobile_v2/core/components/state/state_message.dart';
 import 'package:falletter_mobile_v2/core/components/progress/loading_circular_indicator.dart';
 import 'package:falletter_mobile_v2/core/components/snack_bar/snack_bar.dart';
 import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
@@ -227,9 +228,7 @@ class _FalletterNoticeDetailViewState
             color: themeColors.primaryColor,
             child: detailAsync.when(
               loading: () => loadingCircularIndicator(ref),
-              error: (error, _) => Center(
-                child: Text('알림을 불러올 수 없습니다.', style: FalletterTextStyle.body2),
-              ),
+              error: (error, _) => stateMessage(StateMessages.loadFailed),
               data: (detail) {
                 final hintData = detail.hintData;
                 final hasHints = hintData != null && hintData.unlockedCount > 0;

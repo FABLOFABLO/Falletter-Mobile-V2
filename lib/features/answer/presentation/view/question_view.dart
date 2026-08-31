@@ -1,5 +1,6 @@
 import 'package:falletter_mobile_v2/core/components/progress/loading_circular_indicator.dart';
 import 'package:falletter_mobile_v2/core/components/snack_bar/snack_bar.dart';
+import 'package:falletter_mobile_v2/core/components/state/state_message.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
@@ -78,8 +79,8 @@ class _QuestionViewState extends ConsumerState<QuestionView> {
     final choicesAsync = ref.read(currentChoicesProvider);
     final choices = choicesAsync.value ?? [];
 
-    if (progress.isLoading) {
-      return Center(child: loadingCircularIndicator(ref));
+    if (progress.hasError) {
+      return stateMessage(StateMessages.loadFailed);
     }
 
     if (progress.hasError) {
@@ -87,11 +88,11 @@ class _QuestionViewState extends ConsumerState<QuestionView> {
     }
 
     if (question == null) {
-      return const Center(child: Text('질문이 없습니다'));
+      return stateMessage('질문이 없어요.');
     }
 
     if (choices.length < 4) {
-      return const Center(child: Text('선택지가 부족합니다'));
+      return stateMessage('선택지가 부족해요.');
     }
 
     final currentIndex = progress.value?.currentIndex ?? 0;
