@@ -12,7 +12,7 @@ class AuthInterceptor extends Interceptor {
   final VoidCallback onAuthFailed;
 
   bool _isRefreshing = false;
-  Completer<void>? _refreshCompleter;
+  Completer<bool>? _refreshCompleter;
 
   AuthInterceptor({
     required this.dio,
@@ -52,16 +52,15 @@ class AuthInterceptor extends Interceptor {
     }
 
     if (_isRefreshing) {
-      try {
-        await _refreshCompleter?.future;
-      } catch (_) {
+      final ok = await _refreshCompleter?.future ?? false;
+      if (!ok) {
         return handler.next(err);
       }
       return _retry(requestOptions, handler, err);
     }
 
     _isRefreshing = true;
-    _refreshCompleter = Completer<void>();
+    _refreshCompleter = Completer<bool>();
 
     bool refreshed;
     try {
@@ -71,14 +70,14 @@ class AuthInterceptor extends Interceptor {
     }
 
     if (!refreshed) {
-      _refreshCompleter?.completeError(err);
+      _refreshCompleter?.complete(false);
       _isRefreshing = false;
       await tokenStorage.clear();
       onAuthFailed();
       return handler.reject(err);
     }
 
-    _refreshCompleter?.complete();
+    _refreshCompleter?.complete(true);
     _isRefreshing = false;
 
     return _retry(requestOptions, handler, err);
