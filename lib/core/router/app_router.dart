@@ -229,9 +229,11 @@ final goRouterProvider = Provider<GoRouter>((ref) {
                         path: 'detail',
                         parentNavigatorKey: _rootNavigatorKey,
                         builder: (context, state) {
-                          return BlockDetailView(
-                            post: state.extra as BlockedPostModel,
-                          );
+                          final extra = state.extra;
+                          if (extra is! BlockedPostModel) {
+                            return const BlockView();
+                          }
+                          return BlockDetailView(post: extra);
                         },
                       ),
                     ],
