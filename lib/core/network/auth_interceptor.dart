@@ -2,12 +2,13 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:dio/dio.dart';
-import 'package:falletter_mobile_v2/core/network/api_endpoints.dart';
+import 'package:falletter_mobile_v2/core/network/token_refresher.dart';
 import 'package:falletter_mobile_v2/core/network/token_storage.dart';
 
 class AuthInterceptor extends Interceptor {
   final Dio dio;
   final TokenStorage tokenStorage;
+  final TokenRefresher tokenRefresher;
   final VoidCallback onAuthFailed;
 
   bool _isRefreshing = false;
@@ -16,6 +17,7 @@ class AuthInterceptor extends Interceptor {
   AuthInterceptor({
     required this.dio,
     required this.tokenStorage,
+    required this.tokenRefresher,
     required this.onAuthFailed,
   });
 
@@ -38,7 +40,8 @@ class AuthInterceptor extends Interceptor {
     DioException err,
     ErrorInterceptorHandler handler,
   ) async {
-    if (err.response?.statusCode != 401 && err.response?.statusCode != 403) {
+    final statusCode = err.response?.statusCode;
+    if (statusCode != 401 && statusCode != 403) {
       return handler.next(err);
     }
 
@@ -51,75 +54,52 @@ class AuthInterceptor extends Interceptor {
     if (_isRefreshing) {
       try {
         await _refreshCompleter?.future;
-
-        final newAccessToken = await tokenStorage.readAccessToken();
-
-        final newRequest = requestOptions.copyWith(
-          extra: {...requestOptions.extra, 'retry': true},
-        );
-        newRequest.headers['Authorization'] = 'Bearer $newAccessToken';
-
-        final response = await dio.fetch(newRequest);
-
-        return handler.resolve(response);
-      } catch (e) {
+      } catch (_) {
         return handler.next(err);
       }
+      return _retry(requestOptions, handler, err);
     }
 
     _isRefreshing = true;
-    _refreshCompleter = Completer();
+    _refreshCompleter = Completer<void>();
 
+    bool refreshed;
     try {
-      final refreshToken = await tokenStorage.readRefreshToken();
+      refreshed = await tokenRefresher.refresh();
+    } catch (_) {
+      refreshed = false;
+    }
 
-      if (refreshToken == null) {
-        await tokenStorage.clear();
-        onAuthFailed();
-        return handler.reject(err);
-      }
+    if (!refreshed) {
+      _refreshCompleter?.completeError(err);
+      _isRefreshing = false;
+      await tokenStorage.clear();
+      onAuthFailed();
+      return handler.reject(err);
+    }
 
-      final refreshDio = Dio(
-        BaseOptions(
-          baseUrl: ApiEndpoints.baseUrl,
-          contentType: Headers.jsonContentType,
-          responseType: ResponseType.json,
-          headers: {Headers.acceptHeader: Headers.jsonContentType},
-        ),
-      );
+    _refreshCompleter?.complete();
+    _isRefreshing = false;
 
-      final response = await refreshDio.post(
-        ApiEndpoints.refreshToken,
-        data: {"refreshToken": refreshToken},
-      );
+    return _retry(requestOptions, handler, err);
+  }
 
-      final newAccessToken = response.data['accessToken'];
-      final newRefreshToken = response.data['refreshToken'];
-
-      await tokenStorage.saveTokens(
-        accessToken: newAccessToken,
-        refreshToken: newRefreshToken,
-      );
-
-      _refreshCompleter?.complete();
-
+  Future<void> _retry(
+    RequestOptions requestOptions,
+    ErrorInterceptorHandler handler,
+    DioException err,
+  ) async {
+    try {
+      final newAccessToken = await tokenStorage.readAccessToken();
       final newRequest = requestOptions.copyWith(
         extra: {...requestOptions.extra, 'retry': true},
       );
       newRequest.headers['Authorization'] = 'Bearer $newAccessToken';
 
-      final retryResponse = await dio.fetch(newRequest);
-
-      return handler.resolve(retryResponse);
-    } catch (e) {
-      _refreshCompleter?.completeError(e);
-
-      await tokenStorage.clear();
-      onAuthFailed();
-
-      return handler.reject(err);
-    } finally {
-      _isRefreshing = false;
+      final response = await dio.fetch(newRequest);
+      return handler.resolve(response);
+    } catch (_) {
+      return handler.next(err);
     }
   }
 }
