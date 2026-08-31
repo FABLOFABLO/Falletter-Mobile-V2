@@ -136,6 +136,13 @@ class _FalletterMypageViewState extends ConsumerState<FalletterMypageView> {
                         context.push(RoutePaths.brickHistory);
                       },
                     ),
+                    betweenHeight,
+                    MenuButton(
+                      title: '차단 내역',
+                      onTap: () {
+                        context.push(RoutePaths.block);
+                      },
+                    ),
                     titleHeight,
                     Text('시스템', style: style),
                     betweenHeight,
@@ -203,6 +210,7 @@ class _FalletterMypageViewState extends ConsumerState<FalletterMypageView> {
     );
   }
 
+  void _showContactDialog(BuildContext context) {
   Widget accountButton({
     required BuildContext context,
     required bool redText,
