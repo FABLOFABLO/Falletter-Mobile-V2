@@ -68,7 +68,7 @@ class _SplashViewState extends ConsumerState<SplashView> {
               },
 
               error: (_, __) {
-                return Center(child: Text('초기화 실패'));
+                return _LogoutUI(context, themeColors);
               },
             );
           }
