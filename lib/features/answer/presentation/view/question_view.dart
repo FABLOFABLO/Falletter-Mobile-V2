@@ -44,8 +44,14 @@ class _QuestionViewState extends ConsumerState<QuestionView> {
         ref.read(selectedIndexProvider.notifier).state = null;
         ref.read(answerTimerProvider.notifier).activateOptimistically();
         ref.read(progressProvider.notifier).reset();
-        await ref.read(progressProvider.notifier).completeProgress();
-        await ref.read(answerTimerProvider.notifier).startAnswerTimer();
+        try {
+          await ref.read(progressProvider.notifier).completeProgress();
+          await ref.read(answerTimerProvider.notifier).startAnswerTimer();
+        } catch (e) {
+          await ref.read(answerTimerProvider.notifier).loadAnswerTimer();
+          await ref.read(progressProvider.notifier).loadProgress();
+          rethrow;
+        }
       } else {
         await goNext();
       }
