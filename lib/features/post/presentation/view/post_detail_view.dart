@@ -348,22 +348,43 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
                                             ),
                                           ),
                                         ),
-                                        onTap: () async {
+                                        onTap: () {
                                           Navigator.pop(context);
-                                          if (_isSubmitting) return;
-                                          _isSubmitting = true;
-                                          try {
-                                            await ref.read(blockListProvider.notifier).block(post.id);
-                                            await ref.read(postsProvider.notifier).loadPosts();
-                                            if (!mounted) return;
-                                            successSnackBar(this.context, '차단되었어요.');
-                                            this.context.go(RoutePaths.main);
-                                          } catch (_) {
-                                            if (!mounted) return;
-                                            errorSnackBar(this.context, '차단에 실패했어요.');
-                                          } finally {
-                                            _isSubmitting = false;
-                                          }
+                                          showDialog(
+                                            context: context,
+                                            builder: (context) => Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: 30,
+                                              ),
+                                              child: DefaultModal(
+                                                title: '게시글 차단',
+                                                description: '게시글의 작성자가 차단됩니다.\n정말 차단 하시겠어요?',
+                                                leftButton: '취소',
+                                                rightButton: '차단',
+                                                onLeftPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                onRightPressed: () async {
+                                                  if (_isSubmitting) return;
+                                                  _isSubmitting = true;
+                                                  final navigator = Navigator.of(context);
+                                                  try {
+                                                    await ref.read(blockListProvider.notifier).block(post.id);
+                                                    await ref.read(postsProvider.notifier).loadPosts();
+                                                    if (!mounted) return;
+                                                    this.context.go(RoutePaths.main);
+                                                    successSnackBar(this.context, '차단되었어요.');
+                                                  } catch (_) {
+                                                    if (!mounted) return;
+                                                    navigator.pop();
+                                                    errorSnackBar(this.context, '차단에 실패했어요.');
+                                                  } finally {
+                                                    _isSubmitting = false;
+                                                  }
+                                                },
+                                              ),
+                                            ),
+                                          );
                                         },
                                       ),
                                     ],
