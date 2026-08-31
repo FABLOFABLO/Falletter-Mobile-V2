@@ -28,16 +28,27 @@ class _QuestionViewState extends ConsumerState<QuestionView> {
     final question = ref.read(currentQuestionProvider);
     final choicesAsync = ref.read(currentChoicesProvider);
     final choices = choicesAsync.value ?? [];
-    final progressState = ref.read(progressProvider);
+    final progress = ref.read(progressProvider).value;
 
-    if (selected != null || question == null || !progressState.hasValue) return;
+    if (selected != null || question == null || progress == null) return;
 
     ref.read(selectedIndexProvider.notifier).state = index;
+
+    final isLast = progress.currentIndex + 1 >= progress.questionIds.length;
 
     try {
       await ref.read(answerProvider.notifier).chooseAnswer(question.id, choices[index].id);
       await Future.delayed(const Duration(milliseconds: 700));
-      await goNext();
+
+      if (isLast) {
+        ref.read(selectedIndexProvider.notifier).state = null;
+        ref.read(answerTimerProvider.notifier).activateOptimistically();
+        ref.read(progressProvider.notifier).reset();
+        await ref.read(progressProvider.notifier).completeProgress();
+        await ref.read(answerTimerProvider.notifier).startAnswerTimer();
+      } else {
+        await goNext();
+      }
     } catch (e) {
       errorSnackBar(context, '답변 저장 실패');
     }
@@ -55,9 +66,8 @@ class _QuestionViewState extends ConsumerState<QuestionView> {
             updated.currentIndex >= updated.questionIds.length)) {
 
       await ref.read(progressProvider.notifier).completeProgress();
-      ref.read(progressProvider.notifier).reset();
-
       await ref.read(answerTimerProvider.notifier).startAnswerTimer();
+      ref.read(progressProvider.notifier).reset();
     }
   }
 
@@ -76,15 +86,15 @@ class _QuestionViewState extends ConsumerState<QuestionView> {
     final selectedIndex = ref.watch(selectedIndexProvider);
     final progress = ref.watch(progressProvider);
     final question = ref.watch(currentQuestionProvider);
-    final choicesAsync = ref.read(currentChoicesProvider);
+    final choicesAsync = ref.watch(currentChoicesProvider);
     final choices = choicesAsync.value ?? [];
 
     if (progress.hasError) {
       return stateMessage(StateMessages.loadFailed);
     }
 
-    if (progress.hasError) {
-      return const Center(child: Text('progress 에러'));
+    if (progress.isLoading || choicesAsync.isLoading) {
+      return loadingCircularIndicator(ref);
     }
 
     if (question == null) {
@@ -116,7 +126,9 @@ class _QuestionViewState extends ConsumerState<QuestionView> {
                         ),
                       ),
                       FractionallySizedBox(
-                        widthFactor: (currentIndex + 1) / total,
+                        widthFactor: total == 0
+                            ? 0.0
+                            : ((currentIndex + 1) / total).clamp(0.0, 1.0),
                         child: Container(
                           height: 15,
                           decoration: BoxDecoration(
