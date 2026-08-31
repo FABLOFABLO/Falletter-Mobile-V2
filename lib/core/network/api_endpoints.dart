@@ -76,6 +76,11 @@ class ApiEndpoints {
   /// Report
   static const report = '/report';
 
+  /// User Block
+  static const userBlockList = '/user-blocks/community';
+  static String userBlockByPost(int postId) => '/user-blocks/community/$postId';
+  static String userBlock(int blockId) => '/user-blocks/$blockId';
+
   /// Admin
   static const letterUnPassed = "/admin/letter/unpassed";
   static const notice = "/admin/notice";
