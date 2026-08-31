@@ -271,11 +271,22 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
                                                 onLeftPressed: () {
                                                   Navigator.pop(context);
                                                 },
-                                                onRightPressed: () {
+                                                onRightPressed: () async {
                                                   if (_isSubmitting) return;
                                                   _isSubmitting = true;
-                                                  ref.read(postsDetailProvider.notifier).deletePost(widget.postId);
-                                                  context.go(RoutePaths.main);
+                                                  final navigator = Navigator.of(context);
+                                                  try {
+                                                    await ref.read(postsDetailProvider.notifier).deletePost(widget.postId);
+                                                    await ref.read(postsProvider.notifier).loadPosts();
+                                                    if (!mounted) return;
+                                                    this.context.go(RoutePaths.main);
+                                                  } catch (_) {
+                                                    if (!mounted) return;
+                                                    navigator.pop();
+                                                    errorSnackBar(this.context, '삭제에 실패했어요.');
+                                                  } finally {
+                                                    _isSubmitting = false;
+                                                  }
                                                 },
                                               ),
                                             ),
