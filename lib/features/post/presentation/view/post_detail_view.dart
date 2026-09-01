@@ -277,16 +277,19 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
                                                   final navigator = Navigator.of(context);
                                                   try {
                                                     await ref.read(postsDetailProvider.notifier).deletePost(widget.postId);
-                                                    await ref.read(postsProvider.notifier).loadPosts();
-                                                    if (!mounted) return;
-                                                    this.context.go(RoutePaths.main);
                                                   } catch (_) {
                                                     if (!mounted) return;
                                                     navigator.pop();
                                                     errorSnackBar(this.context, '삭제에 실패했어요.');
-                                                  } finally {
                                                     _isSubmitting = false;
+                                                    return;
                                                   }
+                                                  try {
+                                                    await ref.read(postsProvider.notifier).loadPosts();
+                                                  } catch (_) {}
+                                                  _isSubmitting = false;
+                                                  if (!mounted) return;
+                                                  this.context.go(RoutePaths.main);
                                                 },
                                               ),
                                             ),
@@ -381,17 +384,20 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
                                                   final navigator = Navigator.of(context);
                                                   try {
                                                     await ref.read(blockListProvider.notifier).block(post.id);
-                                                    await ref.read(postsProvider.notifier).loadPosts();
-                                                    if (!mounted) return;
-                                                    this.context.go(RoutePaths.main);
-                                                    successSnackBar(this.context, '차단되었어요.');
                                                   } catch (_) {
                                                     if (!mounted) return;
                                                     navigator.pop();
                                                     errorSnackBar(this.context, '차단에 실패했어요.');
-                                                  } finally {
                                                     _isSubmitting = false;
+                                                    return;
                                                   }
+                                                  try {
+                                                    await ref.read(postsProvider.notifier).loadPosts();
+                                                  } catch (_) {}
+                                                  _isSubmitting = false;
+                                                  if (!mounted) return;
+                                                  this.context.go(RoutePaths.main);
+                                                  successSnackBar(this.context, '차단되었어요.');
                                                 },
                                               ),
                                             ),
