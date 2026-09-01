@@ -1,6 +1,7 @@
 import 'package:falletter_mobile_v2/core/components/button/elevated_button.dart';
 import 'package:falletter_mobile_v2/core/components/gradient/gradient_text.dart';
 import 'package:falletter_mobile_v2/core/components/progress/loading_circular_indicator.dart';
+import 'package:falletter_mobile_v2/core/components/state/state_message.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
@@ -67,7 +68,7 @@ class _SplashViewState extends ConsumerState<SplashView> {
               },
 
               error: (_, __) {
-                return Center(child: Text('초기화 실패'));
+                return _LogoutUI(context, themeColors);
               },
             );
           }
@@ -75,9 +76,7 @@ class _SplashViewState extends ConsumerState<SplashView> {
           return _LogoutUI(context, themeColors);
         },
         error: (error, stack) {
-          return Center(
-            child: Text('에러 발생'),
-          );
+          return stateMessage(StateMessages.loadFailed);
         },
       ),
     );

@@ -36,19 +36,20 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
       centerTitle: true,
       scrolledUnderElevation: 0,
       backgroundColor: context.bgColor,
-      leading: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: paddingWidth),
-        child: GestureDetector(
-          onTap: () => Navigator.of(context).pop(),
-          child: icon == true
-              ? Icon(
+      leadingWidth: paddingWidth + 24,
+      leading: icon == true
+          ? GestureDetector(
+              onTap: () => Navigator.of(context).pop(),
+              child: Padding(
+                padding: const EdgeInsets.only(left: paddingWidth),
+                child: Icon(
                   Symbols.keyboard_arrow_left,
                   size: 24,
                   color: context.textColor,
-                )
-              : null,
-        ),
-      ),
+                ),
+              ),
+            )
+          : null,
       title: Text(title ?? '', style: FalletterTextStyle.body1),
       actions: [
         Padding(

@@ -1,5 +1,6 @@
 import 'package:falletter_mobile_v2/core/components/progress/loading_circular_indicator.dart';
 import 'package:falletter_mobile_v2/core/components/snack_bar/snack_bar.dart';
+import 'package:falletter_mobile_v2/core/components/state/state_message.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
@@ -27,16 +28,33 @@ class _QuestionViewState extends ConsumerState<QuestionView> {
     final question = ref.read(currentQuestionProvider);
     final choicesAsync = ref.read(currentChoicesProvider);
     final choices = choicesAsync.value ?? [];
-    final progressState = ref.read(progressProvider);
+    final progress = ref.read(progressProvider).value;
 
-    if (selected != null || question == null || !progressState.hasValue) return;
+    if (selected != null || question == null || progress == null) return;
 
     ref.read(selectedIndexProvider.notifier).state = index;
+
+    final isLast = progress.currentIndex + 1 >= progress.questionIds.length;
 
     try {
       await ref.read(answerProvider.notifier).chooseAnswer(question.id, choices[index].id);
       await Future.delayed(const Duration(milliseconds: 700));
-      await goNext();
+
+      if (isLast) {
+        ref.read(selectedIndexProvider.notifier).state = null;
+        ref.read(answerTimerProvider.notifier).activateOptimistically();
+        ref.read(progressProvider.notifier).reset();
+        try {
+          await ref.read(progressProvider.notifier).completeProgress();
+          await ref.read(answerTimerProvider.notifier).startAnswerTimer();
+        } catch (e) {
+          await ref.read(answerTimerProvider.notifier).loadAnswerTimer();
+          await ref.read(progressProvider.notifier).loadProgress();
+          rethrow;
+        }
+      } else {
+        await goNext();
+      }
     } catch (e) {
       errorSnackBar(context, '답변 저장 실패');
     }
@@ -54,9 +72,8 @@ class _QuestionViewState extends ConsumerState<QuestionView> {
             updated.currentIndex >= updated.questionIds.length)) {
 
       await ref.read(progressProvider.notifier).completeProgress();
-      ref.read(progressProvider.notifier).reset();
-
       await ref.read(answerTimerProvider.notifier).startAnswerTimer();
+      ref.read(progressProvider.notifier).reset();
     }
   }
 
@@ -75,23 +92,23 @@ class _QuestionViewState extends ConsumerState<QuestionView> {
     final selectedIndex = ref.watch(selectedIndexProvider);
     final progress = ref.watch(progressProvider);
     final question = ref.watch(currentQuestionProvider);
-    final choicesAsync = ref.read(currentChoicesProvider);
+    final choicesAsync = ref.watch(currentChoicesProvider);
     final choices = choicesAsync.value ?? [];
 
-    if (progress.isLoading) {
-      return Center(child: loadingCircularIndicator(ref));
+    if (progress.hasError) {
+      return stateMessage(StateMessages.loadFailed);
     }
 
-    if (progress.hasError) {
-      return const Center(child: Text('progress 에러'));
+    if (progress.isLoading || choicesAsync.isLoading) {
+      return loadingCircularIndicator(ref);
     }
 
     if (question == null) {
-      return const Center(child: Text('질문이 없습니다'));
+      return stateMessage('질문이 없어요.');
     }
 
     if (choices.length < 4) {
-      return const Center(child: Text('선택지가 부족합니다'));
+      return stateMessage('선택지가 부족해요.');
     }
 
     final currentIndex = progress.value?.currentIndex ?? 0;
@@ -115,7 +132,9 @@ class _QuestionViewState extends ConsumerState<QuestionView> {
                         ),
                       ),
                       FractionallySizedBox(
-                        widthFactor: (currentIndex + 1) / total,
+                        widthFactor: total == 0
+                            ? 0.0
+                            : ((currentIndex + 1) / total).clamp(0.0, 1.0),
                         child: Container(
                           height: 15,
                           decoration: BoxDecoration(

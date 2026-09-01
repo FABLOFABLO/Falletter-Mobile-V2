@@ -1,7 +1,7 @@
 import 'dart:async';
+import 'package:falletter_mobile_v2/core/components/state/state_message.dart';
 import 'package:falletter_mobile_v2/core/components/progress/loading_circular_indicator.dart';
 import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
-import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/providers/bottom_nav_provider.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
 import 'package:falletter_mobile_v2/core/theme/app_theme_color.dart';
@@ -140,24 +140,20 @@ class _FalletterNoticeViewState extends ConsumerState<FalletterNoticeView> {
     }
 
     if (noticeState.error != null && noticeState.notices.isEmpty) {
-      return Center(
-        child: Text('알림을 불러올 수 없습니다.', style: FalletterTextStyle.body2),
-      );
+      return stateMessage(StateMessages.loadFailed);
     }
 
     if (noticeState.notices.isEmpty) {
-      return ListView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        children: [
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.5,
-            child: const Center(
-              child: Text(
-                '받은 알림이 없습니다',
-              ),
+      return LayoutBuilder(
+        builder: (context, constraints) => ListView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          children: [
+            SizedBox(
+              height: constraints.maxHeight,
+              child: stateMessage('받은 알림이 없어요.'),
             ),
-          ),
-        ],
+          ],
+        ),
       );
     }
 
