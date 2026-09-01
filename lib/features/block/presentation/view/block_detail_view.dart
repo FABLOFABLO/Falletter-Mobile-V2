@@ -49,7 +49,7 @@ class _BlockDetailViewState extends ConsumerState<BlockDetailView> {
                         ),
                         Spacer(),
                         Text(
-                          timeCheck(post.blockedAt),
+                          post.blockedAt != null ? timeCheck(post.blockedAt!) : '',
                           style: FalletterTextStyle.body3.copyWith(
                             color: FalletterColor.gray400,
                           ),

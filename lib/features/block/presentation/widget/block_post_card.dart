@@ -8,7 +8,7 @@ class BlockPostCard extends StatelessWidget {
   final String title;
   final String content;
   final String nickname;
-  final DateTime blockedAt;
+  final DateTime? blockedAt;
   final VoidCallback onTap;
 
   const BlockPostCard({
@@ -42,7 +42,7 @@ class BlockPostCard extends StatelessWidget {
                 ),
                 SizedBox(width: 8),
                 Text(
-                  timeCheck(blockedAt),
+                  blockedAt != null ? timeCheck(blockedAt!) : '',
                   style: FalletterTextStyle.body4.copyWith(
                     color: FalletterColor.gray500,
                   ),

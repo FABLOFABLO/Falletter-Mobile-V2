@@ -4,7 +4,7 @@ class BlockedPostModel {
   final String title;
   final String content;
   final String anonymousNickname;
-  final DateTime blockedAt;
+  final DateTime? blockedAt;
 
   BlockedPostModel({
     required this.blockId,
@@ -22,7 +22,7 @@ class BlockedPostModel {
       title: json['title'] ?? '',
       content: json['content'] ?? '',
       anonymousNickname: json['anonymousNickname'] ?? '',
-      blockedAt: DateTime.tryParse(json['blockedAt'] ?? '') ?? DateTime.now(),
+      blockedAt: DateTime.tryParse(json['blockedAt'] ?? ''),
     );
   }
 }
