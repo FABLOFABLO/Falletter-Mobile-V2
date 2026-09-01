@@ -1,28 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:falletter_mobile_v2/core/network/api_endpoints.dart';
-import 'package:falletter_mobile_v2/features/auth/data/model/token_model.dart';
 
 class AuthApiService {
   final Dio dio;
 
   AuthApiService(this.dio);
-
-  Future<TokenModel> getRefreshToken({required String refreshToken}) async {
-    try {
-      final response = await dio.post(
-          ApiEndpoints.refreshToken,
-        data: {
-            'refreshToken': refreshToken
-        }
-      );
-      if (response.statusCode == 200) {
-        return TokenModel.fromJson(response.data);
-      }
-      throw Exception('토큰 재발급 실패');
-    } catch(e) {
-      throw Exception('토큰 재발급 실패');
-    }
-  }
 
   Future<void> sendEmailVerify({required String email}) async {
     try {

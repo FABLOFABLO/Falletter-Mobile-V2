@@ -9,5 +9,8 @@ extension ColorContextExtension on BuildContext {
   Color get reverseMiddleColor => FalletterColor.getReverseMiddleColor(this);
   Color get reverseTextColor => FalletterColor.getReverseTextColor(this);
 
+  Color get subTextColor =>
+      isDarkMode ? FalletterColor.gray300 : FalletterColor.gray800;
+
   bool get isDarkMode => Theme.of(this).brightness == Brightness.dark;
 }

@@ -42,7 +42,7 @@ class MainHeader extends ConsumerWidget {
                 onTap: () {
                   context.pop();
                 },
-                  child: Icon(Symbols.close, color: context.textColor, size: 18)
+                  child: Icon(Symbols.close, color: context.textColor, size: 24)
               ),
             Spacer(),
             GestureDetector(

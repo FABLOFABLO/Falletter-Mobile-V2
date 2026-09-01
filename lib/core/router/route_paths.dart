@@ -18,4 +18,5 @@ abstract class RoutePaths {
   static const brickHistory = '${RoutePaths.mypage}/brickHistory';
   static const themeSelect = '${RoutePaths.mypage}/themeSelect';
   static const notificationSetting = '${RoutePaths.mypage}/notificationSetting';
+  static const block = '${RoutePaths.mypage}/block';
 }

@@ -1,6 +1,9 @@
 import 'package:falletter_mobile_v2/core/components/bottom_navigatoin_bar/custon_bottom_nav_bar.dart';
 import 'package:falletter_mobile_v2/core/router/route_paths.dart';
 import 'package:falletter_mobile_v2/features/answer/presentation/view/answer_view.dart';
+import 'package:falletter_mobile_v2/features/block/data/model/blocked_post_model.dart';
+import 'package:falletter_mobile_v2/features/block/presentation/view/block_detail_view.dart';
+import 'package:falletter_mobile_v2/features/block/presentation/view/block_view.dart';
 import 'package:falletter_mobile_v2/features/history/presentation/view/brick_history_view.dart';
 import 'package:falletter_mobile_v2/features/user/presentation/view/theme_select_view.dart';
 import 'package:falletter_mobile_v2/features/letter/presentation/view/letter_view.dart';
@@ -216,6 +219,24 @@ final goRouterProvider = Provider<GoRouter>((ref) {
                       path: 'notificationSetting',
                       parentNavigatorKey: _rootNavigatorKey,
                       builder: (_, __) => const NotificationSettingView()
+                  ),
+                  GoRoute(
+                    path: 'block',
+                    parentNavigatorKey: _rootNavigatorKey,
+                    builder: (_, __) => const BlockView(),
+                    routes: [
+                      GoRoute(
+                        path: 'detail',
+                        parentNavigatorKey: _rootNavigatorKey,
+                        builder: (context, state) {
+                          final extra = state.extra;
+                          if (extra is! BlockedPostModel) {
+                            return const BlockView();
+                          }
+                          return BlockDetailView(post: extra);
+                        },
+                      ),
+                    ],
                   ),
                 ]
               ),

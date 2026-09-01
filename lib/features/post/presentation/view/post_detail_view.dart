@@ -11,11 +11,12 @@ import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/router/route_paths.dart';
 import 'package:falletter_mobile_v2/core/utils/time_utils.dart';
+import 'package:falletter_mobile_v2/features/block/presentation/provider/block_provider.dart';
+import 'package:falletter_mobile_v2/features/post/presentation/provider/posts_provider.dart';
 import 'package:falletter_mobile_v2/features/post/presentation/provider/report_provider.dart';
 import 'package:falletter_mobile_v2/features/user/presentation/provider/user_info_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:falletter_mobile_v2/features/post/presentation/provider/posts_detail_provider.dart';
@@ -35,7 +36,8 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
   final baseInfoStyle = FalletterTextStyle.body3;
   final commentInfoStyle = FalletterTextStyle.body4;
   final maxLength = 200;
-  final reportSvg = 'assets/svg/report/siren.svg';
+
+  bool _isSubmitting = false;
 
   @override
   void initState() {
@@ -62,11 +64,131 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
     setState(() {});
   }
 
+  void _showReportDialog() {
+    final post = ref.read(postsDetailProvider);
+    if (post == null) return;
+
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) => GestureDetector(
+        onTap: FocusScope.of(context).unfocus,
+        child: Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          backgroundColor: context.bgColor,
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  children: [
+                    Text('게시글 신고', style: FalletterTextStyle.subTitle2.copyWith(color: context.textColor),),
+                    Spacer(),
+                    IconButton(
+                        padding: EdgeInsets.zero,
+                        visualDensity: VisualDensity.compact,
+                        onPressed: () {
+                          context.pop();
+                          _reportController.clear();
+                        },
+                        icon: Icon(Symbols.close,
+                          color: FalletterColor.gray200,
+                        )
+                    )
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: Row(
+                    children: [
+                      Text('사유 입력', style: FalletterTextStyle.body2.copyWith(color: context.subTextColor),),
+                      Spacer(),
+                      ListenableBuilder(
+                        listenable: _reportController,
+                        builder: (context, child) => Text.rich(
+                          TextSpan(
+                              children: [
+                                TextSpan(text: '${_reportController.text.length}', style: baseInfoStyle.copyWith(color: context.textColor)),
+                                TextSpan(text: '/$maxLength', style: baseInfoStyle.copyWith(color: FalletterColor.gray500))
+                              ]
+                          )
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 20),
+                  child: CustomTextFormField(
+                    maxLength: maxLength,
+                    controller: _reportController,
+                    decoration: InputDecoration(
+                      hintText: '신고 사유를 입력해주세요.',
+                      counterText: ''
+                    ),
+                    maxLines: ((MediaQuery.sizeOf(context).height -
+                                MediaQuery.viewInsetsOf(context).bottom -
+                                340) /
+                            26)
+                        .floor()
+                        .clamp(1, 12),
+                  ),
+                ),
+                ListenableBuilder(
+                  listenable: _reportController,
+                  builder: (context, child) => GestureDetector(
+                    onTap: isReportEnabled ? () async {
+                      if (_isSubmitting) return;
+                      _isSubmitting = true;
+                      final navigator = Navigator.of(context);
+                      try {
+                        await ref.read(reportProvider.notifier).addReport(
+                            post.id,
+                            _reportController.text.trim()
+                        );
+                        if (!mounted) return;
+                        navigator.pop();
+                        _reportController.clear();
+                        successSnackBar(this.context, '신고가 접수되었습니다.');
+                      } on DioException catch (e) {
+                        if (!mounted) return;
+                        navigator.pop();
+                        _reportController.clear();
+                        errorSnackBar(this.context, e.response?.statusCode == 409
+                              ? '이미 신고한 게시글입니다.'
+                              : '신고에 실패했습니다.',
+                        );
+                      } finally {
+                        _isSubmitting = false;
+                      }
+                    } : null,
+                    child: Container(
+                      width: 350,
+                      height: 52,
+                      decoration: BoxDecoration(
+                        color: isReportEnabled ? FalletterColor.error : FalletterColor.gray900,
+                        borderRadius: BorderRadius.circular(8)
+                      ),
+                      child: Center(child: Text('신고', style: FalletterTextStyle.subTitle2.copyWith(color: FalletterColor.white),),),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final post = ref.watch(postsDetailProvider);
     final myInfo = ref.watch(userInfoProvider);
-    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     if (post == null) {
       return Container(
@@ -149,9 +271,25 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
                                                 onLeftPressed: () {
                                                   Navigator.pop(context);
                                                 },
-                                                onRightPressed: () {
-                                                  ref.read(postsDetailProvider.notifier).deletePost(widget.postId);
-                                                  context.go(RoutePaths.main);
+                                                onRightPressed: () async {
+                                                  if (_isSubmitting) return;
+                                                  _isSubmitting = true;
+                                                  final navigator = Navigator.of(context);
+                                                  try {
+                                                    await ref.read(postsDetailProvider.notifier).deletePost(widget.postId);
+                                                  } catch (_) {
+                                                    if (!mounted) return;
+                                                    navigator.pop();
+                                                    errorSnackBar(this.context, '삭제에 실패했어요.');
+                                                    _isSubmitting = false;
+                                                    return;
+                                                  }
+                                                  try {
+                                                    await ref.read(postsProvider.notifier).loadPosts();
+                                                  } catch (_) {}
+                                                  _isSubmitting = false;
+                                                  if (!mounted) return;
+                                                  this.context.go(RoutePaths.main);
                                                 },
                                               ),
                                             ),
@@ -181,121 +319,96 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
                             },
                           )
                         else if (myInfo.value?.id != null && myInfo.value?.id != post.authorId)
-                          GestureDetector(
-                            onTap: () {
+                          IconButton(
+                            icon: const Icon(
+                              Symbols.more_horiz,
+                            ),
+                            onPressed: () {
                               showDialog(
-                                  barrierDismissible: false,
-                                  context: context,
-                                  builder: (context) => GestureDetector(
-                                    onTap: FocusScope.of(context).unfocus,
-                                    child: Dialog(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(10),
-                                          ),
-                                          backgroundColor: context.bgColor,
+                                context: context,
+                                builder: (context) => Dialog(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  backgroundColor: context.cardBg,
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      ListTile(
+                                        title: Center(
                                           child: Padding(
-                                            padding: const EdgeInsets.all(20),
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                Row(
-                                                  children: [
-                                                    Text('게시글 신고', style: FalletterTextStyle.subTitle2.copyWith(color: context.textColor),),
-                                                    Spacer(),
-                                                    IconButton(
-                                                        padding: EdgeInsets.zero,
-                                                        visualDensity: VisualDensity.compact,
-                                                        onPressed: () {
-                                                          context.pop();
-                                                          _reportController.clear();
-                                                        },
-                                                        icon: Icon(Symbols.close,
-                                                          color: FalletterColor.gray200,
-                                                        )
-                                                    )
-                                                  ],
-                                                ),
-                                                Padding(
-                                                  padding: const EdgeInsets.symmetric(vertical: 10),
-                                                  child: Row(
-                                                    children: [
-                                                      Text('사유 입력', style: FalletterTextStyle.body2.copyWith(color: isDark ? FalletterColor.gray200 : FalletterColor.gray800),),
-                                                      Spacer(),
-                                                      ListenableBuilder(
-                                                        listenable: _reportController,
-                                                        builder: (context, child) => Text.rich(
-                                                          TextSpan(
-                                                              children: [
-                                                                TextSpan(text: '${_reportController.text.length}', style: baseInfoStyle.copyWith(color: context.textColor)),
-                                                                TextSpan(text: '/$maxLength', style: baseInfoStyle.copyWith(color: FalletterColor.gray500))
-                                                              ]
-                                                          )
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding: const EdgeInsets.only(bottom: 20),
-                                                  child: CustomTextFormField(
-                                                    maxLength: maxLength,
-                                                    controller: _reportController,
-                                                    decoration: InputDecoration(
-                                                      hintText: '신고 사유를 입력해주세요.',
-                                                      counterText: ''
-                                                    ),
-                                                    maxLines: ((MediaQuery.sizeOf(context).height -
-                                                                MediaQuery.viewInsetsOf(context).bottom -
-                                                                340) /
-                                                            26)
-                                                        .floor()
-                                                        .clamp(1, 12),
-                                                  ),
-                                                ),
-                                                ListenableBuilder(
-                                                  listenable: _reportController,
-                                                  builder: (context, child) => GestureDetector(
-                                                    onTap: isReportEnabled ? () async {
-                                                      final navigator = Navigator.of(context);
-                                                      try {
-                                                        await ref.read(reportProvider.notifier).addReport(
-                                                            post.id,
-                                                            _reportController.text.trim()
-                                                        );
-                                                        if (!mounted) return;
-                                                        navigator.pop();
-                                                        _reportController.clear();
-                                                        successSnackBar(this.context, '신고가 접수되었습니다.');
-                                                      } on DioException catch (e) {
-                                                        if (!mounted) return;
-                                                        navigator.pop();
-                                                        _reportController.clear();
-                                                        errorSnackBar(this.context, e.response?.statusCode == 409
-                                                              ? '이미 신고한 게시글입니다.'
-                                                              : '신고에 실패했습니다.',
-                                                        );
-                                                      }
-                                                    } : null,
-                                                    child: Container(
-                                                      width: 350,
-                                                      height: 52,
-                                                      decoration: BoxDecoration(
-                                                        color: isReportEnabled ? FalletterColor.error : FalletterColor.gray900,
-                                                        borderRadius: BorderRadius.circular(8)
-                                                      ),
-                                                      child: Center(child: Text('신고', style: FalletterTextStyle.subTitle2.copyWith(color: FalletterColor.white),),),
-                                                    ),
-                                                  ),
-                                                )
-                                              ],
+                                            padding: EdgeInsets.only(top: 10),
+                                            child: Text(
+                                              '신고',
+                                              style: FalletterTextStyle.button.copyWith(
+                                                color: FalletterColor.error,
+                                              ),
                                             ),
                                           ),
+                                        ),
+                                        onTap: () {
+                                          Navigator.pop(context);
+                                          _showReportDialog();
+                                        },
                                       ),
-                                  )
+                                      Divider(color: FalletterColor.gray900),
+                                      ListTile(
+                                        title: Center(
+                                          child: Padding(
+                                            padding: EdgeInsets.only(bottom: 10),
+                                            child: Text(
+                                              '차단',
+                                              style: FalletterTextStyle.button,
+                                            ),
+                                          ),
+                                        ),
+                                        onTap: () {
+                                          Navigator.pop(context);
+                                          showDialog(
+                                            context: context,
+                                            builder: (context) => Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: 30,
+                                              ),
+                                              child: DefaultModal(
+                                                title: '게시글 차단',
+                                                description: '게시글의 작성자가 차단됩니다.\n정말 차단 하시겠어요?',
+                                                leftButton: '취소',
+                                                rightButton: '차단',
+                                                onLeftPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                onRightPressed: () async {
+                                                  if (_isSubmitting) return;
+                                                  _isSubmitting = true;
+                                                  final navigator = Navigator.of(context);
+                                                  try {
+                                                    await ref.read(blockListProvider.notifier).block(post.id);
+                                                  } catch (_) {
+                                                    if (!mounted) return;
+                                                    navigator.pop();
+                                                    errorSnackBar(this.context, '차단에 실패했어요.');
+                                                    _isSubmitting = false;
+                                                    return;
+                                                  }
+                                                  try {
+                                                    await ref.read(postsProvider.notifier).loadPosts();
+                                                  } catch (_) {}
+                                                  _isSubmitting = false;
+                                                  if (!mounted) return;
+                                                  this.context.go(RoutePaths.main);
+                                                  successSnackBar(this.context, '차단되었어요.');
+                                                },
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               );
                             },
-                            child: SvgPicture.asset(reportSvg),
                           )
                       ],
                     ),
@@ -352,11 +465,17 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
                           ),
                           if (myInfo.value?.id != null && myInfo.value?.id == comment.userId)
                             IconButton(
-                              onPressed: () {
-                                ref.read(postsDetailProvider.notifier).deleteComment(
-                                    comment.commentId,
-                                    post.id
-                                );
+                              onPressed: () async {
+                                if (_isSubmitting) return;
+                                _isSubmitting = true;
+                                try {
+                                  await ref.read(postsDetailProvider.notifier).deleteComment(
+                                      comment.commentId,
+                                      post.id
+                                  );
+                                } finally {
+                                  _isSubmitting = false;
+                                }
                               },
                               icon: const Icon(
                                 Symbols.delete,
@@ -386,13 +505,20 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 12),
-                      child: SendButton(isEnabled: isEnabled, onPressed: () {
+                      child: SendButton(isEnabled: isEnabled, onPressed: () async {
+                        if (_isSubmitting) return;
+                        _isSubmitting = true;
                         FocusScope.of(context).unfocus();
-                        ref.read(postsDetailProvider.notifier).addComment(
-                            widget.postId,
-                            _commentController.text
-                        );
+                        final text = _commentController.text;
                         _commentController.text = '';
+                        try {
+                          await ref.read(postsDetailProvider.notifier).addComment(
+                              widget.postId,
+                              text
+                          );
+                        } finally {
+                          _isSubmitting = false;
+                        }
                       }),
                     ),
                   ],

@@ -1,6 +1,8 @@
+import 'package:falletter_mobile_v2/core/components/button/elevated_button.dart';
 import 'package:falletter_mobile_v2/core/components/modal/default_modal.dart';
 import 'package:falletter_mobile_v2/core/components/progress/loading_circular_indicator.dart';
 import 'package:falletter_mobile_v2/core/components/snack_bar/snack_bar.dart';
+import 'package:falletter_mobile_v2/core/components/state/state_message.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/providers/auth_status_provider.dart';
@@ -27,11 +29,11 @@ class FalletterMypageView extends ConsumerStatefulWidget {
   const FalletterMypageView({super.key});
 
   @override
-  ConsumerState<FalletterMypageView> createState() => _FalletterMypageViewState();
+  ConsumerState<FalletterMypageView> createState() =>
+      _FalletterMypageViewState();
 }
 
 class _FalletterMypageViewState extends ConsumerState<FalletterMypageView> {
-
   static const SizedBox betweenHeight = SizedBox(height: 12);
   static const SizedBox titleHeight = SizedBox(height: 32);
   static const SizedBox betweenWidth = SizedBox(width: 12);
@@ -52,6 +54,7 @@ class _FalletterMypageViewState extends ConsumerState<FalletterMypageView> {
     ref.invalidate(selectQuestionListProvider);
     ref.invalidate(currentChoicesProvider);
     ref.invalidate(answerTimerProvider);
+    ref.invalidate(answerCountdownProvider);
     ref.invalidate(rouletteTimerProvider);
 
     ref.read(themeProvider.notifier).changeTheme(AppTheme.blue);
@@ -90,7 +93,7 @@ class _FalletterMypageViewState extends ConsumerState<FalletterMypageView> {
           child: SingleChildScrollView(
             child: myInfo.when(
               error: (Object error, StackTrace stackTrace) {
-                return Center(child: Text('오류입니다 다시 시도해주세요.'));
+                return stateMessage(StateMessages.loadFailed);
               },
               loading: () => loadingCircularIndicator(ref),
               data: (UserInfoModel data) {
@@ -136,6 +139,13 @@ class _FalletterMypageViewState extends ConsumerState<FalletterMypageView> {
                         context.push(RoutePaths.brickHistory);
                       },
                     ),
+                    betweenHeight,
+                    MenuButton(
+                      title: '차단 내역',
+                      onTap: () {
+                        context.push(RoutePaths.block);
+                      },
+                    ),
                     titleHeight,
                     Text('시스템', style: style),
                     betweenHeight,
@@ -151,6 +161,11 @@ class _FalletterMypageViewState extends ConsumerState<FalletterMypageView> {
                       onTap: () {
                         context.go('${RoutePaths.notificationSetting}');
                       },
+                    ),
+                    betweenHeight,
+                    MenuButton(
+                      title: '문의하기',
+                      onTap: () => _showContactDialog(context),
                     ),
                     titleHeight,
                     Text('계정', style: style),
@@ -197,6 +212,63 @@ class _FalletterMypageViewState extends ConsumerState<FalletterMypageView> {
                 );
               },
             ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showContactDialog(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final themeColors = appThemeColors[ref.read(themeProvider)]!;
+
+    showDialog(
+      context: context,
+      builder: (_) => Dialog(
+        backgroundColor: isDark
+            ? FalletterColor.middleBlack
+            : FalletterColor.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        insetPadding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '문의하기',
+                style: FalletterTextStyle.subTitle2.copyWith(
+                  color: isDark ? FalletterColor.white : FalletterColor.black,
+                ),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                '서비스 이용 중 불편하거나 부적절한 콘텐츠를 발견하셨나요?\n아래 이메일로 문의해 주세요.',
+                style: FalletterTextStyle.body3.copyWith(
+                  color: isDark
+                      ? FalletterColor.gray400
+                      : FalletterColor.gray700,
+                ),
+              ),
+              const SizedBox(height: 12),
+              SelectableText(
+                'hx.un0707@gmail.com',
+                style: FalletterTextStyle.body2.copyWith(
+                  color: isDark ? FalletterColor.white : FalletterColor.black,
+                ),
+              ),
+              const SizedBox(height: 20),
+              SizedBox(
+                width: double.infinity,
+                child: CustomElevatedButton(
+                  onPressed: () => context.pop(),
+                  gradient: themeColors.button,
+                  textColor: FalletterColor.white,
+                  child: const Text('확인'),
+                ),
+              ),
+            ],
           ),
         ),
       ),

@@ -21,6 +21,14 @@ class AnswerTimerNotifier extends StateNotifier<TimerModel?> {
 
   AnswerTimerNotifier(this.apiService) : super(null);
 
+  void activateOptimistically() {
+    state = TimerModel(
+      userId: state?.userId ?? 0,
+      remainingSeconds: 14400,
+      isActive: true,
+    );
+  }
+
   Future<void> loadAnswerTimer() async {
     try {
       final timer = await apiService.getBrickTimer();

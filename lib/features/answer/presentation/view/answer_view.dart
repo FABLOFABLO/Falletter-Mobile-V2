@@ -19,8 +19,9 @@ class _FalletterAnswerViewState extends ConsumerState<FalletterAnswerView> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() {
-      ref.read(answerTimerProvider.notifier).loadAnswerTimer();
+    Future.microtask(() async {
+      await ref.read(answerTimerProvider.notifier).loadAnswerTimer();
+      ref.invalidate(answerCountdownProvider);
     });
   }
 
@@ -28,17 +29,16 @@ class _FalletterAnswerViewState extends ConsumerState<FalletterAnswerView> {
   Widget build(BuildContext context) {
     final timer = ref.watch(answerTimerProvider);
 
-    if (timer == null) {
-      return Container(
-        color: context.bgColor,
-        child: loadingCircularIndicator(ref)
-      );
-    }
     return SafeArea(
       child: Scaffold(
-        body: timer.isActive
-            ? AnswerTimerView()
-            : QuestionView()
+        body: timer == null
+            ? Container(
+                color: context.bgColor,
+                child: loadingCircularIndicator(ref),
+              )
+            : timer.isActive
+                ? AnswerTimerView()
+                : QuestionView(),
       ),
     );
   }
