@@ -59,6 +59,7 @@ class _GetLetterViewState extends ConsumerState<GetLetterView> {
                             dear: 'dear',
                             content: letter.content,
                             bottom: '누군가 보냄',
+                            reportLetterId: letter.id,
                           );
                         },
                       );
