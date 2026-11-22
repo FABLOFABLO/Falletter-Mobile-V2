@@ -1,3 +1,4 @@
+import 'package:falletter_mobile_v2/core/components/modal/report_modal.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
@@ -11,13 +12,27 @@ class LetterModal extends ConsumerWidget {
   final String dear;
   final String content;
   final String bottom;
+  final int? reportLetterId;
 
   const LetterModal({
     super.key,
     required this.dear,
     required this.content,
     required this.bottom,
+    this.reportLetterId,
   });
+
+  void _showReportDialog(BuildContext context) {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) => ReportModal(
+        title: '레터 신고',
+        duplicateMessage: '이미 신고한 레터입니다.',
+        onReport: (reason) async {},
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -47,40 +62,84 @@ class LetterModal extends ConsumerWidget {
                   color: context.cardBg,
                 ),
                 padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
+                child: Stack(
+                  clipBehavior: Clip.none,
                   children: [
-                    Center(
-                      child: Text(
-                        dear,
-                        style: FalletterTextStyle.body3.copyWith(
-                          color: context.textColor,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Center(
+                          child: Text(
+                            dear,
+                            style: FalletterTextStyle.body3.copyWith(
+                              color: context.textColor,
+                            ),
+                          ),
+                        ),
+                        height,
+                        divider,
+                        height,
+                        Center(
+                          child: Text(
+                            content,
+                            style: FalletterTextStyle.body3.copyWith(
+                              color: context.textColor,
+                            ),
+                          ),
+                        ),
+                        height,
+                        divider,
+                        height,
+                        Center(
+                          child: Text(
+                            bottom,
+                            style: FalletterTextStyle.body3.copyWith(
+                              color: context.textColor,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    if (reportLetterId != null)
+                      Positioned(
+                        top: 0,
+                        right: 0,
+                        child: PopupMenuButton<String>(
+                          padding: EdgeInsets.zero,
+                          position: PopupMenuPosition.under,
+                          color: FalletterColor.gray50,
+                          elevation: 2,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          icon: Icon(
+                            Symbols.more_vert,
+                            size: 24,
+                            color: context.isDarkMode
+                                ? FalletterColor.gray700
+                                : FalletterColor.gray100,
+                          ),
+                          onSelected: (value) {
+                            if (value == 'report') {
+                              _showReportDialog(context);
+                            }
+                          },
+                          itemBuilder: (context) => [
+                            PopupMenuItem<String>(
+                              value: 'report',
+                              child: Center(
+                                child: Text(
+                                  '신고',
+                                  style: FalletterTextStyle.body2.copyWith(
+                                    color: FalletterColor.error,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ),
-                    height,
-                    divider,
-                    height,
-                    Center(
-                      child: Text(
-                        content,
-                        style: FalletterTextStyle.body3.copyWith(
-                          color: context.textColor,
-                        ),
-                      ),
-                    ),
-                    height,
-                    divider,
-                    height,
-                    Center(
-                      child: Text(
-                        bottom,
-                        style: FalletterTextStyle.body3.copyWith(
-                          color: context.textColor,
-                        ),
-                      ),
-                    ),
                   ],
                 ),
               ),
