@@ -34,6 +34,7 @@ class LetterModal extends ConsumerWidget {
     showDialog(
       context: context,
       barrierColor: Colors.transparent,
+      useSafeArea: false,
       builder: (menuContext) => Stack(
         children: [
           Positioned(
