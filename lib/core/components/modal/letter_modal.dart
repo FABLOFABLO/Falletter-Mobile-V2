@@ -24,24 +24,20 @@ class LetterModal extends ConsumerWidget {
 
   void _showReportMenu(BuildContext context) {
     final box = context.findRenderObject() as RenderBox;
-    final overlay = Overlay.of(context);
-    final overlayBox = overlay.context.findRenderObject() as RenderBox;
+    final overlayBox =
+        Overlay.of(context).context.findRenderObject() as RenderBox;
     final offset = box.localToGlobal(Offset.zero, ancestor: overlayBox);
+    final screenSize = overlayBox.size;
     final popupColor =
         context.isDarkMode ? FalletterColor.gray900 : FalletterColor.whiteBg;
 
-    late OverlayEntry entry;
-    entry = OverlayEntry(
-      builder: (_) => Stack(
+    showDialog(
+      context: context,
+      barrierColor: Colors.transparent,
+      builder: (menuContext) => Stack(
         children: [
-          Positioned.fill(
-            child: GestureDetector(
-              behavior: HitTestBehavior.translucent,
-              onTap: entry.remove,
-            ),
-          ),
           Positioned(
-            right: overlayBox.size.width - offset.dx - box.size.width,
+            right: screenSize.width - offset.dx - box.size.width,
             top: offset.dy + box.size.height,
             child: Material(
               color: popupColor,
@@ -50,7 +46,7 @@ class LetterModal extends ConsumerWidget {
               child: InkWell(
                 borderRadius: BorderRadius.circular(6),
                 onTap: () {
-                  entry.remove();
+                  Navigator.of(menuContext).pop();
                   _showReportDialog(context);
                 },
                 child: Padding(
@@ -71,8 +67,6 @@ class LetterModal extends ConsumerWidget {
         ],
       ),
     );
-
-    overlay.insert(entry);
   }
 
   void _showReportDialog(BuildContext context) {
