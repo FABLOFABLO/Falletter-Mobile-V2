@@ -173,7 +173,7 @@ class _ReportModalState extends ConsumerState<ReportModal> {
                     decoration: BoxDecoration(
                       color: isReportEnabled
                           ? FalletterColor.error
-                          : FalletterColor.gray900,
+                          : context.disabledFillColor,
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Center(

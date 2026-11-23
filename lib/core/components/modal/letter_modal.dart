@@ -22,6 +22,59 @@ class LetterModal extends ConsumerWidget {
     this.reportLetterId,
   });
 
+  void _showReportMenu(BuildContext context) {
+    final box = context.findRenderObject() as RenderBox;
+    final overlay = Overlay.of(context);
+    final overlayBox = overlay.context.findRenderObject() as RenderBox;
+    final offset = box.localToGlobal(Offset.zero, ancestor: overlayBox);
+    final popupColor =
+        context.isDarkMode ? FalletterColor.gray900 : FalletterColor.whiteBg;
+
+    late OverlayEntry entry;
+    entry = OverlayEntry(
+      builder: (_) => Stack(
+        children: [
+          Positioned.fill(
+            child: GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onTap: entry.remove,
+            ),
+          ),
+          Positioned(
+            right: overlayBox.size.width - offset.dx - box.size.width,
+            top: offset.dy + box.size.height,
+            child: Material(
+              color: popupColor,
+              elevation: 0,
+              borderRadius: BorderRadius.circular(6),
+              child: InkWell(
+                borderRadius: BorderRadius.circular(6),
+                onTap: () {
+                  entry.remove();
+                  _showReportDialog(context);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 17.5,
+                    vertical: 12,
+                  ),
+                  child: Text(
+                    '신고',
+                    style: FalletterTextStyle.body2.copyWith(
+                      color: FalletterColor.error,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    overlay.insert(entry);
+  }
+
   void _showReportDialog(BuildContext context) {
     showDialog(
       barrierDismissible: false,
@@ -41,7 +94,7 @@ class LetterModal extends ConsumerWidget {
 
     final closeButtonSize = MediaQuery.of(context).size.width * 0.13;
     const height = SizedBox(height: 12);
-    final divider = Divider(color: FalletterColor.gray200, height: 1);
+    final divider = Divider(color: context.borderColor, height: 1);
 
     return Dialog(
       backgroundColor: Colors.transparent,
@@ -59,87 +112,61 @@ class LetterModal extends ConsumerWidget {
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
-                  color: context.cardBg,
+                  color: context.isDarkMode ? context.cardBg : FalletterColor.white,
                 ),
                 padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                child: Stack(
-                  clipBehavior: Clip.none,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
+                    Row(
                       children: [
-                        Center(
-                          child: Text(
-                            dear,
-                            style: FalletterTextStyle.body3.copyWith(
-                              color: context.textColor,
-                            ),
-                          ),
-                        ),
-                        height,
-                        divider,
-                        height,
-                        Center(
-                          child: Text(
-                            content,
-                            style: FalletterTextStyle.body3.copyWith(
-                              color: context.textColor,
-                            ),
-                          ),
-                        ),
-                        height,
-                        divider,
-                        height,
-                        Center(
-                          child: Text(
-                            bottom,
-                            style: FalletterTextStyle.body3.copyWith(
-                              color: context.textColor,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    if (reportLetterId != null)
-                      Positioned(
-                        top: 0,
-                        right: 0,
-                        child: PopupMenuButton<String>(
-                          padding: EdgeInsets.zero,
-                          position: PopupMenuPosition.under,
-                          color: FalletterColor.gray50,
-                          elevation: 2,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          icon: Icon(
-                            Symbols.more_vert,
-                            size: 24,
-                            color: context.isDarkMode
-                                ? FalletterColor.gray700
-                                : FalletterColor.gray100,
-                          ),
-                          onSelected: (value) {
-                            if (value == 'report') {
-                              _showReportDialog(context);
-                            }
-                          },
-                          itemBuilder: (context) => [
-                            PopupMenuItem<String>(
-                              value: 'report',
-                              child: Center(
-                                child: Text(
-                                  '신고',
-                                  style: FalletterTextStyle.body2.copyWith(
-                                    color: FalletterColor.error,
-                                  ),
-                                ),
+                        if (reportLetterId != null) const SizedBox(width: 24),
+                        Expanded(
+                          child: Center(
+                            child: Text(
+                              dear,
+                              style: FalletterTextStyle.body3.copyWith(
+                                color: context.textColor,
                               ),
                             ),
-                          ],
+                          ),
+                        ),
+                        if (reportLetterId != null)
+                          Builder(
+                            builder: (context) => GestureDetector(
+                              onTap: () => _showReportMenu(context),
+                              child: Icon(
+                                Symbols.more_vert,
+                                size: 24,
+                                color: context.borderColor,
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                    height,
+                    divider,
+                    height,
+                    Center(
+                      child: Text(
+                        content,
+                        style: FalletterTextStyle.body3.copyWith(
+                          color: context.textColor,
                         ),
                       ),
+                    ),
+                    height,
+                    divider,
+                    height,
+                    Center(
+                      child: Text(
+                        bottom,
+                        style: FalletterTextStyle.body3.copyWith(
+                          color: context.textColor,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
