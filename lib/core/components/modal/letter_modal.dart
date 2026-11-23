@@ -1,3 +1,4 @@
+import 'package:falletter_mobile_v2/core/components/modal/report_modal.dart';
 import 'package:falletter_mobile_v2/core/constants/color.dart';
 import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
@@ -11,13 +12,75 @@ class LetterModal extends ConsumerWidget {
   final String dear;
   final String content;
   final String bottom;
+  final int? reportLetterId;
 
   const LetterModal({
     super.key,
     required this.dear,
     required this.content,
     required this.bottom,
+    this.reportLetterId,
   });
+
+  void _showReportMenu(BuildContext context) {
+    final box = context.findRenderObject() as RenderBox;
+    final overlayBox =
+        Overlay.of(context).context.findRenderObject() as RenderBox;
+    final offset = box.localToGlobal(Offset.zero, ancestor: overlayBox);
+    final screenSize = overlayBox.size;
+    final popupColor =
+        context.isDarkMode ? FalletterColor.gray900 : FalletterColor.whiteBg;
+
+    showDialog(
+      context: context,
+      barrierColor: Colors.transparent,
+      useSafeArea: false,
+      builder: (menuContext) => Stack(
+        children: [
+          Positioned(
+            right: screenSize.width - offset.dx - box.size.width,
+            top: offset.dy + box.size.height,
+            child: Material(
+              color: popupColor,
+              elevation: 0,
+              borderRadius: BorderRadius.circular(6),
+              child: InkWell(
+                borderRadius: BorderRadius.circular(6),
+                onTap: () {
+                  Navigator.of(menuContext).pop();
+                  _showReportDialog(context);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 17.5,
+                    vertical: 12,
+                  ),
+                  child: Text(
+                    '신고',
+                    style: FalletterTextStyle.body2.copyWith(
+                      color: FalletterColor.error,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showReportDialog(BuildContext context) {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) => ReportModal(
+        title: '레터 신고',
+        duplicateMessage: '이미 신고한 레터입니다.',
+        onReport: (reason) async {},
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -26,7 +89,7 @@ class LetterModal extends ConsumerWidget {
 
     final closeButtonSize = MediaQuery.of(context).size.width * 0.13;
     const height = SizedBox(height: 12);
-    final divider = Divider(color: FalletterColor.gray200, height: 1);
+    final divider = Divider(color: context.borderColor, height: 1);
 
     return Dialog(
       backgroundColor: Colors.transparent,
@@ -44,20 +107,38 @@ class LetterModal extends ConsumerWidget {
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
-                  color: context.cardBg,
+                  color: context.isDarkMode ? context.cardBg : FalletterColor.white,
                 ),
                 padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Center(
-                      child: Text(
-                        dear,
-                        style: FalletterTextStyle.body3.copyWith(
-                          color: context.textColor,
+                    Row(
+                      children: [
+                        if (reportLetterId != null) const SizedBox(width: 24),
+                        Expanded(
+                          child: Center(
+                            child: Text(
+                              dear,
+                              style: FalletterTextStyle.body3.copyWith(
+                                color: context.textColor,
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
+                        if (reportLetterId != null)
+                          Builder(
+                            builder: (context) => GestureDetector(
+                              onTap: () => _showReportMenu(context),
+                              child: Icon(
+                                Symbols.more_vert,
+                                size: 24,
+                                color: context.borderColor,
+                              ),
+                            ),
+                          ),
+                      ],
                     ),
                     height,
                     divider,

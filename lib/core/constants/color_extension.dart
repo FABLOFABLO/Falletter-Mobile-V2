@@ -12,5 +12,11 @@ extension ColorContextExtension on BuildContext {
   Color get subTextColor =>
       isDarkMode ? FalletterColor.gray300 : FalletterColor.gray800;
 
+  Color get borderColor =>
+      isDarkMode ? FalletterColor.gray600 : FalletterColor.gray300;
+
+  Color get disabledFillColor =>
+      isDarkMode ? FalletterColor.gray700 : FalletterColor.gray300;
+
   bool get isDarkMode => Theme.of(this).brightness == Brightness.dark;
 }
