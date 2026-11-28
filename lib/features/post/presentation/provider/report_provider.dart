@@ -20,4 +20,8 @@ class ReportNotifier extends StateNotifier<void> {
   Future<void> addReport(int contentId, String reason) async {
     await apiService.reportPost(contentId: contentId, reason: reason);
   }
+
+  Future<void> addLetterReport(int letterId, String reason) async {
+    await apiService.reportLetter(letterId: letterId, reason: reason);
+  }
 }

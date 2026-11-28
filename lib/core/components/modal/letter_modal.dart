@@ -4,6 +4,7 @@ import 'package:falletter_mobile_v2/core/constants/color_extension.dart';
 import 'package:falletter_mobile_v2/core/constants/text_style.dart';
 import 'package:falletter_mobile_v2/core/providers/theme/theme_state.dart';
 import 'package:falletter_mobile_v2/core/theme/app_theme_color.dart';
+import 'package:falletter_mobile_v2/features/post/presentation/provider/report_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_symbols_icons/symbols.dart';
@@ -22,7 +23,7 @@ class LetterModal extends ConsumerWidget {
     this.reportLetterId,
   });
 
-  void _showReportMenu(BuildContext context) {
+  void _showReportMenu(BuildContext context, WidgetRef ref) {
     final box = context.findRenderObject() as RenderBox;
     final overlayBox =
         Overlay.of(context).context.findRenderObject() as RenderBox;
@@ -48,7 +49,7 @@ class LetterModal extends ConsumerWidget {
                 borderRadius: BorderRadius.circular(6),
                 onTap: () {
                   Navigator.of(menuContext).pop();
-                  _showReportDialog(context);
+                  _showReportDialog(context, ref);
                 },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
@@ -70,14 +71,18 @@ class LetterModal extends ConsumerWidget {
     );
   }
 
-  void _showReportDialog(BuildContext context) {
+  void _showReportDialog(BuildContext context, WidgetRef ref) {
     showDialog(
       barrierDismissible: false,
       context: context,
       builder: (context) => ReportModal(
         title: '레터 신고',
         duplicateMessage: '이미 신고한 레터입니다.',
-        onReport: (reason) async {},
+        onReport: (reason) =>
+            ref.read(reportProvider.notifier).addLetterReport(
+                  reportLetterId!,
+                  reason,
+                ),
       ),
     );
   }
@@ -130,7 +135,7 @@ class LetterModal extends ConsumerWidget {
                         if (reportLetterId != null)
                           Builder(
                             builder: (context) => GestureDetector(
-                              onTap: () => _showReportMenu(context),
+                              onTap: () => _showReportMenu(context, ref),
                               child: Icon(
                                 Symbols.more_vert,
                                 size: 24,
