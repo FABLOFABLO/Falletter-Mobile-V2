@@ -14,4 +14,13 @@ class ReportApiService {
       }
     );
   }
+
+  Future<void> reportLetter({required int letterId, required String reason}) async {
+    await dio.post(
+      '${ApiEndpoints.report}/letter/$letterId',
+      data: {
+        'reason': reason
+      }
+    );
+  }
 }
